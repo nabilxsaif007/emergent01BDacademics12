@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import GlobeVisualization from './components/GlobeVisualization';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Navbar from './components/Navbar';
+import WelcomeOverlay from './components/WelcomeOverlay';
 import SearchBar from './components/SearchBar';
 import FilterPanel from './components/FilterPanel';
+import GlobeVisualization from './components/GlobeVisualization';
 import InfoPanel from './components/InfoPanel';
-import WelcomeOverlay from './components/WelcomeOverlay';
-
-// Pages
-import HomePage from './pages/HomePage';
 import AcademicsPage from './pages/AcademicsPage';
 import AcademicDetailPage from './pages/AcademicDetailPage';
 import CountriesPage from './pages/CountriesPage';
 import AboutPage from './pages/AboutPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import DashboardPage from './pages/DashboardPage';
+import AdminDashboard from './pages/AdminDashboard';
 import NotFoundPage from './pages/NotFoundPage';
-
+import { AuthProvider } from './context/AuthContext';
 import './App.css';
 
 function App() {
