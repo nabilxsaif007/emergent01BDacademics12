@@ -131,7 +131,17 @@ const RegisterPage = () => {
         <div className="mt-8 pt-6 border-t border-gray-200">
           <button
             className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-gray-800 hover:bg-gray-50 transition-colors duration-300 mb-3"
-            onClick={() => console.log('Google signup')}
+            onClick={() => {
+              // Mock Google signup for demonstration
+              // In a production app, this would redirect to Google OAuth
+              setName('Google User');
+              setEmail('new_google_user@example.com');
+              setPassword('google_auth_password');
+              setConfirmPassword('google_auth_password');
+              
+              // Show a message that this is a mock implementation
+              alert('This is a mock Google signup for the MVP. In production, this would redirect to Google OAuth. The form has been pre-filled with mock credentials for demonstration.');
+            }}
           >
             <img
               src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
