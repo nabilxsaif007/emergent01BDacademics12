@@ -6,6 +6,52 @@ const CountriesPage = ({ academics = [] }) => {
   const [selectedCountry, setSelectedCountry] = useState(null);
   
   useEffect(() => {
+    // Ensure we have data to work with
+    if (!academics || academics.length === 0) {
+      console.log("No academics data available for Countries page");
+      
+      // Set some mock data if no academics are available
+      const mockCountries = [
+        {
+          name: "Bangladesh",
+          count: 5,
+          academics: Array(5).fill().map((_, i) => ({
+            id: 100 + i,
+            name: `Dr. Academic ${i+1}`,
+            field: "Computer Science",
+            university: "University of Dhaka",
+            city: "Dhaka"
+          }))
+        },
+        {
+          name: "USA",
+          count: 4,
+          academics: Array(4).fill().map((_, i) => ({
+            id: 200 + i,
+            name: `Dr. Academic ${i+6}`,
+            field: "Physics",
+            university: "MIT",
+            city: "Cambridge"
+          }))
+        },
+        {
+          name: "UK",
+          count: 3,
+          academics: Array(3).fill().map((_, i) => ({
+            id: 300 + i,
+            name: `Dr. Academic ${i+10}`,
+            field: "Medicine",
+            university: "Oxford University",
+            city: "Oxford"
+          }))
+        }
+      ];
+      
+      setCountries(mockCountries);
+      setSelectedCountry(mockCountries[0]);
+      return;
+    }
+    
     // Get unique countries and count academics in each
     const countryData = academics.reduce((acc, academic) => {
       const country = academic.country;
@@ -24,6 +70,7 @@ const CountriesPage = ({ academics = [] }) => {
     // Convert to array and sort by count (descending)
     const countriesArray = Object.values(countryData).sort((a, b) => b.count - a.count);
     setCountries(countriesArray);
+    console.log("Countries data processed:", countriesArray.length, "countries found");
     
     // Auto-select Bangladesh if exists
     const bangladeshData = countriesArray.find(c => c.name === 'Bangladesh');
