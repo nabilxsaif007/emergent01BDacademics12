@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const isActive = (path) => {
     return location.pathname === path;
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
   };
 
   return (
@@ -24,16 +32,35 @@ const Navbar = () => {
           <NavLink to="/academics" label="Academics" isActive={isActive('/academics')} />
           <NavLink to="/countries" label="Countries" isActive={isActive('/countries')} />
           <NavLink to="/about" label="About" isActive={isActive('/about')} />
+          {user && (
+            <NavLink to="/dashboard" label="Dashboard" isActive={isActive('/dashboard')} />
+          )}
         </div>
       </div>
       
       <div className="flex items-center space-x-4">
-        <Link to="/signup" className="hidden md:block bg-transparent text-white hover:text-blue-300 px-4 py-2 rounded-full text-sm font-medium border border-gray-700 transition-colors">
-          Sign Up
-        </Link>
-        <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition-colors">
-          Login
-        </Link>
+        {user ? (
+          <>
+            <span className="hidden md:inline text-gray-300 text-sm">
+              {user.email}
+            </span>
+            <button 
+              onClick={handleLogout}
+              className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-red-700 transition-colors"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/signup" className="hidden md:block bg-transparent text-white hover:text-blue-300 px-4 py-2 rounded-full text-sm font-medium border border-gray-700 transition-colors">
+              Sign Up
+            </Link>
+            <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition-colors">
+              Login
+            </Link>
+          </>
+        )}
         
         {/* Mobile menu button */}
         <button 
@@ -58,9 +85,26 @@ const Navbar = () => {
             <NavLink to="/academics" label="Academics" isActive={isActive('/academics')} />
             <NavLink to="/countries" label="Countries" isActive={isActive('/countries')} />
             <NavLink to="/about" label="About" isActive={isActive('/about')} />
-            <Link to="/signup" className="bg-transparent text-white hover:text-blue-300 px-4 py-2 text-sm font-medium border border-gray-700 rounded-full mt-2 text-left">
-              Sign Up
-            </Link>
+            {user ? (
+              <>
+                <NavLink to="/dashboard" label="Dashboard" isActive={isActive('/dashboard')} />
+                <button 
+                  onClick={handleLogout}
+                  className="bg-red-600 text-white px-4 py-2 text-sm font-medium rounded-full mt-2 text-left"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/signup" className="bg-transparent text-white hover:text-blue-300 px-4 py-2 text-sm font-medium border border-gray-700 rounded-full mt-2 text-left">
+                  Sign Up
+                </Link>
+                <Link to="/login" className="bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700 transition-colors rounded-full mt-2 text-left">
+                  Login
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
