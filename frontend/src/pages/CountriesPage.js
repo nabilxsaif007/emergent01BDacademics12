@@ -198,24 +198,50 @@ const CountriesPage = ({ academics = [] }) => {
     : null;
   
   return (
-    <div className="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-16">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3">
-            Global Academic Presence
-          </h1>
-          <p className="text-gray-300">
-            Explore Bangladeshi academics across {countries.length} countries worldwide
-          </p>
-        </div>
+    <div className="min-h-screen pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-16 bg-gradient-to-b from-gray-900 to-black">
+      <div className="relative rounded-2xl overflow-hidden mb-12 border border-blue-800">
+        <div className="absolute inset-0 bg-blue-900 bg-opacity-20 backdrop-filter backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-purple-900/40"></div>
         
-        <div className="mt-4 md:mt-0">
-          <Link to="/" className="text-blue-400 hover:text-blue-300 flex items-center">
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            Back to Globe View
-          </Link>
+        {/* Animated elements */}
+        <div className="absolute -top-20 -left-20 w-60 h-60 bg-blue-500 rounded-full opacity-20 mix-blend-multiply blur-2xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -right-20 w-80 h-80 bg-purple-500 rounded-full opacity-20 mix-blend-multiply blur-2xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+        
+        <div className="relative z-10 p-8 md:p-12 flex flex-col md:flex-row justify-between md:items-center">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 tracking-tight">
+              Global Academic Presence
+            </h1>
+            <p className="text-xl text-blue-100 mb-6 leading-relaxed">
+              Explore Bangladeshi academics across <span className="font-bold text-white">{countries.length}</span> countries worldwide, building bridges through knowledge and research.
+            </p>
+            
+            <div className="flex flex-wrap gap-4">
+              <Link to="/" className="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center shadow-lg hover:shadow-blue-900/30">
+                <span>Explore Interactive Globe</span>
+                <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </Link>
+              <Link to="/academics" className="bg-transparent border border-blue-500 text-blue-400 py-3 px-6 rounded-lg hover:bg-blue-900 hover:bg-opacity-20 transition-colors">
+                Find Academics
+              </Link>
+            </div>
+          </div>
+          
+          <div className="hidden lg:block">
+            <div className="relative w-56 h-56 flex items-center justify-center">
+              <svg className="absolute animate-spin-slow opacity-50" width="224" height="224" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="128" cy="128" r="120" stroke="#3B82F6" strokeWidth="8" strokeDasharray="16 32" />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-32 w-32 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
