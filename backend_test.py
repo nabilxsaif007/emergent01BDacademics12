@@ -89,20 +89,40 @@ class BangladeshAcademicNetworkTester:
 
     def test_login(self, email, password):
         """Test login and get token"""
-        success, response = self.run_test(
-            "User Login",
-            "POST",
-            "token",
-            200,
-            data={"username": email, "password": password}
-        )
+        # Using form data format for OAuth2PasswordRequestForm
+        url = f"{self.api_url}/token"
+        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        data = {
+            "username": email,
+            "password": password
+        }
         
-        if success and 'access_token' in response:
-            self.token = response['access_token']
-            self.user_id = response.get('user_id')
-            print(f"Logged in as user ID: {self.user_id}")
-            return True
-        return False
+        self.tests_run += 1
+        print(f"\n🔍 Testing User Login...")
+        
+        try:
+            response = requests.post(url, data=data, headers=headers)
+            
+            success = response.status_code == 200
+            if success:
+                self.tests_passed += 1
+                print(f"✅ Passed - Status: {response.status_code}")
+                response_data = response.json()
+                self.token = response_data['access_token']
+                self.user_id = response_data.get('user_id')
+                print(f"Logged in as user ID: {self.user_id}")
+                return True
+            else:
+                print(f"❌ Failed - Expected 200, got {response.status_code}")
+                try:
+                    error_detail = response.json().get('detail', 'No detail provided')
+                    print(f"Error: {error_detail}")
+                except:
+                    print("Could not parse error response")
+                return False
+        except Exception as e:
+            print(f"❌ Failed - Error: {str(e)}")
+            return False
 
     def test_get_academics(self, params=None):
         """Test getting academics with optional filters"""
