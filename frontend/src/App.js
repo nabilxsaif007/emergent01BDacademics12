@@ -19,7 +19,7 @@ import NotFoundPage from './pages/NotFoundPage';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
 
-// Create a wrapper component that uses useLocation
+// Main content component that uses location
 function AppContent() {
   const [dataPoints, setDataPoints] = useState([]);
   const [filteredDataPoints, setFilteredDataPoints] = useState([]);
@@ -171,5 +171,7 @@ function App() {
     </AuthProvider>
   );
 }
+
+export default App;
 
 export default App;
