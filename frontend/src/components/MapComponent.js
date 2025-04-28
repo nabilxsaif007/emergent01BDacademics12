@@ -75,33 +75,46 @@ const MapComponent = ({ academics = [], center = { lat: 23.6850, lng: 90.3563 },
 
   const onMapLoad = (map) => {
     setMapInstance(map);
+    setIsLoaded(true);
+    console.log("Google Maps loaded successfully");
+  };
+
+  const onLoadError = (error) => {
+    console.error("Error loading Google Maps:", error);
+    setIsLoaded(false);
   };
 
   // Update markers when map zoom changes
   useEffect(() => {
-    if (!mapInstance) return;
+    if (!mapInstance || !window.google || !window.google.maps) return;
 
-    const zoomChangedListener = mapInstance.addListener('zoom_changed', () => {
-      const currentZoom = mapInstance.getZoom();
-      // Adjust marker size based on zoom level
-      Object.values(markersRef.current).forEach(marker => {
-        if (marker && marker.setIcon) {
-          const size = currentZoom > 5 ? 8 : 12; // Smaller when zoomed in
-          marker.setIcon({
-            path: window.google.maps.SymbolPath.CIRCLE,
-            scale: size,
-            fillColor: '#4285F4',
-            fillOpacity: 1,
-            strokeColor: '#FFFFFF',
-            strokeWeight: 2,
-          });
-        }
+    try {
+      const zoomChangedListener = mapInstance.addListener('zoom_changed', () => {
+        const currentZoom = mapInstance.getZoom();
+        // Adjust marker size based on zoom level
+        Object.values(markersRef.current).forEach(marker => {
+          if (marker && marker.setIcon) {
+            const size = currentZoom > 5 ? 8 : 12; // Smaller when zoomed in
+            marker.setIcon({
+              path: window.google.maps.SymbolPath.CIRCLE,
+              scale: size,
+              fillColor: '#4285F4',
+              fillOpacity: 1,
+              strokeColor: '#FFFFFF',
+              strokeWeight: 2,
+            });
+          }
+        });
       });
-    });
 
-    return () => {
-      window.google.maps.event.removeListener(zoomChangedListener);
-    };
+      return () => {
+        if (window.google && window.google.maps && window.google.maps.event) {
+          window.google.maps.event.removeListener(zoomChangedListener);
+        }
+      };
+    } catch (error) {
+      console.error("Error setting up map zoom listener:", error);
+    }
   }, [mapInstance]);
 
   // Set marker ref when created
@@ -119,17 +132,43 @@ const MapComponent = ({ academics = [], center = { lat: 23.6850, lng: 90.3563 },
     );
   }
 
+  // Helper function to safely create marker icons
+  const createMarkerIcon = (scale) => {
+    if (!window.google || !window.google.maps) {
+      return {};
+    }
+    
+    try {
+      return {
+        path: window.google.maps.SymbolPath.CIRCLE,
+        scale: scale,
+        fillColor: '#4285F4',
+        fillOpacity: 1,
+        strokeColor: '#FFFFFF',
+        strokeWeight: 2,
+      };
+    } catch (error) {
+      console.error("Error creating marker icon:", error);
+      return {};
+    }
+  };
+
   return (
     <div className="map-container rounded-lg overflow-hidden shadow-lg">
-      <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY}>
+      <LoadScript 
+        googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+        onLoad={() => console.log("Google Maps Script loaded successfully")}
+        onError={onLoadError}
+      >
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={center}
           zoom={zoom}
           options={options}
           onLoad={onMapLoad}
+          onUnmount={() => setIsLoaded(false)}
         >
-          {cityGroups.map((group) => (
+          {isLoaded && cityGroups && cityGroups.length > 0 && cityGroups.map((group) => (
             <Marker
               key={`${group.city}_${group.country}`}
               position={{ lat: group.latitude, lng: group.longitude }}
@@ -153,8 +192,10 @@ const MapComponent = ({ academics = [], center = { lat: 23.6850, lng: 90.3563 },
                         <p>{group.academics.length} academics</p>
                         <button 
                           onClick={() => {
-                            mapInstance.setCenter({ lat: group.latitude, lng: group.longitude });
-                            mapInstance.setZoom(8);
+                            if (mapInstance) {
+                              mapInstance.setCenter({ lat: group.latitude, lng: group.longitude });
+                              mapInstance.setZoom(8);
+                            }
                           }}
                           className="text-blue-500 hover:text-blue-700"
                         >
@@ -166,14 +207,7 @@ const MapComponent = ({ academics = [], center = { lat: 23.6850, lng: 90.3563 },
                 }
               }}
               onLoad={(marker) => setMarkerRef(`${group.city}_${group.country}`, marker)}
-              icon={{
-                path: window.google.maps.SymbolPath.CIRCLE,
-                scale: group.academics.length > 5 ? 14 : (group.academics.length > 1 ? 10 : 8),
-                fillColor: '#4285F4',
-                fillOpacity: 1,
-                strokeColor: '#FFFFFF',
-                strokeWeight: 2,
-              }}
+              icon={createMarkerIcon(group.academics.length > 5 ? 14 : (group.academics.length > 1 ? 10 : 8))}
               label={group.academics.length > 1 ? {
                 text: group.academics.length.toString(),
                 color: 'white',
@@ -183,32 +217,27 @@ const MapComponent = ({ academics = [], center = { lat: 23.6850, lng: 90.3563 },
             />
           ))}
 
-          {mapInstance && mapInstance.getZoom() > 7 && academics.map((academic) => (
-            <Marker
-              key={academic.id}
-              position={{ lat: academic.latitude, lng: academic.longitude }}
-              onClick={() => handleMarkerClick(academic)}
-              onLoad={(marker) => setMarkerRef(academic.id, marker)}
-              icon={{
-                path: window.google.maps.SymbolPath.CIRCLE,
-                scale: 8,
-                fillColor: '#4285F4',
-                fillOpacity: 1,
-                strokeColor: '#FFFFFF',
-                strokeWeight: 2,
-              }}
-            />
+          {isLoaded && mapInstance && window.google && mapInstance.getZoom() > 7 && academics.map((academic) => (
+            academic && academic.latitude && academic.longitude && (
+              <Marker
+                key={academic.id}
+                position={{ lat: academic.latitude, lng: academic.longitude }}
+                onClick={() => handleMarkerClick(academic)}
+                onLoad={(marker) => setMarkerRef(academic.id, marker)}
+                icon={createMarkerIcon(8)}
+              />
+            )
           ))}
 
-          {selectedAcademic && (
+          {isLoaded && selectedAcademic && selectedAcademic.latitude && selectedAcademic.longitude && (
             <InfoWindow
               position={{ lat: selectedAcademic.latitude, lng: selectedAcademic.longitude }}
               onCloseClick={handleInfoWindowClose}
             >
               <div className="infowindow">
-                <h3 className="text-md font-semibold">{selectedAcademic.name}</h3>
-                <p className="text-sm text-gray-600">{selectedAcademic.university}</p>
-                <p className="text-sm text-gray-600">{selectedAcademic.research_field}</p>
+                <h3 className="text-md font-semibold">{selectedAcademic.name || 'Academic'}</h3>
+                <p className="text-sm text-gray-600">{selectedAcademic.university || 'University'}</p>
+                <p className="text-sm text-gray-600">{selectedAcademic.research_field || 'Research Field'}</p>
                 <button
                   onClick={() => handleViewProfile(selectedAcademic.id)}
                   className="mt-2 px-2 py-1 bg-blue-500 text-white text-xs rounded-md hover:bg-blue-600"
@@ -219,7 +248,7 @@ const MapComponent = ({ academics = [], center = { lat: 23.6850, lng: 90.3563 },
             </InfoWindow>
           )}
 
-          {activeInfoWindow && (
+          {isLoaded && activeInfoWindow && activeInfoWindow.position && (
             <InfoWindow
               position={activeInfoWindow.position}
               onCloseClick={() => setActiveInfoWindow(null)}
