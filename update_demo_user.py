@@ -4,7 +4,7 @@ from passlib.context import CryptContext
 
 # Connect to MongoDB
 client = MongoClient(os.environ.get('MONGO_URL', 'mongodb://localhost:27017/'))
-db = client[os.environ.get('DB_NAME', 'bangladesh_academic_network')]
+db = client[os.environ.get('DB_NAME', 'test_database')]
 
 # Create password hash using the same context as the backend
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
