@@ -6,10 +6,11 @@ import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/ap
 // In production, this should be replaced with a valid API key and stored in environment variables
 const GOOGLE_MAPS_API_KEY = 'AIzaSyD2ye0BEvMZZEMQ9LKQl6XQxLw7UiRZYXM'; // Mock API key for demonstration
 
-const MapComponent = ({ academics, center = { lat: 23.6850, lng: 90.3563 }, zoom = 2 }) => {
+const MapComponent = ({ academics = [], center = { lat: 23.6850, lng: 90.3563 }, zoom = 2 }) => {
   const [selectedAcademic, setSelectedAcademic] = useState(null);
   const [mapInstance, setMapInstance] = useState(null);
   const [activeInfoWindow, setActiveInfoWindow] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
   const navigate = useNavigate();
   const markersRef = useRef({});
 
@@ -35,9 +36,13 @@ const MapComponent = ({ academics, center = { lat: 23.6850, lng: 90.3563 }, zoom
 
   // Group academics by city to show count when zoomed out
   const groupByCity = useCallback(() => {
+    if (!academics || academics.length === 0) return [];
+    
     const groupedAcademics = {};
     
     academics.forEach(academic => {
+      if (!academic || !academic.city || !academic.country) return;
+      
       const key = `${academic.city}_${academic.country}`;
       if (!groupedAcademics[key]) {
         groupedAcademics[key] = {
