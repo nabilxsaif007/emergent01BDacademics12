@@ -1,5 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import Globe from 'react-globe.gl';
+import * as THREE from 'three';
+import { useNavigate } from 'react-router-dom';
 
 const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
   const globeEl = useRef();
@@ -8,18 +10,32 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const tooltipRef = useRef(null);
   const [isGlobeReady, setIsGlobeReady] = useState(false);
+  const navigate = useNavigate();
 
-  // Set initial globe configuration after it's loaded
+  // Enhance globe with custom texture and effects
   useEffect(() => {
     if (!isLoading && globeEl.current) {
       // Set initial rotation and camera position
       globeEl.current.controls().autoRotate = true;
       globeEl.current.controls().autoRotateSpeed = 0.5;
+      globeEl.current.pointOfView({ lat: 23.6850, lng: 90.3563, altitude: 2.5 }); // Center on Bangladesh
       
-      // Start with a zoomed out view
-      globeEl.current.pointOfView({ lat: 0, lng: 0, altitude: 2.5 });
+      // Add directional light for 3D effect
+      const directionalLight = new THREE.DirectionalLight(0x3a9dc4, 0.6);
+      directionalLight.position.set(1, 1, 1);
+      globeEl.current.scene().add(directionalLight);
+      
+      // Add ambient light for better visibility
+      const ambientLight = new THREE.AmbientLight(0xbbbbbb, 0.3);
+      globeEl.current.scene().add(ambientLight);
       
       setIsGlobeReady(true);
+      
+      // Stop auto rotation when user interacts with the globe
+      const controls = globeEl.current.controls();
+      controls.addEventListener('start', () => {
+        controls.autoRotate = false;
+      });
     }
   }, [isLoading]);
 
@@ -34,7 +50,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       })
       .catch(error => {
         console.error("Error loading countries data:", error);
-        // Fallback to empty array if fetch fails
         setCountries([]);
       });
   }, []);
@@ -52,7 +67,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handlePointHover = (point, event) => {
+  const handlePointHover = useCallback((point, event) => {
     if (point) {
       setHoveredPoint(point);
       
@@ -64,7 +79,30 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
     } else {
       setHoveredPoint(null);
     }
-  };
+  }, []);
+
+  const handlePointClick = useCallback((point) => {
+    if (point) {
+      // Focus camera on clicked point
+      if (globeEl.current) {
+        globeEl.current.pointOfView({
+          lat: point.lat,
+          lng: point.lng,
+          altitude: 1.5
+        }, 1000); // 1000ms animation duration
+      }
+      
+      // Call the provided click handler
+      onPointClick(point);
+    }
+  }, [onPointClick]);
+
+  // Navigate to academic's profile on double click
+  const handlePointDoubleClick = useCallback((point) => {
+    if (point && point.id) {
+      navigate(`/academics/${point.id}`);
+    }
+  }, [navigate]);
 
   if (isLoading) {
     return (
@@ -80,6 +118,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       <Globe
         ref={globeEl}
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+        bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
         backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
         width={window.innerWidth}
         height={window.innerHeight}
@@ -87,7 +126,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         
         // Country polygons
         hexPolygonsData={countries}
-        hexPolygonResolution={3} // Lower values are faster
+        hexPolygonResolution={3}
         hexPolygonMargin={0.3}
         hexPolygonColor={() => `rgba(255, 255, 255, ${isGlobeReady ? 0.1 : 0})`}
         
@@ -97,16 +136,17 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         pointAltitude={0.01}
         pointRadius={0.25}
         pointsMerge={false}
-        pointResolution={12} // Lower values are faster but less smooth
-        onPointClick={(point, event) => onPointClick(point)}
-        onPointHover={(point, event) => handlePointHover(point, event)}
+        pointResolution={12}
+        onPointClick={handlePointClick}
+        onPointRightClick={handlePointDoubleClick}
+        onPointHover={handlePointHover}
         
         // Atmosphere
-        atmosphereColor="rgba(255, 255, 255, 0.3)"
+        atmosphereColor="rgba(51, 153, 255, 0.3)"
         atmosphereAltitude={0.15}
         
         // Performance optimizations
-        rendererConfig={{ antialias: false, alpha: true }}
+        rendererConfig={{ antialias: true, alpha: true }}
       />
       
       {/* Tooltip */}
@@ -132,6 +172,11 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
           background: 'radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.4) 100%)'
         }}
       ></div>
+      
+      {/* User instruction */}
+      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-70 backdrop-blur-sm px-4 py-2 rounded-full text-xs text-white text-center opacity-70 hover:opacity-100 transition-opacity">
+        Click a point to view details • Double-click to view full profile • Drag to rotate • Scroll to zoom
+      </div>
       
       {/* Attribution */}
       <div className="attribution">

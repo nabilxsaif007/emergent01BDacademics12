@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import GlobeVisualization from './components/GlobeVisualization';
 import Navbar from './components/Navbar';
 import SearchBar from './components/SearchBar';
 import FilterPanel from './components/FilterPanel';
 import InfoPanel from './components/InfoPanel';
 import WelcomeOverlay from './components/WelcomeOverlay';
+
+// Pages
+import HomePage from './pages/HomePage';
+import AcademicsPage from './pages/AcademicsPage';
+import AcademicDetailPage from './pages/AcademicDetailPage';
+import CountriesPage from './pages/CountriesPage';
+import AboutPage from './pages/AboutPage';
+import LoginPage from './pages/LoginPage';
+import SignupPage from './pages/SignupPage';
+import NotFoundPage from './pages/NotFoundPage';
+
 import './App.css';
 
 function App() {
@@ -13,6 +25,10 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAcademic, setSelectedAcademic] = useState(null);
   const [showInfoPanel, setShowInfoPanel] = useState(false);
+  const location = useLocation();
+
+  // Only show globe on certain pages
+  const showGlobe = ['/'].includes(location.pathname);
 
   // Simulate fetching data points (academics in our case)
   useEffect(() => {
@@ -28,7 +44,7 @@ function App() {
             { id: 3, name: "Dr. Kamal Hossain", lat: 1.3521, lng: 103.8198, university: "National University of Singapore", field: "Physics", city: "Singapore", country: "Singapore" },
             { id: 4, name: "Dr. Anisur Rahman", lat: 37.4419, lng: -122.1430, university: "Stanford University", field: "Bioengineering", city: "Palo Alto", country: "USA" },
             { id: 5, name: "Dr. Tahmina Ahmed", lat: 43.6532, lng: -79.3832, university: "University of Toronto", field: "Environmental Science", city: "Toronto", country: "Canada" },
-            // Add more sample data as needed
+            // Add more sample data for Bangladesh and various global locations
             { id: 6, name: "Dr. Salim Khan", lat: 23.8103, lng: 90.4125, university: "BUET", field: "Civil Engineering", city: "Dhaka", country: "Bangladesh" },
             { id: 7, name: "Dr. Nusrat Jahan", lat: 48.8566, lng: 2.3522, university: "Sorbonne University", field: "Literature", city: "Paris", country: "France" },
             { id: 8, name: "Dr. Zahir Uddin", lat: 35.7128, lng: 139.7669, university: "University of Tokyo", field: "Robotics", city: "Tokyo", country: "Japan" },
@@ -39,6 +55,12 @@ function App() {
             { id: 13, name: "Dr. Farhana Islam", lat: 59.3293, lng: 18.0686, university: "KTH Royal Institute", field: "Sustainable Energy", city: "Stockholm", country: "Sweden" },
             { id: 14, name: "Dr. Imran Hossain", lat: 55.7558, lng: 37.6173, university: "Moscow State University", field: "Mathematics", city: "Moscow", country: "Russia" },
             { id: 15, name: "Dr. Shahana Rahman", lat: -33.8688, lng: 151.2093, university: "University of Sydney", field: "Marine Biology", city: "Sydney", country: "Australia" },
+            // More academics in Bangladesh
+            { id: 16, name: "Dr. Mahmud Ali", lat: 23.7000, lng: 90.3500, university: "University of Dhaka", field: "Economics", city: "Dhaka", country: "Bangladesh" },
+            { id: 17, name: "Dr. Farida Akhter", lat: 23.7200, lng: 90.4100, university: "BRAC University", field: "Public Health", city: "Dhaka", country: "Bangladesh" },
+            { id: 18, name: "Dr. Ashraf Uddin", lat: 22.3569, lng: 91.7832, university: "Chittagong University", field: "Marine Science", city: "Chittagong", country: "Bangladesh" },
+            { id: 19, name: "Dr. Rafiq Islam", lat: 24.3636, lng: 88.6241, university: "Rajshahi University", field: "Agriculture", city: "Rajshahi", country: "Bangladesh" },
+            { id: 20, name: "Dr. Sultana Begum", lat: 24.8949, lng: 91.8687, university: "Sylhet Agricultural University", field: "Environmental Science", city: "Sylhet", country: "Bangladesh" },
           ];
           setDataPoints(sampleData);
           setFilteredDataPoints(sampleData);
@@ -103,24 +125,36 @@ function App() {
 
   return (
     <div className="app-container">
-      <WelcomeOverlay />
       <Navbar />
-      <SearchBar onSearch={handleSearch} />
-      <FilterPanel onFilter={handleFilter} />
       
-      <div className="globe-container">
-        <GlobeVisualization 
-          dataPoints={filteredDataPoints} 
-          isLoading={isLoading} 
-          onPointClick={handleGlobePointClick}
-        />
-      </div>
-      
-      <InfoPanel 
-        isVisible={showInfoPanel} 
-        academic={selectedAcademic} 
-        onClose={() => setShowInfoPanel(false)} 
-      />
+      <Routes>
+        <Route path="/" element={
+          <>
+            <WelcomeOverlay />
+            <SearchBar onSearch={handleSearch} academics={dataPoints} />
+            <FilterPanel onFilter={handleFilter} />
+            <div className="globe-container">
+              <GlobeVisualization 
+                dataPoints={filteredDataPoints} 
+                isLoading={isLoading} 
+                onPointClick={handleGlobePointClick}
+              />
+            </div>
+            <InfoPanel 
+              isVisible={showInfoPanel} 
+              academic={selectedAcademic} 
+              onClose={() => setShowInfoPanel(false)} 
+            />
+          </>
+        } />
+        <Route path="/academics" element={<AcademicsPage academics={dataPoints} />} />
+        <Route path="/academics/:id" element={<AcademicDetailPage academics={dataPoints} />} />
+        <Route path="/countries" element={<CountriesPage academics={dataPoints} />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </div>
   );
 }
