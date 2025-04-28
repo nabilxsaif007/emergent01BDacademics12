@@ -19,7 +19,8 @@ import NotFoundPage from './pages/NotFoundPage';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
 
-function App() {
+// Create a wrapper component that uses useLocation
+function AppContent() {
   const [dataPoints, setDataPoints] = useState([]);
   const [filteredDataPoints, setFilteredDataPoints] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
