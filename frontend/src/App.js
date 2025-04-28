@@ -165,7 +165,39 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <div className="app-container">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={
+            <>
+              <WelcomeOverlay />
+              <SearchBar onSearch={handleSearch} academics={dataPoints} />
+              <FilterPanel onFilter={handleFilter} />
+              <div className="globe-container">
+                <GlobeVisualization 
+                  dataPoints={filteredDataPoints} 
+                  isLoading={isLoading} 
+                  onPointClick={handleGlobePointClick}
+                />
+              </div>
+              <InfoPanel 
+                isVisible={showInfoPanel} 
+                academic={selectedAcademic} 
+                onClose={() => setShowInfoPanel(false)}
+              />
+            </>
+          } />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/academics" element={<AcademicsPage academics={dataPoints} />} />
+          <Route path="/academics/:id" element={<AcademicDetailPage academics={dataPoints} />} />
+          <Route path="/countries" element={<CountriesPage academics={dataPoints} />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </div>
     </AuthProvider>
   );
 }
