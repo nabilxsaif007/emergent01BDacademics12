@@ -1,49 +1,60 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
-
+  const [error, setError] = useState('');
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
+    if (!email || !password) {
+      setError('Please enter both email and password');
+      return;
+    }
+    
     setIsLoading(true);
-
+    
     try {
-      const result = await login(email, password);
-      if (result.success) {
-        navigate('/');
+      // Mock login functionality (replace with actual API call in production)
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Check credentials (this is just a simulation)
+      if (email === 'admin@example.com' && password === 'password') {
+        // Login success - in a real app, you would store tokens, redirect, etc.
+        console.log('Login successful');
+        // Redirect would happen here
       } else {
-        setError(result.message);
+        setError('Invalid email or password');
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
-      console.error('Login error:', err);
+      setError('An error occurred during login. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
-
+  
   return (
-    <div className="flex justify-center items-center py-12">
-      <div className="w-full max-w-md px-8 py-10 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">Login to Your Account</h1>
+    <div className="flex min-h-screen items-center justify-center pt-12">
+      <div className="w-full max-w-md px-8 py-10 bg-black bg-opacity-50 backdrop-blur-md rounded-xl shadow-xl border border-gray-800">
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
+          <p className="text-gray-400">Log in to your account</p>
+        </div>
         
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <div className="bg-red-900 bg-opacity-50 text-red-200 px-4 py-3 rounded-lg mb-6">
             {error}
           </div>
         )}
         
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
-            <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
+            <label htmlFor="email" className="block text-gray-300 text-sm font-medium mb-2">
               Email Address
             </label>
             <input
@@ -51,17 +62,18 @@ const LoginPage = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-gray-900 bg-opacity-80 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your email"
               required
             />
           </div>
           
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
-              <label htmlFor="password" className="block text-gray-700 font-medium">
+              <label htmlFor="password" className="block text-gray-300 text-sm font-medium">
                 Password
               </label>
-              <a href="#" className="text-sm text-blue-600 hover:text-blue-800">
+              <a href="#" className="text-sm text-blue-400 hover:text-blue-300">
                 Forgot password?
               </a>
             </div>
@@ -70,46 +82,75 @@ const LoginPage = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-gray-900 bg-opacity-80 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your password"
               required
             />
           </div>
           
+          <div className="flex items-center mb-6">
+            <input
+              id="remember-me"
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="h-4 w-4 text-blue-600 border-gray-700 rounded focus:ring-blue-500 bg-gray-900"
+            />
+            <label htmlFor="remember-me" className="ml-2 block text-gray-300 text-sm">
+              Remember me
+            </label>
+          </div>
+          
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-300 font-medium"
             disabled={isLoading}
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 flex items-center justify-center"
           >
-            {isLoading ? 'Logging in...' : 'Login'}
+            {isLoading ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Processing...
+              </>
+            ) : (
+              'Log In'
+            )}
           </button>
         </form>
         
         <div className="mt-6 text-center">
-          <span className="text-gray-600">Don't have an account? </span>
-          <Link to="/register" className="text-blue-600 hover:text-blue-800 font-medium">
-            Register now
+          <span className="text-gray-400">Don't have an account? </span>
+          <Link to="/signup" className="text-blue-400 hover:text-blue-300 font-medium">
+            Create one
           </Link>
         </div>
         
-        <div className="mt-8 pt-6 border-t border-gray-200">
+        <div className="mt-8 pt-6 border-t border-gray-800">
           <button
-            className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-gray-800 hover:bg-gray-50 transition-colors duration-300 mb-3"
-            onClick={() => {
-              // Mock Google login for demonstration
-              // In a production app, this would redirect to Google OAuth
-              setEmail('demo_google_user@example.com');
-              setPassword('google_auth_password');
-              
-              // Show a message that this is a mock implementation
-              alert('This is a mock Google login for the MVP. In production, this would redirect to Google OAuth. The form has been pre-filled with mock credentials for demonstration.');
-            }}
+            className="w-full flex items-center justify-center py-2 px-4 border border-gray-700 rounded-lg shadow-sm bg-transparent text-white hover:bg-gray-800 transition-colors mb-3"
+            onClick={() => console.log('Google login')}
           >
-            <img
-              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-              alt="Google"
-              className="w-5 h-5 mr-2"
-            />
+            <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
+                <path fill="#4285F4" d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z"/>
+                <path fill="#34A853" d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z"/>
+                <path fill="#FBBC05" d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.724 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z"/>
+                <path fill="#EA4335" d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z"/>
+              </g>
+            </svg>
             Continue with Google
+          </button>
+          
+          <button
+            className="w-full flex items-center justify-center py-2 px-4 border border-gray-700 rounded-lg shadow-sm bg-transparent text-white hover:bg-gray-800 transition-colors"
+            onClick={() => console.log('LinkedIn login')}
+          >
+            <svg className="h-5 w-5 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+            </svg>
+            Continue with LinkedIn
           </button>
         </div>
       </div>
