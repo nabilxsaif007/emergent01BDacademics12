@@ -318,6 +318,17 @@ async def update_academic(
     updated_academic = await db.academics.find_one({"id": academic_id})
     return Academic(**updated_academic)
 
+# User routes
+@api_router.get("/users/{user_id}", response_model=User)
+async def get_user(user_id: str, current_user: User = Depends(get_current_user)):
+    user = await db.users.find_one({"id": user_id})
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    return User(**user)
+
 # Admin routes
 @api_router.get("/admin/academics", response_model=List[Academic])
 async def get_academics_for_admin(
