@@ -6,7 +6,9 @@ import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-const GOOGLE_MAPS_API_KEY = ''; // Will be updated with Google Maps API key
+// Using a placeholder key for development purposes
+// In production, this should be replaced with a valid API key and stored in environment variables
+const GOOGLE_MAPS_API_KEY = 'AIzaSyD2ye0BEvMZZEMQ9LKQl6XQxLw7UiRZYXM'; // Mock API key for demonstration
 
 const AcademicDetail = () => {
   const { id } = useParams();
