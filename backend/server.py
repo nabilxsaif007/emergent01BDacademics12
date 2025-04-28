@@ -331,6 +331,64 @@ async def get_user(user_id: str):
     # Only return safe fields (exclude any sensitive information)
     return User(**{k: v for k, v in user.items() if k != "password"})
 
+# User profile routes
+@api_router.get("/users/me", response_model=User)
+async def get_current_user_profile(current_user: User = Depends(get_current_user)):
+    return current_user
+
+@api_router.get("/users/{user_id}/profile")
+async def get_user_profile(user_id: str, current_user: User = Depends(get_current_user)):
+    # Check if requesting own profile or admin
+    if user_id != current_user.id and current_user.role != Role.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can only access your own profile"
+        )
+    
+    # Try to find academic profile
+    profile = await db.academics.find_one({"user_id": user_id})
+    if profile:
+        # Convert ObjectId to string for JSON serialization
+        if "_id" in profile:
+            profile["_id"] = str(profile["_id"])
+        return profile
+    
+    # No profile found
+    return None
+
+@api_router.get("/users/{user_id}/stats")
+async def get_user_stats(user_id: str, current_user: User = Depends(get_current_user)):
+    # Check if requesting own stats or admin
+    if user_id != current_user.id and current_user.role != Role.ADMIN:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can only access your own stats"
+        )
+    
+    # Get real stats if available, otherwise return placeholder data
+    # In a real app, these would come from actual database queries
+    
+    # Check if user has a profile
+    profile = await db.academics.find_one({"user_id": user_id})
+    
+    if profile:
+        # For demo purposes, generate random stats
+        # In production, these would be actual metrics from the database
+        profile_views = random.randint(50, 200)
+        connections_count = random.randint(5, 30)
+        messages_count = random.randint(0, 10)
+    else:
+        # Default stats for users without profiles
+        profile_views = 0
+        connections_count = 0
+        messages_count = 0
+    
+    return {
+        "profileViews": profile_views,
+        "connections": connections_count, 
+        "messages": messages_count
+    }
+
 # Admin routes
 @api_router.get("/admin/academics", response_model=List[Academic])
 async def get_academics_for_admin(
