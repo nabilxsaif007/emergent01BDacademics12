@@ -320,14 +320,15 @@ async def update_academic(
 
 # User routes
 @api_router.get("/users/{user_id}", response_model=User)
-async def get_user(user_id: str, current_user: User = Depends(get_current_user)):
+async def get_user(user_id: str):
     user = await db.users.find_one({"id": user_id})
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
-    return User(**user)
+    # Only return safe fields (exclude any sensitive information)
+    return User(**{k: v for k, v in user.items() if k != "password"})
 
 # Admin routes
 @api_router.get("/admin/academics", response_model=List[Academic])
