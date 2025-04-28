@@ -40,6 +40,7 @@ const LoginPage = () => {
     }
     
     setIsSubmitting(true);
+    setIsLoading(true);
     setError('');
     setSuccess('');
     
