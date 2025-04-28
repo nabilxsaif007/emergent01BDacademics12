@@ -56,24 +56,48 @@ const AcademicsPage = ({ academics = [] }) => {
   };
   
   return (
-    <div className="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-16">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white mb-3">
-            Bangladeshi Academic Directory
-          </h1>
-          <p className="text-gray-300">
-            Browse our network of {academics.length} Bangladeshi academics working across the globe
-          </p>
-        </div>
-        
-        <div className="mt-4 md:mt-0">
-          <Link to="/" className="text-blue-400 hover:text-blue-300 flex items-center">
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            Back to Globe View
-          </Link>
+    <div className="min-h-screen pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-16 bg-gradient-to-b from-gray-900 to-black">
+      <div className="relative overflow-hidden mb-16 rounded-2xl bg-blue-900 bg-opacity-20 border border-blue-800">
+        <div className="absolute inset-0 bg-blue-500 opacity-10"></div>
+        <div className="relative z-10 px-8 py-12">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div className="max-w-2xl">
+              <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4 tracking-tight">
+                Bangladeshi Academic Directory
+              </h1>
+              <p className="text-xl text-blue-100 leading-relaxed">
+                Browse our network of <span className="font-bold text-white">{academics.length}</span> Bangladeshi academics working across the globe. Connect, collaborate, and build meaningful partnerships.
+              </p>
+              
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link to="/about" className="inline-flex items-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors">
+                  Learn More
+                  <svg className="ml-2 -mr-1 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                  </svg>
+                </Link>
+                <Link to="/" className="inline-flex items-center px-5 py-3 border border-blue-400 text-base font-medium rounded-md text-blue-100 bg-transparent hover:bg-blue-700 hover:bg-opacity-20 transition-colors">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                  Back to Globe View
+                </Link>
+              </div>
+            </div>
+            
+            <div className="hidden lg:block">
+              <div className="relative w-64 h-64 flex items-center justify-center">
+                <svg className="absolute animate-spin-slow opacity-20" width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="128" cy="128" r="120" stroke="#3B82F6" strokeWidth="16" strokeDasharray="16 32" />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-32 w-32 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
