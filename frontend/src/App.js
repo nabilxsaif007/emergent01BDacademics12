@@ -1,110 +1,62 @@
-import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
-import axios from "axios";
-import "./App.css";
-
-// Components
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import ProfilePage from "./pages/ProfilePage";
-import CreateProfilePage from "./pages/CreateProfilePage";
-import AdminDashboard from "./pages/AdminDashboard";
-import AcademicDetail from "./pages/AcademicDetail";
-import SearchPage from "./pages/SearchPage";
-import NotFoundPage from "./pages/NotFoundPage";
-
-// Context
-import { AuthProvider, useAuth } from "./context/AuthContext";
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
-
-// Protected route for authentication
-const ProtectedRoute = ({ children, allowedRoles = [] }) => {
-  const { isAuthenticated, user } = useAuth();
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  if (allowedRoles.length > 0 && !allowedRoles.includes(user?.role)) {
-    return <Navigate to="/" replace />;
-  }
-  
-  return children;
-};
-
-function AppRoutes() {
-  const { isAuthenticated, user } = useAuth();
-  
-  return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />} />
-      <Route path="/register" element={!isAuthenticated ? <RegisterPage /> : <Navigate to="/" />} />
-      <Route 
-        path="/profile" 
-        element={
-          <ProtectedRoute>
-            <ProfilePage />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/create-profile" 
-        element={
-          <ProtectedRoute>
-            <CreateProfilePage />
-          </ProtectedRoute>
-        } 
-      />
-      <Route 
-        path="/admin" 
-        element={
-          <ProtectedRoute allowedRoles={["admin"]}>
-            <AdminDashboard />
-          </ProtectedRoute>
-        } 
-      />
-      <Route path="/academics/:id" element={<AcademicDetail />} />
-      <Route path="/search" element={<SearchPage />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
-  );
-}
+import React, { useState, useEffect } from 'react';
+import GlobeVisualization from './components/GlobeVisualization';
+import Navbar from './components/Navbar';
+import './App.css';
 
 function App() {
-  const [apiStatus, setApiStatus] = useState("Loading...");
+  const [dataPoints, setDataPoints] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
+  // Simulate fetching data points (academics in our case)
   useEffect(() => {
-    const checkApi = async () => {
+    // This would be replaced with actual API call in production
+    const fetchData = async () => {
       try {
-        const response = await axios.get(`${API}/`);
-        setApiStatus(response.data.message);
+        // Simulating API call with timeout
+        setTimeout(() => {
+          // Sample data for academic locations
+          const sampleData = [
+            { id: 1, name: "Dr. Arif Rahman", lat: 42.3601, lng: -71.0942, university: "MIT", field: "Computer Science" },
+            { id: 2, name: "Dr. Fatima Begum", lat: 51.7520, lng: -1.2577, university: "Oxford University", field: "Medicine" },
+            { id: 3, name: "Dr. Kamal Hossain", lat: 1.3521, lng: 103.8198, university: "National University of Singapore", field: "Physics" },
+            { id: 4, name: "Dr. Anisur Rahman", lat: 37.4419, lng: -122.1430, university: "Stanford University", field: "Bioengineering" },
+            { id: 5, name: "Dr. Tahmina Ahmed", lat: 43.6532, lng: -79.3832, university: "University of Toronto", field: "Environmental Science" },
+            // Add more sample data as needed
+            { id: 6, name: "Dr. Salim Khan", lat: 23.8103, lng: 90.4125, university: "BUET", field: "Civil Engineering" },
+            { id: 7, name: "Dr. Nusrat Jahan", lat: 48.8566, lng: 2.3522, university: "Sorbonne University", field: "Literature" },
+            { id: 8, name: "Dr. Zahir Uddin", lat: 35.7128, lng: 139.7669, university: "University of Tokyo", field: "Robotics" },
+            { id: 9, name: "Dr. Nasreen Akter", lat: -37.8136, lng: 144.9631, university: "University of Melbourne", field: "Psychology" },
+            { id: 10, name: "Dr. Jamal Uddin", lat: 25.2048, lng: 55.2708, university: "UAE University", field: "Economics" },
+          ];
+          setDataPoints(sampleData);
+          setIsLoading(false);
+        }, 1000);
       } catch (error) {
-        console.error("Error connecting to API:", error);
-        setApiStatus("Error connecting to API");
+        console.error("Error fetching data:", error);
+        setIsLoading(false);
       }
     };
 
-    checkApi();
+    fetchData();
   }, []);
 
+  const handleGlobePointClick = (point) => {
+    console.log("Selected academic:", point);
+    // In a complete implementation, this could open a modal or redirect to a profile page
+    alert(`Selected: ${point.name} at ${point.university}\nField: ${point.field}`);
+  };
+
   return (
-    <AuthProvider>
-      <Router>
-        <div className="flex flex-col min-h-screen bg-gray-50">
-          <Navbar />
-          <main className="flex-grow container mx-auto px-4 py-8">
-            <AppRoutes />
-          </main>
-          <Footer />
-        </div>
-      </Router>
-    </AuthProvider>
+    <div className="app-container">
+      <Navbar />
+      <div className="globe-container">
+        <GlobeVisualization 
+          dataPoints={dataPoints} 
+          isLoading={isLoading} 
+          onPointClick={handleGlobePointClick}
+        />
+      </div>
+    </div>
   );
 }
 
