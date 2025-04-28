@@ -216,48 +216,73 @@ const AcademicsPage = ({ academics = [] }) => {
       
       {/* Results */}
       {loading ? (
-        <div className="flex justify-center items-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="flex justify-center items-center py-16">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+          <span className="ml-4 text-blue-300 text-lg">Searching academics...</span>
         </div>
       ) : displayedAcademics.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {displayedAcademics.map(academic => (
-            <Link 
-              key={academic.id} 
-              to={`/academics/${academic.id}`}
-              className="bg-black bg-opacity-50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800 hover:border-blue-500 hover:shadow-md transition-all transform hover:-translate-y-1"
+            <div 
+              key={academic.id}
+              className="group bg-black bg-opacity-60 backdrop-blur-lg rounded-xl overflow-hidden border border-gray-800 hover:border-blue-500 hover:shadow-blue-900/20 hover:shadow-lg transition-all transform hover:-translate-y-1 duration-300"
             >
+              <div className="relative overflow-hidden h-24 bg-gradient-to-r from-blue-900 to-indigo-900">
+                <div className="absolute inset-0 bg-blue-500 mix-blend-overlay opacity-20"></div>
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-black opacity-60"></div>
+                <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500 rounded-full opacity-20 mix-blend-multiply blur-2xl"></div>
+                <div className="absolute -top-10 -right-10 w-40 h-40 bg-purple-500 rounded-full opacity-20 mix-blend-multiply blur-2xl"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-white text-xl font-bold tracking-tight">{academic.name}</h3>
+                  <p className="text-blue-200 text-sm font-medium">{getDesignation(academic.field)}</p>
+                </div>
+              </div>
               <div className="p-6">
                 <div className="flex items-start">
-                  <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-full h-16 w-16 flex items-center justify-center text-2xl font-bold text-white flex-shrink-0">
+                  <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-full h-16 w-16 flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 shadow-lg transform -mt-12 border-4 border-black group-hover:scale-110 transition-transform">
                     {academic.name.charAt(0)}
                   </div>
-                  <div className="ml-4">
-                    <h3 className="text-white text-lg font-bold">{academic.name}</h3>
-                    <p className="text-blue-300 text-sm">{getDesignation(academic.field)}</p>
-                    <p className="text-gray-300 mt-1">{academic.field}</p>
-                    <div className="mt-2 pt-2 border-t border-gray-700">
-                      <p className="text-gray-400 text-sm">{academic.university}</p>
-                      <div className="flex items-center mt-1">
-                        <svg className="h-4 w-4 text-gray-500 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <p className="text-gray-500 text-sm">{academic.city}, {academic.country}</p>
-                      </div>
+                  <div className="ml-4 mt-2">
+                    <div className="flex items-center mb-2">
+                      <svg className="h-5 w-5 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                      </svg>
+                      <span className="text-gray-200">{academic.field}</span>
+                    </div>
+                    <div className="flex items-center mb-2">
+                      <svg className="h-5 w-5 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                      </svg>
+                      <span className="text-gray-300">{academic.university}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <svg className="h-5 w-5 text-blue-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <span className="text-gray-400">{academic.city}, {academic.country}</span>
                     </div>
                   </div>
                 </div>
-                <div className="mt-4 flex justify-end">
-                  <span className="text-blue-400 text-sm flex items-center">
+                <div className="mt-6 pt-4 border-t border-gray-800 flex justify-between items-center">
+                  <button className="text-blue-400 hover:text-blue-300 text-sm font-medium flex items-center transition-colors">
+                    <svg className="mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                    </svg>
+                    Contact
+                  </button>
+                  <Link 
+                    to={`/academics/${academic.id}`}
+                    className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                  >
                     View Profile
-                    <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg className="ml-2 -mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
-                  </span>
+                  </Link>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       ) : (
