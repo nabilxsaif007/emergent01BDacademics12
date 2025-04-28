@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 
 const WelcomeOverlay = () => {
-  const [isVisible, setIsVisible] = useState(true);
+  // Set to false to remove the overlay by default
+  const [isVisible, setIsVisible] = useState(false);
 
   if (!isVisible) return null;
 
