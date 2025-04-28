@@ -247,26 +247,67 @@ const CountriesPage = ({ academics = [] }) => {
       
       {/* Stats Cards */}
       {countryStats && (
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-black bg-opacity-50 backdrop-blur-sm rounded-xl border border-gray-800 p-5 flex flex-col justify-between">
-            <div className="text-gray-400 text-sm font-medium">Countries</div>
-            <div className="text-3xl font-bold text-white mt-2">{countryStats.totalCountries}</div>
-            <div className="text-blue-400 text-sm mt-2">Across 4 continents</div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <div className="bg-black bg-opacity-60 backdrop-blur-xl rounded-xl border border-blue-900 p-6 group transition-all duration-300 hover:border-blue-500 hover:translate-y-[-4px] hover:shadow-lg hover:shadow-blue-900/20">
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-blue-900 bg-opacity-30 rounded-lg mr-4 group-hover:scale-110 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-gray-400 text-sm font-medium">Countries</div>
+                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-200 group-hover:scale-105 transition-transform">{countryStats.totalCountries}</div>
+              </div>
+            </div>
+            <div className="text-blue-400 text-sm mt-2 pl-14">Across 4 continents</div>
           </div>
-          <div className="bg-black bg-opacity-50 backdrop-blur-sm rounded-xl border border-gray-800 p-5 flex flex-col justify-between">
-            <div className="text-gray-400 text-sm font-medium">Academics</div>
-            <div className="text-3xl font-bold text-white mt-2">{countryStats.totalAcademics}</div>
-            <div className="text-blue-400 text-sm mt-2">In global institutions</div>
+          
+          <div className="bg-black bg-opacity-60 backdrop-blur-xl rounded-xl border border-blue-900 p-6 group transition-all duration-300 hover:border-blue-500 hover:translate-y-[-4px] hover:shadow-lg hover:shadow-blue-900/20">
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-blue-900 bg-opacity-30 rounded-lg mr-4 group-hover:scale-110 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-gray-400 text-sm font-medium">Academics</div>
+                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-200 group-hover:scale-105 transition-transform">{countryStats.totalAcademics}</div>
+              </div>
+            </div>
+            <div className="text-blue-400 text-sm mt-2 pl-14">In global institutions</div>
           </div>
-          <div className="bg-black bg-opacity-50 backdrop-blur-sm rounded-xl border border-gray-800 p-5 flex flex-col justify-between">
-            <div className="text-gray-400 text-sm font-medium">Top Country</div>
-            <div className="text-3xl font-bold text-white mt-2">{countryStats.topCountry}</div>
-            <div className="text-blue-400 text-sm mt-2">{countries[0]?.count} academics</div>
+          
+          <div className="bg-black bg-opacity-60 backdrop-blur-xl rounded-xl border border-blue-900 p-6 group transition-all duration-300 hover:border-blue-500 hover:translate-y-[-4px] hover:shadow-lg hover:shadow-blue-900/20">
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-blue-900 bg-opacity-30 rounded-lg mr-4 group-hover:scale-110 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-gray-400 text-sm font-medium">Top Country</div>
+                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-200 group-hover:scale-105 transition-transform">
+                  {countryStats.topCountry}
+                </div>
+              </div>
+            </div>
+            <div className="text-blue-400 text-sm mt-2 pl-14">{countries[0]?.count} academics</div>
           </div>
-          <div className="bg-black bg-opacity-50 backdrop-blur-sm rounded-xl border border-gray-800 p-5 flex flex-col justify-between">
-            <div className="text-gray-400 text-sm font-medium">Coverage</div>
-            <div className="text-3xl font-bold text-white mt-2">Global</div>
-            <div className="text-blue-400 text-sm mt-2">6 continents represented</div>
+          
+          <div className="bg-black bg-opacity-60 backdrop-blur-xl rounded-xl border border-blue-900 p-6 group transition-all duration-300 hover:border-blue-500 hover:translate-y-[-4px] hover:shadow-lg hover:shadow-blue-900/20">
+            <div className="flex items-center mb-4">
+              <div className="p-3 bg-blue-900 bg-opacity-30 rounded-lg mr-4 group-hover:scale-110 transition-transform">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              </div>
+              <div>
+                <div className="text-gray-400 text-sm font-medium">Coverage</div>
+                <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-200 group-hover:scale-105 transition-transform">Global</div>
+              </div>
+            </div>
+            <div className="text-blue-400 text-sm mt-2 pl-14">6 continents represented</div>
           </div>
         </div>
       )}
