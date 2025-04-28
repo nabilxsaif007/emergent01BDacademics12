@@ -19,35 +19,57 @@ const AboutPage = () => {
   ];
 
   return (
-    <div className="pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-16">
+    <div className="min-h-screen pt-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-16 bg-gradient-to-b from-gray-900 to-black">
       {/* Hero Section */}
-      <div className="bg-black bg-opacity-50 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800 mb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-          <div className="p-8 md:p-12 flex flex-col justify-center">
-            <h1 className="text-4xl font-bold text-white mb-4">About Bangladesh Academic Network</h1>
-            <p className="text-gray-300 mb-6">
-              Connecting Bangladeshi academics across the globe with students and researchers seeking guidance and mentorship.
+      <div className="relative rounded-2xl overflow-hidden border border-blue-800 mb-16">
+        <div className="absolute inset-0 bg-blue-900 bg-opacity-20 backdrop-filter backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-purple-900/40"></div>
+        
+        {/* Animated particles */}
+        <div className="absolute -top-24 -left-24 w-64 h-64 bg-blue-500 rounded-full opacity-20 mix-blend-multiply blur-2xl animate-pulse"></div>
+        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-purple-500 rounded-full opacity-20 mix-blend-multiply blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+        
+        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-0">
+          <div className="p-10 md:p-16 flex flex-col justify-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
+              About Bangladesh Academic Network
+            </h1>
+            <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+              Connecting Bangladeshi academics across the globe with students and researchers seeking guidance and mentorship. Building bridges for knowledge transfer and collaboration.
             </p>
-            <div className="flex space-x-4">
-              <Link to="/" className="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center">
+            <div className="flex flex-wrap gap-4">
+              <Link to="/" className="bg-blue-600 text-white py-3 px-8 rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center shadow-lg hover:shadow-blue-900/30">
                 <span>Explore Map</span>
                 <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </Link>
-              <Link to="/academics" className="bg-transparent border border-blue-500 text-blue-400 py-2 px-6 rounded-lg hover:bg-blue-900 hover:bg-opacity-20 transition-colors">
+              <Link to="/academics" className="bg-transparent border border-blue-500 text-blue-400 py-3 px-8 rounded-lg hover:bg-blue-900 hover:bg-opacity-20 transition-colors shadow-lg hover:shadow-blue-900/30">
                 Find Academics
               </Link>
             </div>
           </div>
-          <div className="bg-blue-900 bg-opacity-30 relative h-64 md:h-auto">
+          <div className="relative overflow-hidden md:h-auto">
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent z-10"></div>
             <img 
               src="https://source.unsplash.com/random/800x600/?bangladesh,university" 
               alt="Bangladesh academics" 
-              className="w-full h-full object-cover opacity-60 mix-blend-luminosity"
+              className="w-full h-full object-cover opacity-80 md:h-full transition-transform duration-10000 hover:scale-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent"></div>
+            
+            <div className="absolute inset-0 flex items-center justify-center z-20">
+              <div className="w-32 h-32 md:w-48 md:h-48 relative">
+                <svg className="absolute animate-spin-slow opacity-80" width="100%" height="100%" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="128" cy="128" r="120" stroke="#3B82F6" strokeWidth="8" strokeDasharray="16 32" />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 md:h-24 md:w-24 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
