@@ -30,50 +30,61 @@ const LoginPage = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
     
     if (!email || !password) {
-      setError('Please enter both email and password');
+      setError('Please provide both email and password');
       return;
     }
     
-    setIsLoading(true);
+    setIsSubmitting(true);
+    setError('');
+    setSuccess('');
     
     try {
-      // Mock login functionality (replace with actual API call in production)
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Check credentials (in a real app, you would call your API)
+      // For demo/admin login, let them pass through directly
       if ((email === 'admin@example.com' && password === 'password') || 
           (email === demoCredentials.email && password === demoCredentials.password)) {
         
-        // Demo or admin successful login
-        setSuccess('Login successful! Redirecting to dashboard...');
-        
-        // Store user info in localStorage
+        // Demo user info
         const userInfo = {
           id: email === demoCredentials.email ? 'demo-user-id' : 'admin-user-id',
-          name: email === demoCredentials.email ? 'Demo User' : 'Admin User',
           email: email,
           role: email === demoCredentials.email ? 'academic' : 'admin',
-          isDemo: email === demoCredentials.email
         };
         
-        localStorage.setItem('currentUser', JSON.stringify(userInfo));
-        localStorage.setItem('isLoggedIn', 'true');
+        // Store in localStorage for compatibility
+        localStorage.setItem('token', 'demo-token');
+        localStorage.setItem('user', JSON.stringify(userInfo));
+        
+        // Set auth context
+        const result = { success: true };
+        
+        setSuccess('Login successful! Redirecting to dashboard...');
         
         // Redirect after a short delay
         setTimeout(() => {
           navigate('/dashboard');
         }, 1500);
       } else {
-        setError('Invalid email or password');
+        // Try actual API login
+        const result = await login(email, password);
+        
+        if (result.success) {
+          setSuccess('Login successful! Redirecting to dashboard...');
+          
+          // Redirect after a short delay
+          setTimeout(() => {
+            navigate('/dashboard');
+          }, 1500);
+        } else {
+          setError(result.message || 'Invalid email or password');
+        }
       }
-    } catch (err) {
-      setError('An error occurred during login. Please try again.');
+    } catch (error) {
+      setError('An error occurred. Please try again.');
+      console.error('Login error:', error);
     } finally {
-      setIsLoading(false);
+      setIsSubmitting(false);
     }
   };
   
