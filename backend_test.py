@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 
 class BangladeshAcademicNetworkTester:
-    def __init__(self, base_url="https://df7237f0-509a-46d2-a901-12007e2054b9.preview.emergentagent.com"):
+    def __init__(self, base_url="https://60033f48-a690-4b39-a4b4-35817b3748c7.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.token = None
