@@ -88,6 +88,7 @@ const LoginPage = () => {
       console.error('Login error:', error);
     } finally {
       setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
   
