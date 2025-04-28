@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 
-const GOOGLE_MAPS_API_KEY = ''; // Will be updated with Google Maps API key
+// Using a placeholder key for development purposes
+// In production, this should be replaced with a valid API key and stored in environment variables
+const GOOGLE_MAPS_API_KEY = 'AIzaSyD2ye0BEvMZZEMQ9LKQl6XQxLw7UiRZYXM'; // Mock API key for demonstration
 
 const MapComponent = ({ academics, center = { lat: 23.6850, lng: 90.3563 }, zoom = 2 }) => {
   const [selectedAcademic, setSelectedAcademic] = useState(null);
