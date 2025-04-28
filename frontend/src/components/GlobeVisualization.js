@@ -41,16 +41,54 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
 
   // Load country data for globe
   useEffect(() => {
+    // Mock country data structure for basic visualization
+    const mockCountryData = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: { name: "Bangladesh" },
+          geometry: {
+            type: "Polygon",
+            coordinates: [[[92.6727, 22.0412], [92.6523, 21.3240], [92.3032, 21.4755], [92.3686, 20.6709], [92.0829, 21.1922], [92.0252, 21.7016], [91.8349, 22.1829], [91.4171, 22.7650], [90.4960, 22.8050], [90.5870, 22.3928], [90.2730, 21.8364], [89.8475, 22.0391], [89.7021, 21.8571], [89.4189, 21.9662], [89.0320, 22.0557], [88.8763, 22.8791], [88.5298, 23.6311], [88.6999, 24.2337], [88.0844, 24.5017], [88.3064, 24.8661], [88.9316, 25.2387], [88.2098, 25.7681], [88.5630, 26.4465], [89.3551, 26.0144], [89.8325, 25.9651], [89.9207, 25.2698], [90.8722, 25.1326], [91.7996, 25.1474], [92.3762, 24.9767], [91.9151, 24.1304], [91.4677, 24.0726], [91.1590, 23.5035], [91.7065, 22.9853], [91.8699, 23.6243], [92.1460, 23.6275], [92.6727, 22.0412]]]
+          }
+        },
+        {
+          type: "Feature",
+          properties: { name: "United States" },
+          geometry: {
+            type: "MultiPolygon",
+            coordinates: [
+              [[[-155.54211, 19.08999], [-155.68817, 18.91619], [-155.93665, 19.05939], [-155.90806, 19.33888], [-156.07347, 19.70294], [-156.02368, 19.81422], [-155.85008, 19.97729], [-155.91907, 20.17395], [-155.86108, 20.26721], [-155.78505, 20.2487], [-155.40214, 20.07975], [-155.22452, 19.99302], [-155.06226, 19.8591], [-154.80741, 19.50871], [-154.83147, 19.45328], [-155.22217, 19.23972], [-155.54211, 19.08999]]]
+            ]
+          }
+        },
+        {
+          type: "Feature",
+          properties: { name: "United Kingdom" },
+          geometry: {
+            type: "MultiPolygon",
+            coordinates: [
+              [[[-5.661949, 54.554603], [-6.197885, 53.867565], [-6.95373, 54.073702], [-7.572168, 54.059956], [-7.366031, 54.595841], [-7.572168, 55.131622], [-6.733847, 55.17286], [-5.661949, 54.554603]]]
+            ]
+          }
+        }
+      ]
+    };
+    
+    setCountries(mockCountryData.features);
+    
+    // Also try to fetch real data, but rely on mock if it fails
     fetch('https://unpkg.com/world-atlas/countries-110m.json')
       .then(res => res.json())
       .then(data => {
-        if (data.features) {
+        if (data.features && data.features.length > 0) {
           setCountries(data.features);
+          console.log("Loaded real country data");
         }
       })
       .catch(error => {
-        console.error("Error loading countries data:", error);
-        setCountries([]);
+        console.log("Using mock country data due to fetch error");
       });
   }, []);
 
