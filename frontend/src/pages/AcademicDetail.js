@@ -159,7 +159,11 @@ const AcademicDetail = () => {
                 
                 {academic.latitude && academic.longitude && (
                   <div className="rounded-lg overflow-hidden border border-gray-200">
-                    <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY}>
+                    <LoadScript 
+                      googleMapsApiKey={GOOGLE_MAPS_API_KEY}
+                      onLoad={() => console.log("Google Maps Script loaded in AcademicDetail")}
+                      onError={handleMapError}
+                    >
                       <GoogleMap
                         mapContainerStyle={mapContainerStyle}
                         center={{
@@ -167,13 +171,16 @@ const AcademicDetail = () => {
                           lng: academic.longitude
                         }}
                         zoom={8}
+                        onLoad={handleMapLoad}
                       >
-                        <Marker
-                          position={{
-                            lat: academic.latitude,
-                            lng: academic.longitude
-                          }}
-                        />
+                        {mapLoaded && (
+                          <Marker
+                            position={{
+                              lat: academic.latitude,
+                              lng: academic.longitude
+                            }}
+                          />
+                        )}
                       </GoogleMap>
                     </LoadScript>
                   </div>
