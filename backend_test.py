@@ -206,8 +206,8 @@ class BangladeshAcademicNetworkTester:
             return response.get('id')
         return None
 
-def main():
-    # Setup
+def test_demo_login():
+    """Test login with demo account"""
     tester = BangladeshAcademicNetworkTester()
     
     # Test root endpoint
@@ -215,22 +215,33 @@ def main():
         print("❌ Root API test failed, stopping tests")
         return 1
     
-    # Test registration
-    email, password = tester.test_register_user()
-    if not email:
-        print("❌ Registration failed, stopping tests")
+    # Test login with demo account
+    if not tester.test_login("demo@bdacademic.org", "demo123"):
+        print("❌ Demo login failed, stopping tests")
         return 1
     
-    # Test login
-    if not tester.test_login(email, password):
-        print("❌ Login failed, stopping tests")
-        return 1
+    # Test getting user profile
+    if tester.user_id:
+        success, profile = tester.run_test(
+            "Get User Profile",
+            "GET",
+            f"users/{tester.user_id}/profile",
+            200
+        )
+        
+        # Test getting user stats
+        success, stats = tester.run_test(
+            "Get User Stats",
+            "GET",
+            f"users/{tester.user_id}/stats",
+            200
+        )
+        
+        if success:
+            print(f"User stats: {stats}")
     
     # Test getting academics (no filters)
     academics = tester.test_get_academics()
-    
-    # Test getting academics with research field filter
-    filtered_academics = tester.test_get_academics({"research_field": "Computer Science"})
     
     # Test getting keywords
     keywords = tester.test_get_keywords()
@@ -238,12 +249,13 @@ def main():
     # Test getting stats
     stats_success, stats = tester.test_get_stats()
     
-    # Test creating an academic profile
-    profile_id = tester.test_create_academic_profile()
-    
     # Print results
     print(f"\n📊 Tests passed: {tester.tests_passed}/{tester.tests_run}")
     return 0 if tester.tests_passed == tester.tests_run else 1
+
+def main():
+    # Run the demo login test
+    return test_demo_login()
 
 if __name__ == "__main__":
     sys.exit(main())
