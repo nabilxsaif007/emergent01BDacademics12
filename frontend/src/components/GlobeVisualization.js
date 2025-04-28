@@ -1,13 +1,15 @@
 import React, { useRef, useEffect, useState } from 'react';
 import Globe from 'react-globe.gl';
 
-const GlobeVisualization = ({ dataPoints, isLoading, onPointClick }) => {
+const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
   const globeEl = useRef();
   const [countries, setCountries] = useState([]);
   const [hoveredPoint, setHoveredPoint] = useState(null);
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const tooltipRef = useRef(null);
+  const [isGlobeReady, setIsGlobeReady] = useState(false);
 
+  // Set initial globe configuration after it's loaded
   useEffect(() => {
     if (!isLoading && globeEl.current) {
       // Set initial rotation and camera position
@@ -16,15 +18,19 @@ const GlobeVisualization = ({ dataPoints, isLoading, onPointClick }) => {
       
       // Start with a zoomed out view
       globeEl.current.pointOfView({ lat: 0, lng: 0, altitude: 2.5 });
+      
+      setIsGlobeReady(true);
     }
   }, [isLoading]);
 
   // Load country data for globe
   useEffect(() => {
-    fetch('/countries.geojson')
+    fetch('https://unpkg.com/world-atlas/countries-110m.json')
       .then(res => res.json())
       .then(data => {
-        setCountries(data.features);
+        if (data.features) {
+          setCountries(data.features);
+        }
       })
       .catch(error => {
         console.error("Error loading countries data:", error);
@@ -51,8 +57,8 @@ const GlobeVisualization = ({ dataPoints, isLoading, onPointClick }) => {
       setHoveredPoint(point);
       
       // Calculate tooltip position based on mouse or touch event
-      const x = event.clientX || (event.touches && event.touches[0] ? event.touches[0].clientX : 0);
-      const y = event.clientY || (event.touches && event.touches[0] ? event.touches[0].clientY : 0);
+      const x = event?.clientX || (event?.touches && event.touches[0] ? event.touches[0].clientX : window.innerWidth / 2);
+      const y = event?.clientY || (event?.touches && event.touches[0] ? event.touches[0].clientY : window.innerHeight / 2);
       
       setTooltipPosition({ x, y });
     } else {
@@ -64,7 +70,7 @@ const GlobeVisualization = ({ dataPoints, isLoading, onPointClick }) => {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
-        <p>Loading globe data...</p>
+        <p>Loading globe visualization...</p>
       </div>
     );
   }
@@ -80,29 +86,27 @@ const GlobeVisualization = ({ dataPoints, isLoading, onPointClick }) => {
         lineHoverPrecision={0}
         
         // Country polygons
-        polygonsData={countries}
-        polygonCapColor={() => 'rgba(200, 200, 200, 0)'}
-        polygonSideColor={() => 'rgba(150, 150, 150, 0.3)'}
-        polygonStrokeColor={() => 'rgba(255, 255, 255, 0.3)'}
-        polygonAltitude={0.001}
+        hexPolygonsData={countries}
+        hexPolygonResolution={3} // Lower values are faster
+        hexPolygonMargin={0.3}
+        hexPolygonColor={() => `rgba(255, 255, 255, ${isGlobeReady ? 0.1 : 0})`}
         
         // Render points
         pointsData={dataPoints}
         pointColor={() => '#4285F4'}
-        pointAltitude={0.02}
+        pointAltitude={0.01}
         pointRadius={0.25}
         pointsMerge={false}
-        pointLabel={point => `
-          <div class="text-sm font-bold">${point.name}</div>
-          <div class="text-xs">${point.university}</div>
-          <div class="text-xs">${point.field}</div>
-        `}
+        pointResolution={12} // Lower values are faster but less smooth
         onPointClick={(point, event) => onPointClick(point)}
         onPointHover={(point, event) => handlePointHover(point, event)}
         
         // Atmosphere
         atmosphereColor="rgba(255, 255, 255, 0.3)"
         atmosphereAltitude={0.15}
+        
+        // Performance optimizations
+        rendererConfig={{ antialias: false, alpha: true }}
       />
       
       {/* Tooltip */}
@@ -121,7 +125,15 @@ const GlobeVisualization = ({ dataPoints, isLoading, onPointClick }) => {
         </div>
       )}
       
-      {/* Attribution similar to screenshot */}
+      {/* Overlay effect for better readability */}
+      <div 
+        className="absolute inset-0 pointer-events-none" 
+        style={{
+          background: 'radial-gradient(circle, rgba(0,0,0,0) 40%, rgba(0,0,0,0.4) 100%)'
+        }}
+      ></div>
+      
+      {/* Attribution */}
       <div className="attribution">
         <a 
           href="https://www.mapbox.com/" 
