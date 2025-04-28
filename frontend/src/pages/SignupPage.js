@@ -70,8 +70,8 @@ const SignupPage = () => {
   };
   
   return (
-    <div className="flex min-h-screen items-center justify-center py-12">
-      <div className="w-full max-w-lg px-8 py-10 bg-black bg-opacity-50 backdrop-blur-md rounded-xl shadow-xl border border-gray-800">
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-gradient-to-b from-gray-900 to-black">
+      <div className="w-full max-w-lg px-8 py-10 bg-black bg-opacity-70 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-800 transform transition-all">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Create Your Account</h1>
           <p className="text-gray-400">Join the Bangladesh Academic Mentor Network</p>
