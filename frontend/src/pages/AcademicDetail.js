@@ -16,6 +16,7 @@ const AcademicDetail = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [mapLoaded, setMapLoaded] = useState(false);
   
   useEffect(() => {
     const fetchAcademic = async () => {
@@ -33,7 +34,10 @@ const AcademicDetail = () => {
           setUser(userResponse.data);
         } catch (err) {
           console.error('Error fetching user details:', err);
-          setUser({ name: 'Academic Mentor', email: academicResponse.data.contact_email });
+          setUser({ 
+            name: 'Academic Mentor', 
+            email: academicResponse.data.contact_email 
+          });
         }
       } catch (err) {
         console.error('Error fetching academic details:', err);
@@ -49,6 +53,16 @@ const AcademicDetail = () => {
   const mapContainerStyle = {
     width: '100%',
     height: '300px',
+  };
+  
+  const handleMapLoad = () => {
+    setMapLoaded(true);
+    console.log("Google Maps loaded successfully in AcademicDetail");
+  };
+  
+  const handleMapError = (error) => {
+    console.error("Error loading Google Maps in AcademicDetail:", error);
+    setMapLoaded(false);
   };
   
   if (loading) {
