@@ -3,14 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [showDemoNotice, setShowDemoNotice] = useState(false);
-  const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Demo account credentials
   const demoCredentials = {
