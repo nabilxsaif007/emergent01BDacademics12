@@ -167,10 +167,15 @@ const DashboardPage = () => {
       ) : (
         <div className="bg-white shadow rounded-lg p-6 mb-8">
           <div className="flex justify-between items-start">
-            <div>
-              <h2 className="text-xl font-medium text-gray-900 mb-1">Your Academic Profile</h2>
-              <p className="text-gray-600">{profile.university} | {profile.city}, {profile.country}</p>
-              <p className="text-sm text-gray-500 mt-2">{profile.research_field}</p>
+            <div className="flex items-center">
+              <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-full h-16 w-16 flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 mr-4">
+                {user.name ? user.name.charAt(0) : profile.name ? profile.name.charAt(0) : "A"}
+              </div>
+              <div>
+                <h2 className="text-xl font-medium text-gray-900 mb-1">Your Academic Profile</h2>
+                <p className="text-gray-600">{profile.university} | {profile.city}, {profile.country}</p>
+                <p className="text-sm text-gray-500 mt-2">{profile.research_field || profile.field}</p>
+              </div>
             </div>
             <Link
               to={`/profile/edit`}
@@ -180,28 +185,64 @@ const DashboardPage = () => {
             </Link>
           </div>
 
-          {profile.keywords && profile.keywords.length > 0 && (
-            <div className="mt-4">
-              <p className="text-sm font-medium text-gray-500 mb-1">Research Keywords</p>
-              <div className="flex flex-wrap gap-2">
-                {profile.keywords.map((keyword, idx) => (
-                  <span
-                    key={idx}
-                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-                  >
-                    {keyword}
-                  </span>
-                ))}
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-medium text-gray-700 mb-2">About</h3>
+              <p className="text-sm text-gray-600">{profile.bio || "Add a short bio describing your research interests and expertise."}</p>
+              <button className="mt-2 text-sm text-blue-600 hover:text-blue-800">Edit</button>
+            </div>
+            
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-medium text-gray-700 mb-2">Contact Information</h3>
+              <div className="text-sm">
+                <div className="flex items-center mb-1">
+                  <svg className="h-4 w-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                  <span className="text-gray-600">{profile.email || user.email || "Add your email"}</span>
+                </div>
+                <div className="flex items-center">
+                  <svg className="h-4 w-4 text-gray-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  <span className="text-gray-600">{profile.phone || "Add your phone number"}</span>
+                </div>
               </div>
+              <button className="mt-2 text-sm text-blue-600 hover:text-blue-800">Edit</button>
             </div>
-          )}
+          </div>
 
-          {profile.bio && (
-            <div className="mt-4">
-              <p className="text-sm font-medium text-gray-500 mb-1">Biography</p>
-              <p className="text-sm text-gray-900">{profile.bio}</p>
+          <div className="mt-6">
+            <h3 className="font-medium text-gray-700 mb-2">Research Keywords</h3>
+            <div className="flex flex-wrap gap-2 mb-2">
+              {profile.keywords ? profile.keywords.map((keyword, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                >
+                  {keyword}
+                </span>
+              )) : profile.research_areas ? profile.research_areas.map((keyword, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                >
+                  {keyword}
+                </span>
+              )) : (
+                <span className="text-sm text-gray-500">Add research keywords to help others find you</span>
+              )}
             </div>
-          )}
+            <button className="text-sm text-blue-600 hover:text-blue-800">Edit Keywords</button>
+          </div>
+
+          <div className="mt-6">
+            <h3 className="font-medium text-gray-700 mb-2">Publications</h3>
+            <div className="text-sm text-gray-600">
+              {profile.publications ? `${profile.publications} published works` : "Add your publication information"}
+            </div>
+            <button className="mt-2 text-sm text-blue-600 hover:text-blue-800">Add Publications</button>
+          </div>
         </div>
       )}
 
