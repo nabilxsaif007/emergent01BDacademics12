@@ -239,7 +239,7 @@ function AppContent() {
                   </div>
                 </div>
                 
-                {/* Search bar moved inside the info box */}
+                {/* Enhanced search bar with autocomplete */}
                 <div className="mt-6">
                   <form onSubmit={(e) => { e.preventDefault(); handleSearch(document.getElementById('search-input').value); }} className="relative">
                     <input
@@ -247,7 +247,20 @@ function AppContent() {
                       type="text"
                       placeholder="Search academics, fields, or universities..."
                       className="w-full py-3 px-6 bg-black bg-opacity-60 backdrop-blur-md border border-gray-600 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                      list="search-suggestions"
                     />
+                    <datalist id="search-suggestions">
+                      <option value="Computer Science" />
+                      <option value="Medicine" />
+                      <option value="Physics" />
+                      <option value="Bioengineering" />
+                      <option value="Environmental Science" />
+                      <option value="University of Dhaka" />
+                      <option value="BUET" />
+                      <option value="artificial intelligence" />
+                      <option value="machine learning" />
+                      <option value="climate research" />
+                    </datalist>
                     <button
                       type="submit"
                       className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition-colors focus:outline-none"
