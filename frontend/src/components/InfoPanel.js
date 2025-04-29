@@ -3,7 +3,19 @@ import { useNavigate } from 'react-router-dom';
 
 const InfoPanel = ({ isVisible, academic, onClose }) => {
   const navigate = useNavigate();
+  // Add hooks at the top level - before any conditional returns
+  const [loading, setLoading] = useState(false);
   
+  // Set loading effect when academic changes
+  useEffect(() => {
+    if (isVisible && academic) {
+      setLoading(true);
+      const timer = setTimeout(() => setLoading(false), 800);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, academic]);
+  
+  // Early return - after all hooks have been called
   if (!isVisible || !academic) return null;
 
   const handleViewProfile = () => {
@@ -51,23 +63,6 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
   const getAboutText = () => {
     return `${academic.name.split(' ')[0]} is a ${academic.field} specialist at ${academic.university}. Their research focuses on advanced topics with real-world applications.`.substring(0, 150);
   };
-
-  // Generate a more detailed description
-  const getDetailedDescription = () => {
-    return `${academic.name.split(' ')[0]} is a ${academic.field} specialist focusing on advanced research at ${academic.university}. Their work combines theoretical insights with practical applications, particularly in ${generateKeywords(academic.field)[0]} and ${generateKeywords(academic.field)[1]}. They've published extensively in peer-reviewed journals and collaborate with institutions worldwide.`;
-  };
-
-  // Add loading and error states
-  const [loading, setLoading] = useState(true);
-  
-  // Set loading effect when academic changes
-  useEffect(() => {
-    if (academic) {
-      setLoading(true);
-      const timer = setTimeout(() => setLoading(false), 800);
-      return () => clearTimeout(timer);
-    }
-  }, [academic]);
   
   return (
     <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4 sm:max-w-lg md:max-w-xl">
