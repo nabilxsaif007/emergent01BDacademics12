@@ -166,7 +166,39 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
   }
 
   return (
-    <>
+    <div className="h-full relative">
+      {/* Responsive controls for mobile */}
+      <div className="absolute top-4 right-4 z-10 flex flex-col space-y-2 md:hidden">
+        <button 
+          onClick={() => globeEl.current && globeEl.current.controls().reset()}
+          className="bg-black bg-opacity-70 p-2 rounded-full border border-gray-700 text-white hover:bg-opacity-90 transition-all"
+          title="Reset view"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+        <button 
+          onClick={() => globeEl.current && globeEl.current.zoomIn()}
+          className="bg-black bg-opacity-70 p-2 rounded-full border border-gray-700 text-white hover:bg-opacity-90 transition-all"
+          title="Zoom in"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+        </button>
+        <button 
+          onClick={() => globeEl.current && globeEl.current.zoomOut()}
+          className="bg-black bg-opacity-70 p-2 rounded-full border border-gray-700 text-white hover:bg-opacity-90 transition-all"
+          title="Zoom out"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" />
+          </svg>
+        </button>
+      </div>
+      
+      <>
       <Globe
         ref={globeEl}
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
