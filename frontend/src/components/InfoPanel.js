@@ -109,13 +109,7 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
           </div>
         </div>
         
-        {/* Detailed Description Section */}
-        <div className="mt-4 pt-4 border-t border-gray-700">
-          <h4 className="text-gray-200 text-sm font-semibold uppercase mb-2">Description</h4>
-          <p className="text-gray-300 text-sm">
-            {getDetailedDescription()}
-          </p>
-        </div>
+{/* Description section removed as per feedback */}
         
         {/* Contact Information */}
         <div className="mt-4 pt-4 border-t border-gray-700">
