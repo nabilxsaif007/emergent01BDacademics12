@@ -57,9 +57,12 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
     return `${academic.name.split(' ')[0]} is a ${academic.field} specialist focusing on advanced research at ${academic.university}. Their work combines theoretical insights with practical applications, particularly in ${generateKeywords(academic.field)[0]} and ${generateKeywords(academic.field)[1]}. They've published extensively in peer-reviewed journals and collaborate with institutions worldwide.`;
   };
 
+  // Added console log to verify component is triggered  
+  console.log("InfoPanel rendering with academic:", academic);
+  
   return (
-    <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 w-full max-w-md px-4">
-      <div className="info-panel-backdrop rounded-lg shadow-lg p-6 animate-fade-in-up">
+    <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4">
+      <div className="info-panel-backdrop rounded-lg shadow-xl border-2 border-blue-500 p-6 animate-fade-in-up">
         <button 
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white"
