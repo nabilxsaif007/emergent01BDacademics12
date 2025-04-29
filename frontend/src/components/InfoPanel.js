@@ -75,7 +75,7 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
         )}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-white"
+          className="absolute top-4 right-4 text-white p-2 bg-red-600 rounded-full hover:bg-red-700 focus:outline-none transition-colors shadow-lg"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
