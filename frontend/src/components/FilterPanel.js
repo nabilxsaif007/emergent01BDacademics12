@@ -65,7 +65,7 @@ const FilterPanel = ({ onFilter }) => {
                 name="country"
                 value={filters.country}
                 onChange={handleChange}
-                className="w-full bg-gray-900 text-white border border-gray-700 rounded py-2 px-3"
+                className="w-full bg-gray-900 text-white border border-gray-700 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="">Any Country</option>
                 <option value="USA">USA</option>
