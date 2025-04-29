@@ -19,6 +19,9 @@ import NotFoundPage from './pages/NotFoundPage';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
 
+// Define API URL from environment variables
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+
 // Get API URL from environment variables
 const API = process.env.REACT_APP_BACKEND_URL || 'https://60033f48-a690-4b39-a4b4-35817b3748c7.preview.emergentagent.com/api';
 
