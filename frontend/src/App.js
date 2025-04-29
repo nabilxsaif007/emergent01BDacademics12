@@ -205,6 +205,8 @@ function AppContent() {
   return (
     <div className="app-container">
       <Navbar />
+      {/* Add padding for fixed navbar */}
+      <div className="pt-20">
       <Routes>
         <Route path="/" element={
           <>
