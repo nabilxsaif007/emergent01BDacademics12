@@ -116,7 +116,11 @@ const NavLink = ({ to, label, isActive = false }) => {
   return (
     <Link 
       to={to}
-      className={`text-sm font-medium ${isActive ? 'text-blue-400' : 'text-gray-300 hover:text-white'}`}
+      className={`text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 ${
+        isActive 
+          ? 'text-blue-400 bg-blue-900 bg-opacity-30' 
+          : 'text-gray-300 hover:text-white hover:bg-gray-800 hover:bg-opacity-50'
+      }`}
     >
       {label}
     </Link>
