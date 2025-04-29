@@ -201,19 +201,20 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         rendererConfig={{ antialias: true, alpha: true }}
       />
       
-      {/* Tooltip */}
+      {/* Enhanced Tooltip */}
       {hoveredPoint && (
         <div 
           ref={tooltipRef}
-          className="tooltip"
+          className="fixed z-50 bg-black bg-opacity-85 backdrop-blur-md px-4 py-2 rounded-lg shadow-lg border border-blue-500 text-white transform -translate-x-1/2 pointer-events-none"
           style={{
             left: tooltipPosition.x,
-            top: tooltipPosition.y - 10
+            top: tooltipPosition.y - 40
           }}
         >
-          <div className="font-bold">{hoveredPoint.name}</div>
-          <div className="text-xs">{hoveredPoint.university}</div>
-          <div className="text-xs">{hoveredPoint.field}</div>
+          <div className="font-bold text-blue-300 text-base">{hoveredPoint.name}</div>
+          <div className="text-sm text-white">{hoveredPoint.university}</div>
+          <div className="text-xs text-gray-300">{hoveredPoint.field} • {hoveredPoint.city}, {hoveredPoint.country}</div>
+          <div className="text-xs text-blue-400 mt-1">Click for details</div>
         </div>
       )}
       
