@@ -247,6 +247,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         // Performance optimizations
         rendererConfig={{ antialias: true, alpha: true }}
       />
+      )}
       
       {/* Enhanced Tooltip */}
       {hoveredPoint && (
