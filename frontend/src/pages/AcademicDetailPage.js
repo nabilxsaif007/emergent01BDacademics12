@@ -28,11 +28,38 @@ const AcademicDetailPage = ({ academics = [] }) => {
   };
   
   useEffect(() => {
-    // Find the academic by ID
-    const foundAcademic = academics.find(a => a.id === parseInt(id));
+    // Find the academic by ID - handling both number and string IDs
+    const foundAcademic = academics.find(a => 
+      a.id === id || 
+      a.id === parseInt(id) || 
+      String(a.id) === id
+    );
     
     if (foundAcademic) {
+      console.log("Found academic by ID:", foundAcademic);
       setAcademic(foundAcademic);
+    } else {
+      console.error("Academic not found with ID:", id);
+      console.log("Available academics:", academics);
+      
+      // Attempt to fetch from API directly
+      const fetchAcademic = async () => {
+        try {
+          const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+          const response = await fetch(`${API}/academics/${id}`);
+          if (response.ok) {
+            const data = await response.json();
+            console.log("Fetched academic data:", data);
+            setAcademic(data);
+          } else {
+            console.error("Failed to fetch academic:", response.status);
+          }
+        } catch (error) {
+          console.error("Error fetching academic:", error);
+        }
+      };
+      
+      fetchAcademic();
     }
   }, [id, academics]);
   
