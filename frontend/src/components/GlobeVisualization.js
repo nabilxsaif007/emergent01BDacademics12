@@ -185,14 +185,20 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         // Render points
         pointsData={dataPoints}
         pointColor={(d) => d === hoveredPoint ? '#ff8800' : '#4285F4'}
-        pointAltitude={0.07}
-        pointRadius={(d) => d === hoveredPoint ? 0.4 : 0.25}
+        pointAltitude={0.1} // Increased from 0.07
+        pointRadius={(d) => d === hoveredPoint ? 0.6 : 0.4} // Increased from 0.4/0.25
         pointResolution={12}
         pointsMerge={false}
         pointLabel={(d) => `${d.name} (${d.university})`}
         onPointClick={(point, event) => {
           console.log('Direct point click:', point);
+          // Ensure the click handler works by calling both the local function and parent callback
           handlePointClick(point);
+          
+          // Also directly call the parent handler as a fallback
+          if (onPointClick && typeof onPointClick === 'function') {
+            setTimeout(() => onPointClick(point), 50);
+          }
         }}
         onPointRightClick={handlePointDoubleClick}
         onPointHover={handlePointHover}
