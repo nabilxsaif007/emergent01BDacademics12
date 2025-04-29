@@ -77,8 +77,14 @@ function AppContent() {
   }, []);
 
   const handleGlobePointClick = (point) => {
+    console.log("Globe point clicked, setting selected academic:", point);
     setSelectedAcademic(point);
     setShowInfoPanel(true);
+    
+    // Debug check to ensure we're getting the right data
+    if (!point) {
+      console.error("No point data received in handleGlobePointClick");
+    }
   };
 
   const handleSearch = (query) => {
