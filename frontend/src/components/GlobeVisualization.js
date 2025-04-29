@@ -189,7 +189,11 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         pointRadius={(d) => d === hoveredPoint ? 0.4 : 0.25}
         pointResolution={12}
         pointsMerge={false}
-        onPointClick={handlePointClick}
+        pointLabel={(d) => `${d.name} (${d.university})`}
+        onPointClick={(point, event) => {
+          console.log('Direct point click:', point);
+          handlePointClick(point);
+        }}
         onPointRightClick={handlePointDoubleClick}
         onPointHover={handlePointHover}
         
