@@ -27,18 +27,19 @@ const FilterPanel = ({ onFilter }) => {
   };
 
   return (
-    <div className="absolute top-24 right-4 z-10">
+    <div className="fixed top-24 right-4 z-40">
       <button 
         onClick={togglePanel}
-        className="bg-black bg-opacity-60 p-3 rounded-full flex items-center justify-center hover:bg-opacity-80 transition-colors border border-gray-600"
+        className="bg-black bg-opacity-80 p-3 rounded-full flex items-center justify-center hover:bg-opacity-90 transition-all border border-blue-800 shadow-lg hover:shadow-blue-900/20"
+        aria-label="Filter toggle"
       >
-        <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg className="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
         </svg>
       </button>
       
       {isOpen && (
-        <div className="absolute top-14 right-0 w-64 bg-black bg-opacity-80 backdrop-blur-md rounded-lg shadow-lg border border-gray-700 p-4 mt-2">
+        <div className="absolute top-14 right-0 w-72 md:w-80 bg-black bg-opacity-90 backdrop-blur-lg rounded-lg shadow-xl border border-blue-900 p-4 mt-2 animate-fade-in-up">
           <h3 className="text-white font-semibold mb-3">Filter Academics</h3>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
