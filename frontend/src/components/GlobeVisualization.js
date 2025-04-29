@@ -274,10 +274,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         }}
       ></div>
       
-      {/* User instruction */}
-      <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-black bg-opacity-70 backdrop-blur-sm px-4 py-2 rounded-full text-xs text-white text-center opacity-70 hover:opacity-100 transition-opacity">
-        Click a point to view details • Double-click to view full profile • Drag to rotate • Scroll to zoom
-      </div>
+      {/* User instruction removed as requested */}
       
       {/* Attribution */}
       <div className="attribution">
