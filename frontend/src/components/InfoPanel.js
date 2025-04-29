@@ -65,8 +65,8 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
   };
   
   return (
-    <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4 sm:max-w-lg md:max-w-xl">
-      <div className="info-panel-backdrop rounded-lg shadow-xl border-2 border-blue-500 p-6 animate-fade-in-up">
+    <div className="fixed inset-0 z-50 flex items-center justify-center sm:inset-auto sm:bottom-10 sm:left-1/2 sm:transform sm:-translate-x-1/2 sm:w-full sm:max-w-md sm:px-4 md:max-w-lg">
+      <div className="info-panel-backdrop rounded-lg shadow-xl border-2 border-blue-500 p-6 animate-fade-in-up w-full h-full overflow-y-auto sm:h-auto sm:max-h-[80vh]">
         {loading && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 rounded-lg z-10 backdrop-filter backdrop-blur-sm">
             <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500 mr-3"></div>
