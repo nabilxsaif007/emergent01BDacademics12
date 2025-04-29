@@ -18,7 +18,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex justify-between items-center py-4 px-6 w-full absolute top-0 z-10">
+    <nav className="flex justify-between items-center py-4 px-6 w-full fixed top-0 z-50 bg-black bg-opacity-80 backdrop-filter backdrop-blur-lg border-b border-gray-800 shadow-lg">
       <div className="flex items-center">
         <Link to="/" className="text-white font-bold text-2xl mr-10">
           <span className="text-blue-500">B</span>
