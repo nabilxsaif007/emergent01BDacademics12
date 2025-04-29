@@ -144,7 +144,7 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
         {/* View Profile Button */}
         <button 
           onClick={handleViewProfile}
-          className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-colors font-medium flex items-center justify-center"
+          className="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg transition-all duration-300 font-medium flex items-center justify-center animate-pulse-glow hover:scale-105 transform"
         >
           <span>View Full Profile</span>
           <svg className="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
