@@ -266,6 +266,26 @@ function AppContent() {
               <SearchBar onSearch={handleSearch} academics={dataPoints} />
             </div>
             
+            {/* Debug info and testing button */}
+            <div className="absolute bottom-4 left-4 z-20">
+              <button 
+                onClick={() => {
+                  if (dataPoints.length > 0) {
+                    console.log("Test showing academic:", dataPoints[0]);
+                    handleGlobePointClick(dataPoints[0]);
+                  } else {
+                    console.error("No academics data available");
+                  }
+                }}
+                className="bg-blue-600 text-white px-3 py-1 rounded-md text-xs hover:bg-blue-700 transition-colors"
+              >
+                Show Sample Profile
+              </button>
+              <div className="text-xs text-gray-400 mt-1">
+                {dataPoints.length} academics loaded
+              </div>
+            </div>
+            
             <FilterPanel onFilter={handleFilter} />
             <div className="globe-container">
               <GlobeVisualization 
