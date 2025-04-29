@@ -27,10 +27,10 @@ const FilterPanel = ({ onFilter }) => {
   };
 
   return (
-    <div className="fixed top-24 right-4 z-40">
+    <div className="fixed top-24 right-4 z-40 hidden">
       <button 
         onClick={togglePanel}
-        className="bg-black bg-opacity-80 p-3 rounded-full flex items-center justify-center hover:bg-opacity-90 transition-all border border-blue-800 shadow-lg hover:shadow-blue-900/20"
+        className="filter-toggle-button bg-black bg-opacity-80 p-3 rounded-full flex items-center justify-center hover:bg-opacity-90 transition-all border border-blue-800 shadow-lg hover:shadow-blue-900/20"
         aria-label="Filter toggle"
       >
         <svg className="h-5 w-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -39,7 +39,7 @@ const FilterPanel = ({ onFilter }) => {
       </button>
       
       {isOpen && (
-        <div className="absolute top-14 right-0 w-72 md:w-80 bg-black bg-opacity-90 backdrop-blur-lg rounded-lg shadow-xl border border-blue-900 p-4 mt-2 animate-fade-in-up">
+        <div className="fixed inset-0 sm:absolute sm:inset-auto sm:top-14 sm:right-0 sm:w-72 md:w-80 bg-black bg-opacity-90 backdrop-blur-lg rounded-lg shadow-xl border border-blue-900 p-4 mt-2 animate-fade-in-up max-h-[90vh] overflow-y-auto sm:max-h-[80vh]">
           <div className="flex justify-between items-center mb-3">
             <h3 className="text-white font-semibold">Filter Academics</h3>
             <button 
