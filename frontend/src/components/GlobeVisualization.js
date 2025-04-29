@@ -184,11 +184,11 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         
         // Render points
         pointsData={dataPoints}
-        pointColor={() => '#4285F4'}
-        pointAltitude={0.01}
-        pointRadius={0.25}
-        pointsMerge={false}
+        pointColor={(d) => d === hoveredPoint ? '#ff8800' : '#4285F4'}
+        pointAltitude={0.07}
+        pointRadius={(d) => d === hoveredPoint ? 0.4 : 0.25}
         pointResolution={12}
+        pointsMerge={false}
         onPointClick={handlePointClick}
         onPointRightClick={handlePointDoubleClick}
         onPointHover={handlePointHover}
