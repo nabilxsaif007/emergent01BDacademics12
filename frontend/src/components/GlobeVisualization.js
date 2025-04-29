@@ -122,19 +122,30 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
     }
   }, []);
 
+  // Handle point click to focus on location and show info panel
   const handlePointClick = useCallback((point) => {
-    if (point) {
-      // Focus camera on clicked point
-      if (globeEl.current) {
-        globeEl.current.pointOfView({
-          lat: point.lat,
-          lng: point.lng,
-          altitude: 1.5
-        }, 1000); // 1000ms animation duration
-      }
+    console.log("Globe point clicked:", point); // Debug logging
+    
+    if (point && globeEl.current) {
+      // Clear any existing hover state
+      setHoveredPoint(null);
       
-      // Call the provided click handler
-      onPointClick(point);
+      // Animate to point location
+      globeEl.current.pointOfView({
+        lat: point.lat,
+        lng: point.lng,
+        altitude: 1.5
+      }, 1000); // 1000ms animation duration
+      
+      // Call the provided click handler with a slight delay to allow animation to start
+      setTimeout(() => {
+        if (onPointClick && typeof onPointClick === 'function') {
+          console.log("Calling onPointClick with:", point);
+          onPointClick(point);
+        } else {
+          console.error("onPointClick is not a function:", onPointClick);
+        }
+      }, 100);
     }
   }, [onPointClick]);
 
