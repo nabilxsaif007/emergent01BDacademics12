@@ -84,7 +84,7 @@ const FilterPanel = ({ onFilter }) => {
                 value={filters.university}
                 onChange={handleChange}
                 placeholder="Type to filter..."
-                className="w-full bg-gray-900 text-white border border-gray-700 rounded py-2 px-3"
+                className="w-full bg-gray-900 text-white border border-gray-700 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
             
