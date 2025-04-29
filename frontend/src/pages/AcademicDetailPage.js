@@ -138,8 +138,38 @@ const AcademicDetailPage = ({ academics = [] }) => {
                 <h2 className="text-xl font-semibold text-white mb-4">About</h2>
                 <div className="bg-gray-900 bg-opacity-50 rounded-lg p-5 border border-gray-800">
                   <p className="text-gray-300">
-                    {`${academic.name} is a ${academic.field} specialist at ${academic.university}. Their research focuses on advanced topics with real-world applications.`.substring(0, 150)}
+                    {academic.bio 
+                      ? academic.bio.substring(0, 150) + (academic.bio.length > 150 ? "..." : "")
+                      : `${academic.name} is a ${academic.field} specialist at ${academic.university}. Their research focuses on advanced topics with real-world applications.`.substring(0, 150)
+                    }
                   </p>
+                </div>
+              </div>
+              
+              {/* Research Keywords section */}
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold text-white mb-4">Research Areas</h2>
+                <div className="bg-gray-900 bg-opacity-50 rounded-lg p-5 border border-gray-800">
+                  <div className="flex flex-wrap gap-3">
+                    {academic.research_areas 
+                      ? academic.research_areas.map((area, idx) => (
+                          <span 
+                            key={idx} 
+                            className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-900 bg-opacity-50 text-blue-100 border border-blue-700"
+                          >
+                            {area}
+                          </span>
+                        ))
+                      : Array(3).fill().map((_, idx) => (
+                          <span 
+                            key={idx} 
+                            className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-900 bg-opacity-50 text-blue-100 border border-blue-700"
+                          >
+                            {['Research Method', 'Field Specialization', 'Theoretical Framework'][idx]}
+                          </span>
+                        ))
+                    }
+                  </div>
                 </div>
               </div>
               
@@ -148,14 +178,22 @@ const AcademicDetailPage = ({ academics = [] }) => {
                 <h2 className="text-xl font-semibold text-white mb-4">Description</h2>
                 <div className="bg-gray-900 bg-opacity-50 rounded-lg p-5 border border-gray-800">
                   <p className="text-gray-300">
-                    {academic.name} is a {academic.field} researcher and {getDesignation(academic.field).toLowerCase()} at {academic.university}. 
-                    {academic.country === 'Bangladesh' 
-                      ? ' They are currently based in Bangladesh and are part of our network of academic mentors.'
-                      : ` Originally from Bangladesh, they are currently working in ${academic.city}, ${academic.country}.`
+                    {academic.bio 
+                      ? academic.bio
+                      : `${academic.name} is a ${academic.field} researcher and ${getDesignation(academic.field).toLowerCase()} at ${academic.university}. 
+                        ${academic.country === 'Bangladesh' 
+                          ? 'They are currently based in Bangladesh and are part of our network of academic mentors.'
+                          : `Originally from Bangladesh, they are currently working in ${academic.city}, ${academic.country}.`
+                        }`
                     }
                   </p>
                   <p className="text-gray-300 mt-4">
-                    Their research focuses on advanced topics in {academic.field} with applications in both academic and industry settings. {academic.name.split(' ')[0]} has published numerous papers in reputable journals and is actively involved in mentoring students from Bangladesh.
+                    Their research focuses on advanced topics in {academic.field} with applications in both academic and industry settings. 
+                    {academic.publications 
+                      ? ` They have published ${academic.publications} papers in reputable journals.` 
+                      : ` ${academic.name.split(' ')[0]} has published numerous papers in reputable journals.`
+                    } 
+                    They are actively involved in mentoring students from Bangladesh and contributing to global research collaborations.
                   </p>
                 </div>
               </div>
