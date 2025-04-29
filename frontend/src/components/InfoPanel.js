@@ -58,8 +58,8 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
   };
 
   return (
-    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-md px-4">
-      <div className="bg-black bg-opacity-80 backdrop-blur-md rounded-lg shadow-lg border border-gray-700 p-6 animate-fade-in-up">
+    <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20 w-full max-w-md px-4">
+      <div className="info-panel-backdrop rounded-lg shadow-lg p-6 animate-fade-in-up">
         <button 
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white"
