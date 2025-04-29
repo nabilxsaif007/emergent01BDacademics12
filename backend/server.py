@@ -489,6 +489,64 @@ async def get_academics_by_field():
     
     return formatted_results
 
+# Globe data endpoint
+@api_router.get("/globe-data")
+async def get_globe_data():
+    # Sample data for the globe visualization
+    sample_data = [
+        {
+            "id": "bd-1",
+            "name": "Dr. Rahim Ahmed",
+            "university": "Bangladesh University of Engineering and Technology",
+            "field": "Computer Science",
+            "country": "Bangladesh",
+            "city": "Dhaka",
+            "lat": 23.7104,
+            "lng": 90.4074
+        },
+        {
+            "id": "bd-2",
+            "name": "Dr. Farida Begum",
+            "university": "University of Dhaka",
+            "field": "Medicine",
+            "country": "Bangladesh",
+            "city": "Dhaka",
+            "lat": 23.7300,
+            "lng": 90.3900
+        },
+        {
+            "id": "int-1",
+            "name": "Dr. John Smith",
+            "university": "MIT",
+            "field": "Robotics",
+            "country": "USA",
+            "city": "Boston",
+            "lat": 42.3601,
+            "lng": -71.0942
+        },
+        {
+            "id": "int-2",
+            "name": "Dr. Sarah Johnson",
+            "university": "University of Oxford",
+            "field": "Literature",
+            "country": "UK",
+            "city": "Oxford",
+            "lat": 51.7520,
+            "lng": -1.2577
+        },
+        {
+            "id": "int-3",
+            "name": "Dr. Takashi Yamamoto",
+            "university": "University of Tokyo",
+            "field": "Physics",
+            "country": "Japan",
+            "city": "Tokyo",
+            "lat": 35.6895,
+            "lng": 139.6917
+        }
+    ]
+    return sample_data
+
 # Test route
 @api_router.get("/")
 async def root():
