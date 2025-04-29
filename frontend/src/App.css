@@ -36,10 +36,20 @@ body, html {
 }
 
 .globe-container {
-  flex: 1;
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 70vh; /* Fixed height for the globe */
+  min-height: 400px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Add responsive styles */
+@media (max-width: 768px) {
+  .globe-container {
+    height: 50vh;
+    min-height: 300px;
+  }
 }
 
 canvas {
