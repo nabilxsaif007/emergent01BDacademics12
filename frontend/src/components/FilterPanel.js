@@ -99,13 +99,13 @@ const FilterPanel = ({ onFilter }) => {
                   });
                   onFilter({});
                 }}
-                className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-3 rounded text-sm"
+                className="bg-gray-800 hover:bg-gray-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
               >
                 Reset
               </button>
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded text-sm"
+                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 Apply Filters
               </button>
