@@ -291,7 +291,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         </a>
       </div>
     </>
-  )
   );
 };
 
