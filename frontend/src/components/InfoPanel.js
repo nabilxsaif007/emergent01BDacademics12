@@ -57,12 +57,27 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
     return `${academic.name.split(' ')[0]} is a ${academic.field} specialist focusing on advanced research at ${academic.university}. Their work combines theoretical insights with practical applications, particularly in ${generateKeywords(academic.field)[0]} and ${generateKeywords(academic.field)[1]}. They've published extensively in peer-reviewed journals and collaborate with institutions worldwide.`;
   };
 
-  // Added console log to verify component is triggered  
-  console.log("InfoPanel rendering with academic:", academic);
+  // Add loading and error states
+  const [loading, setLoading] = useState(true);
+  
+  // Set loading effect when academic changes
+  useEffect(() => {
+    if (academic) {
+      setLoading(true);
+      const timer = setTimeout(() => setLoading(false), 800);
+      return () => clearTimeout(timer);
+    }
+  }, [academic]);
   
   return (
-    <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4">
+    <div className="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md px-4 sm:max-w-lg md:max-w-xl">
       <div className="info-panel-backdrop rounded-lg shadow-xl border-2 border-blue-500 p-6 animate-fade-in-up">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 rounded-lg z-10 backdrop-filter backdrop-blur-sm">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-blue-500 mr-3"></div>
+            <p className="text-blue-400">Loading profile...</p>
+          </div>
+        )}
         <button 
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white"
