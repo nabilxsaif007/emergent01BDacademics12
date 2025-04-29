@@ -95,9 +95,12 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
   // Handle window resize
   useEffect(() => {
     const handleResize = () => {
+      // No need to manually resize - the Globe component will handle this internally
+      // The width and height props are already bound to window.innerWidth/Height
+      // This prevents the "width is not a function" error
       if (globeEl.current) {
-        globeEl.current.width(window.innerWidth);
-        globeEl.current.height(window.innerHeight);
+        // Force a re-render of the globe on resize if needed
+        globeEl.current.camera().updateProjectionMatrix();
       }
     };
 
