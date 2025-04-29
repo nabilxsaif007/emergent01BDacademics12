@@ -40,7 +40,18 @@ const FilterPanel = ({ onFilter }) => {
       
       {isOpen && (
         <div className="absolute top-14 right-0 w-72 md:w-80 bg-black bg-opacity-90 backdrop-blur-lg rounded-lg shadow-xl border border-blue-900 p-4 mt-2 animate-fade-in-up">
-          <h3 className="text-white font-semibold mb-3">Filter Academics</h3>
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="text-white font-semibold">Filter Academics</h3>
+            <button 
+              onClick={togglePanel}
+              className="text-gray-400 hover:text-white"
+              aria-label="Close filter panel"
+            >
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label className="block text-gray-300 text-sm mb-1">Research Field</label>
