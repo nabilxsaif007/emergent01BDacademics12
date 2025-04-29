@@ -290,7 +290,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
           © Mapbox
         </a>
       </div>
-    </>
+    </div>
   );
 };
 
