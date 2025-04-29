@@ -79,7 +79,7 @@ const Navbar = () => {
       
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="absolute top-full left-0 right-0 bg-black bg-opacity-90 backdrop-blur-sm border-t border-gray-800 md:hidden">
+        <div className="fixed top-[60px] left-0 right-0 bg-black bg-opacity-95 backdrop-blur-lg border-t border-gray-800 md:hidden shadow-lg z-40 max-h-[calc(100vh-60px)] overflow-y-auto">
           <div className="flex flex-col p-4 space-y-3">
             <NavLink to="/" label="Home" isActive={isActive('/')} />
             <NavLink to="/academics" label="Academics" isActive={isActive('/academics')} />
