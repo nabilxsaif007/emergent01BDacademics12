@@ -93,11 +93,12 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
         {/* Research Keywords Section */}
         <div className="mt-4 pt-4 border-t border-gray-700">
           <h4 className="text-gray-200 text-sm font-semibold uppercase mb-2">Research Keywords</h4>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap">
             {generateKeywords(academic.field).map((keyword, index) => (
               <span 
                 key={index} 
-                className="bg-blue-900 bg-opacity-50 text-blue-200 px-2 py-1 rounded-full text-xs"
+                className="keyword-tag animate-float"
+                style={{ animationDelay: `${index * 0.2}s` }}
               >
                 {keyword}
               </span>
