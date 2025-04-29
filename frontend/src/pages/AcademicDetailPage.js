@@ -106,9 +106,19 @@ const AcademicDetailPage = ({ academics = [] }) => {
                 <p className="text-gray-500">{academic.city}, {academic.country}</p>
               </div>
               
-              {/* About section first */}
+              {/* About section with character limit */}
               <div className="mb-8">
                 <h2 className="text-xl font-semibold text-white mb-4">About</h2>
+                <div className="bg-gray-900 bg-opacity-50 rounded-lg p-5 border border-gray-800">
+                  <p className="text-gray-300">
+                    {`${academic.name} is a ${academic.field} specialist at ${academic.university}. Their research focuses on advanced topics with real-world applications.`.substring(0, 150)}
+                  </p>
+                </div>
+              </div>
+              
+              {/* Detailed Description section */}
+              <div className="mb-8">
+                <h2 className="text-xl font-semibold text-white mb-4">Description</h2>
                 <div className="bg-gray-900 bg-opacity-50 rounded-lg p-5 border border-gray-800">
                   <p className="text-gray-300">
                     {academic.name} is a {academic.field} researcher and {getDesignation(academic.field).toLowerCase()} at {academic.university}. 
