@@ -33,48 +33,117 @@ function AppContent() {
 
   // Simulate fetching data points (academics in our case)
   useEffect(() => {
-    // This would be replaced with actual API call in production
     const fetchData = async () => {
+      setIsLoading(true);
       try {
-        // Simulating API call with timeout
-        setTimeout(() => {
-          // Sample data for academic locations
-          const sampleData = [
-            { id: 1, name: "Dr. Arif Rahman", lat: 42.3601, lng: -71.0942, university: "MIT", field: "Computer Science", city: "Cambridge", country: "USA" },
-            { id: 2, name: "Dr. Fatima Begum", lat: 51.7520, lng: -1.2577, university: "Oxford University", field: "Medicine", city: "Oxford", country: "UK" },
-            { id: 3, name: "Dr. Kamal Hossain", lat: 1.3521, lng: 103.8198, university: "National University of Singapore", field: "Physics", city: "Singapore", country: "Singapore" },
-            { id: 4, name: "Dr. Anisur Rahman", lat: 37.4419, lng: -122.1430, university: "Stanford University", field: "Bioengineering", city: "Palo Alto", country: "USA" },
-            { id: 5, name: "Dr. Tahmina Ahmed", lat: 43.6532, lng: -79.3832, university: "University of Toronto", field: "Environmental Science", city: "Toronto", country: "Canada" },
-            // Add more sample data for Bangladesh and various global locations
-            { id: 6, name: "Dr. Salim Khan", lat: 23.8103, lng: 90.4125, university: "BUET", field: "Civil Engineering", city: "Dhaka", country: "Bangladesh" },
-            { id: 7, name: "Dr. Nusrat Jahan", lat: 48.8566, lng: 2.3522, university: "Sorbonne University", field: "Literature", city: "Paris", country: "France" },
-            { id: 8, name: "Dr. Zahir Uddin", lat: 35.7128, lng: 139.7669, university: "University of Tokyo", field: "Robotics", city: "Tokyo", country: "Japan" },
-            { id: 9, name: "Dr. Nasreen Akter", lat: -37.8136, lng: 144.9631, university: "University of Melbourne", field: "Psychology", city: "Melbourne", country: "Australia" },
-            { id: 10, name: "Dr. Jamal Uddin", lat: 25.2048, lng: 55.2708, university: "UAE University", field: "Economics", city: "Dubai", country: "UAE" },
-            { id: 11, name: "Dr. Sabina Ahmed", lat: 13.0827, lng: 80.2707, university: "IIT Madras", field: "Chemical Engineering", city: "Chennai", country: "India" },
-            { id: 12, name: "Dr. Rashid Khan", lat: 39.9042, lng: 116.4074, university: "Peking University", field: "Artificial Intelligence", city: "Beijing", country: "China" },
-            { id: 13, name: "Dr. Farhana Islam", lat: 59.3293, lng: 18.0686, university: "KTH Royal Institute", field: "Sustainable Energy", city: "Stockholm", country: "Sweden" },
-            { id: 14, name: "Dr. Imran Hossain", lat: 55.7558, lng: 37.6173, university: "Moscow State University", field: "Mathematics", city: "Moscow", country: "Russia" },
-            { id: 15, name: "Dr. Shahana Rahman", lat: -33.8688, lng: 151.2093, university: "University of Sydney", field: "Marine Biology", city: "Sydney", country: "Australia" },
-            // More academics in Bangladesh
-            { id: 16, name: "Dr. Mahmud Ali", lat: 23.7000, lng: 90.3500, university: "University of Dhaka", field: "Economics", city: "Dhaka", country: "Bangladesh" },
-            { id: 17, name: "Dr. Farida Akhter", lat: 23.7200, lng: 90.4100, university: "BRAC University", field: "Public Health", city: "Dhaka", country: "Bangladesh" },
-            { id: 18, name: "Dr. Ashraf Uddin", lat: 22.3569, lng: 91.7832, university: "Chittagong University", field: "Marine Science", city: "Chittagong", country: "Bangladesh" },
-            { id: 19, name: "Dr. Rafiq Islam", lat: 24.3636, lng: 88.6241, university: "Rajshahi University", field: "Agriculture", city: "Rajshahi", country: "Bangladesh" },
-            { id: 20, name: "Dr. Sultana Begum", lat: 24.8949, lng: 91.8687, university: "Sylhet Agricultural University", field: "Environmental Science", city: "Sylhet", country: "Bangladesh" },
-          ];
+        // Fetch data from API
+        const response = await axios.get(`${API}/globe-data`);
+        
+        // If API returns data, use it
+        if (response.data && response.data.length > 0) {
+          console.log("Using API data:", response.data.length, "data points");
+          setDataPoints(response.data);
+          setFilteredDataPoints(response.data);
+        } else {
+          // Otherwise, use sample data
+          console.log("API returned no data, using sample data");
+          const sampleData = generateSampleAcademics();
           setDataPoints(sampleData);
           setFilteredDataPoints(sampleData);
-          setIsLoading(false);
-        }, 1000);
+        }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('Error fetching globe data:', error);
+        // Fall back to sample data
+        console.log("Error fetching data, using sample data");
+        const sampleData = generateSampleAcademics();
+        setDataPoints(sampleData);
+        setFilteredDataPoints(sampleData);
+      } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
+  
+  // Generate sample academic data
+  const generateSampleAcademics = () => {
+    // List of universities in Bangladesh
+    const bangladeshiUniversities = [
+      "University of Dhaka", "Bangladesh University of Engineering and Technology", 
+      "Chittagong University of Engineering and Technology", "Jahangirnagar University",
+      "Rajshahi University", "Khulna University", "BRAC University", "North South University"
+    ];
+    
+    // Universities in other countries
+    const internationalUniversities = {
+      "USA": ["Harvard University", "MIT", "Stanford University", "UC Berkeley"],
+      "UK": ["University of Oxford", "University of Cambridge", "Imperial College London"],
+      "Australia": ["University of Sydney", "University of Melbourne", "Australian National University"],
+      "Canada": ["University of Toronto", "McGill University", "University of British Columbia"],
+      "Germany": ["TU Munich", "Humboldt University", "Heidelberg University"],
+      "Japan": ["University of Tokyo", "Kyoto University", "Osaka University"]
+    };
+    
+    // Research fields
+    const fields = [
+      "Computer Science", "Medicine", "Physics", "Bioengineering", 
+      "Environmental Science", "Civil Engineering", "Literature", "Robotics",
+      "Psychology", "Economics"
+    ];
+    
+    // Generate academics in Bangladesh
+    const bangladeshAcademics = bangladeshiUniversities.flatMap(university => {
+      return Array(3).fill().map((_, idx) => {
+        const field = fields[Math.floor(Math.random() * fields.length)];
+        return {
+          id: `bd-${university.toLowerCase().replace(/\s+/g, '-')}-${idx}`,
+          name: `Dr. ${['Rahim', 'Karim', 'Anika', 'Farida', 'Mohammad', 'Taslima'][Math.floor(Math.random() * 6)]} ${['Ahmed', 'Khan', 'Rahman', 'Begum', 'Chowdhury', 'Islam'][Math.floor(Math.random() * 6)]}`,
+          university,
+          field,
+          country: "Bangladesh",
+          city: ["Dhaka", "Chittagong", "Rajshahi", "Khulna"][Math.floor(Math.random() * 4)],
+          lat: 23.6850 + (Math.random() - 0.5) * 2,
+          lng: 90.3563 + (Math.random() - 0.5) * 2
+        };
+      });
+    });
+    
+    // Generate academics worldwide
+    const internationalAcademics = Object.entries(internationalUniversities).flatMap(([country, universities]) => {
+      return universities.flatMap(university => {
+        return Array(2).fill().map((_, idx) => {
+          const field = fields[Math.floor(Math.random() * fields.length)];
+          const latlng = {
+            "USA": [37.7749, -122.4194],
+            "UK": [51.5074, -0.1278],
+            "Australia": [-33.8688, 151.2093],
+            "Canada": [43.6532, -79.3832],
+            "Germany": [52.5200, 13.4050],
+            "Japan": [35.6762, 139.6503]
+          }[country];
+          
+          return {
+            id: `int-${country.toLowerCase()}-${university.toLowerCase().replace(/\s+/g, '-')}-${idx}`,
+            name: `Dr. ${['John', 'Sarah', 'Michael', 'Emma', 'David', 'Olivia'][Math.floor(Math.random() * 6)]} ${['Smith', 'Johnson', 'Williams', 'Brown', 'Jones', 'Miller'][Math.floor(Math.random() * 6)]}`,
+            university,
+            field,
+            country,
+            city: university.includes("Oxford") ? "Oxford" : 
+                  university.includes("Cambridge") ? "Cambridge" :
+                  university.includes("Tokyo") ? "Tokyo" :
+                  university.includes("MIT") || university.includes("Harvard") ? "Boston" :
+                  university.includes("Stanford") ? "Stanford" : "Unknown",
+            lat: latlng[0] + (Math.random() - 0.5) * 2,
+            lng: latlng[1] + (Math.random() - 0.5) * 5
+          };
+        });
+      });
+    });
+    
+    // Combine Bangladesh and international academics
+    return [...bangladeshAcademics, ...internationalAcademics];
+  };
 
   const handleGlobePointClick = (point) => {
     console.log("Globe point clicked, setting selected academic:", point);
