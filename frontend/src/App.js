@@ -160,9 +160,34 @@ function AppContent() {
                     <span>Click points for details</span>
                   </div>
                 </div>
+                
+                {/* Search bar moved inside the info box */}
+                <div className="mt-6">
+                  <form onSubmit={(e) => { e.preventDefault(); handleSearch(document.getElementById('search-input').value); }} className="relative">
+                    <input
+                      id="search-input"
+                      type="text"
+                      placeholder="Search academics, fields, or universities..."
+                      className="w-full py-3 px-6 bg-black bg-opacity-60 backdrop-blur-md border border-gray-600 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                    />
+                    <button
+                      type="submit"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition-colors focus:outline-none"
+                    >
+                      <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
-            <SearchBar onSearch={handleSearch} academics={dataPoints} />
+            
+            {/* Original SearchBar hidden but still functional for state management */}
+            <div className="hidden">
+              <SearchBar onSearch={handleSearch} academics={dataPoints} />
+            </div>
+            
             <FilterPanel onFilter={handleFilter} />
             <div className="globe-container">
               <GlobeVisualization 
