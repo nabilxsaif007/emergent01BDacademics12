@@ -28,6 +28,35 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
     return designations[field] || "Researcher";
   };
 
+  // Generate research keywords based on field
+  const generateKeywords = (field) => {
+    const fieldSpecificKeywords = {
+      "Computer Science": ['artificial intelligence', 'machine learning', 'data science', 'algorithms'],
+      "Medicine": ['epidemiology', 'clinical research', 'healthcare', 'medical science'],
+      "Physics": ['quantum mechanics', 'theoretical physics', 'particle physics', 'astrophysics'],
+      "Bioengineering": ['genetic engineering', 'biomaterials', 'tissue engineering', 'synthetic biology'],
+      "Environmental Science": ['climate change', 'sustainability', 'ecology', 'conservation'],
+      "Civil Engineering": ['structural engineering', 'urban planning', 'construction', 'infrastructure'],
+      "Literature": ['comparative literature', 'literary theory', 'cultural studies', 'postcolonial studies'],
+      "Robotics": ['automation', 'artificial intelligence', 'computer vision', 'mechanical engineering'],
+      "Psychology": ['cognitive psychology', 'clinical psychology', 'behavioral science', 'neuroscience'],
+      "Economics": ['development economics', 'international trade', 'macroeconomics', 'economic policy']
+    };
+    
+    // Return 3 keywords for the field
+    return fieldSpecificKeywords[field] || ['research', 'academia', 'education'];
+  };
+
+  // Generate a limited-length about text
+  const getAboutText = () => {
+    return `${academic.name.split(' ')[0]} is a ${academic.field} specialist at ${academic.university}. Their research focuses on advanced topics with real-world applications.`.substring(0, 150);
+  };
+
+  // Generate a more detailed description
+  const getDetailedDescription = () => {
+    return `${academic.name.split(' ')[0]} is a ${academic.field} specialist focusing on advanced research at ${academic.university}. Their work combines theoretical insights with practical applications, particularly in ${generateKeywords(academic.field)[0]} and ${generateKeywords(academic.field)[1]}. They've published extensively in peer-reviewed journals and collaborate with institutions worldwide.`;
+  };
+
   return (
     <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-md px-4">
       <div className="bg-black bg-opacity-80 backdrop-blur-md rounded-lg shadow-lg border border-gray-700 p-6 animate-fade-in-up">
@@ -53,11 +82,34 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
           </div>
         </div>
         
-        {/* Description Section */}
+        {/* About Section - Limited to 150 chars */}
         <div className="mt-4 pt-4 border-t border-gray-700">
+          <h4 className="text-gray-200 text-sm font-semibold uppercase mb-2">About</h4>
           <p className="text-gray-300 text-sm">
-            {academic.name.split(' ')[0]} is a {academic.field} specialist focusing on advanced research 
-            at {academic.university}. {academic.name.split(' ')[0]}'s work has contributed significantly to the field.
+            {getAboutText()}
+          </p>
+        </div>
+        
+        {/* Research Keywords Section */}
+        <div className="mt-4 pt-4 border-t border-gray-700">
+          <h4 className="text-gray-200 text-sm font-semibold uppercase mb-2">Research Keywords</h4>
+          <div className="flex flex-wrap gap-2">
+            {generateKeywords(academic.field).map((keyword, index) => (
+              <span 
+                key={index} 
+                className="bg-blue-900 bg-opacity-50 text-blue-200 px-2 py-1 rounded-full text-xs"
+              >
+                {keyword}
+              </span>
+            ))}
+          </div>
+        </div>
+        
+        {/* Detailed Description Section */}
+        <div className="mt-4 pt-4 border-t border-gray-700">
+          <h4 className="text-gray-200 text-sm font-semibold uppercase mb-2">Description</h4>
+          <p className="text-gray-300 text-sm">
+            {getDetailedDescription()}
           </p>
         </div>
         
