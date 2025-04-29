@@ -494,58 +494,220 @@ async def get_academics_by_field():
 async def get_globe_data():
     # Sample data for the globe visualization
     sample_data = [
+        # Bangladesh academics
         {
             "id": "bd-1",
             "name": "Dr. Rahim Ahmed",
             "university": "Bangladesh University of Engineering and Technology",
             "field": "Computer Science",
+            "bio": "Pioneering researcher in machine learning and artificial intelligence with a focus on natural language processing for Bangla language.",
             "country": "Bangladesh",
             "city": "Dhaka",
             "lat": 23.7104,
-            "lng": 90.4074
+            "lng": 90.4074,
+            "publications": 45,
+            "research_areas": ["AI", "NLP", "Deep Learning"],
+            "email": "rahim.ahmed@buet.ac.bd",
+            "phone": "+880 1XX-XXXXXXX"
         },
         {
             "id": "bd-2",
             "name": "Dr. Farida Begum",
             "university": "University of Dhaka",
             "field": "Medicine",
+            "bio": "Expert in infectious diseases research with extensive experience in tropical medicine and community health initiatives.",
             "country": "Bangladesh",
             "city": "Dhaka",
             "lat": 23.7300,
-            "lng": 90.3900
+            "lng": 90.3900,
+            "publications": 32,
+            "research_areas": ["Infectious Diseases", "Tropical Medicine", "Public Health"],
+            "email": "farida.begum@du.ac.bd",
+            "phone": "+880 1XX-XXXXXXX"
         },
+        {
+            "id": "bd-3",
+            "name": "Dr. Anisur Rahman",
+            "university": "Jahangirnagar University",
+            "field": "Environmental Science",
+            "bio": "Environmental researcher specializing in climate change impacts on Bangladesh's coastal regions and sustainable development.",
+            "country": "Bangladesh",
+            "city": "Savar",
+            "lat": 23.8830,
+            "lng": 90.2670,
+            "publications": 28,
+            "research_areas": ["Climate Change", "Coastal Ecology", "Sustainable Development"],
+            "email": "anisur.rahman@ju.ac.bd",
+            "phone": "+880 1XX-XXXXXXX"
+        },
+        {
+            "id": "bd-4",
+            "name": "Dr. Taslima Khatun",
+            "university": "Rajshahi University",
+            "field": "Agricultural Science",
+            "bio": "Agricultural scientist working on crop improvement and sustainable farming practices for rural Bangladesh.",
+            "country": "Bangladesh",
+            "city": "Rajshahi",
+            "lat": 24.3636,
+            "lng": 88.6241,
+            "publications": 22,
+            "research_areas": ["Agronomy", "Crop Science", "Food Security"],
+            "email": "taslima.khatun@ru.ac.bd",
+            "phone": "+880 1XX-XXXXXXX"
+        },
+        {
+            "id": "bd-5",
+            "name": "Dr. Kamal Hossain",
+            "university": "Chittagong University of Engineering and Technology",
+            "field": "Civil Engineering",
+            "bio": "Civil engineer specializing in earthquake-resistant structures and infrastructure development in seismic zones.",
+            "country": "Bangladesh",
+            "city": "Chittagong",
+            "lat": 22.4716,
+            "lng": 91.7877,
+            "publications": 19,
+            "research_areas": ["Structural Engineering", "Earthquake Engineering", "Infrastructure"],
+            "email": "kamal.hossain@cuet.ac.bd",
+            "phone": "+880 1XX-XXXXXXX"
+        },
+        
+        # International academics
         {
             "id": "int-1",
             "name": "Dr. John Smith",
             "university": "MIT",
             "field": "Robotics",
+            "bio": "Leading researcher in advanced robotics with a focus on human-robot interaction and autonomous systems.",
             "country": "USA",
             "city": "Boston",
             "lat": 42.3601,
-            "lng": -71.0942
+            "lng": -71.0942,
+            "publications": 78,
+            "research_areas": ["Robotics", "AI", "Human-Robot Interaction"],
+            "email": "john.smith@mit.edu",
+            "phone": "+1 XXX-XXX-XXXX"
         },
         {
             "id": "int-2",
             "name": "Dr. Sarah Johnson",
             "university": "University of Oxford",
             "field": "Literature",
+            "bio": "Literary scholar specializing in South Asian literature with focus on Bengali works in translation.",
             "country": "UK",
             "city": "Oxford",
             "lat": 51.7520,
-            "lng": -1.2577
+            "lng": -1.2577,
+            "publications": 42,
+            "research_areas": ["South Asian Literature", "Translation Studies", "Postcolonial Theory"],
+            "email": "sarah.johnson@oxford.ac.uk",
+            "phone": "+44 XXXX XXXXXX"
         },
         {
             "id": "int-3",
             "name": "Dr. Takashi Yamamoto",
             "university": "University of Tokyo",
             "field": "Physics",
+            "bio": "Theoretical physicist working on quantum field theory with collaborative projects with Bangladeshi institutions.",
             "country": "Japan",
             "city": "Tokyo",
             "lat": 35.6895,
-            "lng": 139.6917
+            "lng": 139.6917,
+            "publications": 64,
+            "research_areas": ["Quantum Physics", "Theoretical Physics", "Particle Physics"],
+            "email": "takashi.yamamoto@u-tokyo.ac.jp",
+            "phone": "+81 XX-XXXX-XXXX"
+        },
+        {
+            "id": "int-4",
+            "name": "Dr. Fatima Khan",
+            "university": "University of Toronto",
+            "field": "Economics",
+            "bio": "Economist studying developmental economics with a focus on microfinance and poverty alleviation in South Asia.",
+            "country": "Canada",
+            "city": "Toronto",
+            "lat": 43.6532,
+            "lng": -79.3832,
+            "publications": 37,
+            "research_areas": ["Developmental Economics", "Microfinance", "Poverty Studies"],
+            "email": "fatima.khan@utoronto.ca",
+            "phone": "+1 XXX-XXX-XXXX"
+        },
+        {
+            "id": "int-5",
+            "name": "Dr. Mohammad Rahman",
+            "university": "Stanford University",
+            "field": "Computer Science",
+            "bio": "Computer scientist specializing in big data analytics and machine learning applications in healthcare.",
+            "country": "USA",
+            "city": "Palo Alto",
+            "lat": 37.4419,
+            "lng": -122.1430,
+            "publications": 52,
+            "research_areas": ["Big Data", "Machine Learning", "Healthcare Informatics"],
+            "email": "mohammad.rahman@stanford.edu",
+            "phone": "+1 XXX-XXX-XXXX"
+        },
+        {
+            "id": "int-6",
+            "name": "Dr. Amina Patel",
+            "university": "University of Melbourne",
+            "field": "Public Health",
+            "bio": "Public health researcher specializing in health systems strengthening in developing countries.",
+            "country": "Australia",
+            "city": "Melbourne",
+            "lat": -37.8136,
+            "lng": 144.9631,
+            "publications": 29,
+            "research_areas": ["Public Health", "Health Systems", "Global Health"],
+            "email": "amina.patel@unimelb.edu.au",
+            "phone": "+61 X XXXX XXXX"
+        },
+        {
+            "id": "int-7",
+            "name": "Dr. Abdullah Al-Farabi",
+            "university": "Technical University of Munich",
+            "field": "Mechanical Engineering",
+            "bio": "Mechanical engineer specializing in renewable energy technologies and sustainable engineering.",
+            "country": "Germany",
+            "city": "Munich",
+            "lat": 48.1351,
+            "lng": 11.5820,
+            "publications": 31,
+            "research_areas": ["Renewable Energy", "Sustainable Engineering", "Thermodynamics"],
+            "email": "abdullah.alfarabi@tum.de",
+            "phone": "+49 XXX XXXXXXXX"
+        },
+        {
+            "id": "int-8",
+            "name": "Dr. Priya Sharma",
+            "university": "National University of Singapore",
+            "field": "Bioengineering",
+            "bio": "Bioengineer working on tissue engineering and regenerative medicine with applications in tropical diseases.",
+            "country": "Singapore",
+            "city": "Singapore",
+            "lat": 1.2966,
+            "lng": 103.7764,
+            "publications": 40,
+            "research_areas": ["Tissue Engineering", "Regenerative Medicine", "Tropical Diseases"],
+            "email": "priya.sharma@nus.edu.sg",
+            "phone": "+65 XXXX XXXX"
         }
     ]
     return sample_data
+
+@api_router.get("/academics/{academic_id}")
+async def get_academic_by_id(academic_id: str):
+    """Get details of a specific academic by ID"""
+    # Get all sample data
+    all_academics = await get_globe_data()
+    
+    # Find the academic with the matching ID
+    for academic in all_academics:
+        if academic["id"] == academic_id:
+            return academic
+            
+    # If not found, raise a 404 error
+    raise HTTPException(status_code=404, detail="Academic not found")
 
 # Test route
 @api_router.get("/")
