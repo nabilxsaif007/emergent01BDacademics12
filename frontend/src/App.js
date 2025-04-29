@@ -22,9 +22,6 @@ import './App.css';
 // Define API URL from environment variables
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
-// Get API URL from environment variables
-const API = process.env.REACT_APP_BACKEND_URL || 'https://60033f48-a690-4b39-a4b4-35817b3748c7.preview.emergentagent.com/api';
-
 // Main content component that uses location
 function AppContent() {
   const [dataPoints, setDataPoints] = useState([]);
