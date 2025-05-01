@@ -49,10 +49,139 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Import models
-from models.user import User, UserCreate, UserUpdate
-from models.researcher_profile import ResearcherProfile, ResearcherProfileCreate, ResearcherProfileUpdate, ProfileStatus
-from auth.dependencies import get_current_user, get_current_admin, create_access_token
+# User models
+class UserBase(BaseModel):
+    email: EmailStr
+    first_name: str
+    last_name: str
+    is_admin: bool = False
+
+
+class UserCreate(UserBase):
+    password: str
+
+
+class UserUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    is_admin: Optional[bool] = None
+    password: Optional[str] = None
+
+
+class User(UserBase):
+    id: str
+    created_at: datetime
+    updated_at: datetime
+    email_verified: bool = False
+
+    class Config:
+        from_attributes = True
+        
+# Profile models
+class ProfileStatus(str, Enum):
+    DRAFT = "draft"
+    PENDING_VERIFICATION = "pending_verification"
+    VERIFIED = "verified"
+    PENDING_APPROVAL = "pending_approval"
+    APPROVED = "approved"
+
+
+class ResearcherProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    academic_title: Optional[str] = None
+    institution_name: Optional[str] = None
+    department: Optional[str] = None
+    research_interests: List[str] = []
+    bio: Optional[str] = None
+    country: Optional[str] = None
+    city: Optional[str] = None
+    profile_picture_url: Optional[str] = None
+    social_links: Dict = {}
+    contact_email: Optional[EmailStr] = None
+    phone: Optional[str] = None
+    public_email: bool = False
+    status: ProfileStatus = ProfileStatus.DRAFT
+    completion_percentage: int = 0
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+
+class ResearcherProfileCreate(BaseModel):
+    academic_title: Optional[str] = None
+    institution_name: Optional[str] = None
+    department: Optional[str] = None
+    research_interests: Optional[List[str]] = None
+    bio: Optional[str] = None
+    country: Optional[str] = None
+    city: Optional[str] = None
+    contact_email: Optional[EmailStr] = None
+    phone: Optional[str] = None
+    public_email: Optional[bool] = None
+    social_links: Optional[Dict] = None
+
+
+class ResearcherProfileUpdate(BaseModel):
+    academic_title: Optional[str] = None
+    institution_name: Optional[str] = None
+    department: Optional[str] = None
+    research_interests: Optional[List[str]] = None
+    bio: Optional[str] = None
+    country: Optional[str] = None
+    city: Optional[str] = None
+    profile_picture_url: Optional[str] = None
+    social_links: Optional[Dict] = None
+    contact_email: Optional[EmailStr] = None
+    phone: Optional[str] = None
+    public_email: Optional[bool] = None
+    status: Optional[ProfileStatus] = None
+    
+# JWT token settings
+SECRET_KEY = "mysecretkey"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 1440  # 24 hours
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/token")
+
+
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+
+async def get_current_user(token: str = Depends(oauth2_scheme)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise credentials_exception
+    except jwt.PyJWTError:
+        raise credentials_exception
+    user = await db.users.find_one({"id": user_id})
+    if user is None:
+        raise credentials_exception
+    return user
+
+
+async def get_current_admin(current_user: dict = Depends(get_current_user)):
+    if not current_user.get("is_admin", False):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not enough permissions"
+        )
+    return current_user
 
 # Model for email verification tokens
 class VerificationToken(BaseModel):
