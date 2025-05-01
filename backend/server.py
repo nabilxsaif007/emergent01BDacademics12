@@ -13,14 +13,13 @@ from typing import Dict, List, Optional, Union
 from dotenv import load_dotenv
 
 from fastapi import BackgroundTasks, Body, Depends, FastAPI, HTTPException, Query, status, APIRouter
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 # Import models and auth
 from models.user import User
 from auth.dependencies import get_current_user
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, EmailStr, Field
 import jwt
