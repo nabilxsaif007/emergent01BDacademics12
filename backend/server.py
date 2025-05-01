@@ -1361,6 +1361,141 @@ async def verify_email(token: str):
     
     return {"message": "Email verified successfully"}
 
+# Admin routes for profile approval workflow
+@api_router.get("/admin/profiles", response_model=List[ResearcherProfile])
+async def get_profiles_for_admin(
+    status: Optional[ProfileStatus] = Query(None),
+    current_user: User = Depends(get_current_admin)
+):
+    """
+    Get all researcher profiles for admin review.
+    Optionally filter by status.
+    """
+    query = {}
+    if status:
+        query["status"] = status
+    
+    profiles = await db.researcher_profiles.find(query).to_list(1000)
+    return profiles
+
+
+@api_router.get("/admin/profiles/{profile_id}", response_model=ResearcherProfile)
+async def get_profile_details_for_admin(
+    profile_id: str,
+    current_user: User = Depends(get_current_admin)
+):
+    """
+    Get detailed information about a specific profile for admin review.
+    """
+    profile = await db.researcher_profiles.find_one({"id": profile_id})
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
+    return profile
+
+
+@api_router.put("/admin/profiles/{profile_id}/approve", response_model=ResearcherProfile)
+async def approve_profile(
+    profile_id: str, 
+    current_user: User = Depends(get_current_admin),
+    background_tasks: BackgroundTasks = None
+):
+    """
+    Approve a researcher profile.
+    """
+    # Check if profile exists
+    profile = await db.researcher_profiles.find_one({"id": profile_id})
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
+    
+    # Update status to approved
+    await db.researcher_profiles.update_one(
+        {"id": profile_id},
+        {"$set": {
+            "status": ProfileStatus.APPROVED,
+            "updated_at": datetime.now()
+        }}
+    )
+    
+    # Get the updated profile
+    updated_profile = await db.researcher_profiles.find_one({"id": profile_id})
+    
+    # Get user info for notification
+    user = await db.users.find_one({"id": profile["user_id"]})
+    
+    # Send notification in background (just log it for now)
+    if background_tasks and user:
+        background_tasks.add_task(
+            log_notification,
+            user["email"],
+            "Profile Approved",
+            f"Your researcher profile has been approved and is now publicly visible."
+        )
+    
+    return updated_profile
+
+
+@api_router.put("/admin/profiles/{profile_id}/reject", response_model=ResearcherProfile)
+async def reject_profile(
+    profile_id: str,
+    feedback: Dict = Body(...),
+    current_user: User = Depends(get_current_admin),
+    background_tasks: BackgroundTasks = None
+):
+    """
+    Reject a researcher profile with feedback.
+    """
+    # Check if profile exists
+    profile = await db.researcher_profiles.find_one({"id": profile_id})
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
+    
+    # Update status to rejected and add feedback
+    await db.researcher_profiles.update_one(
+        {"id": profile_id},
+        {"$set": {
+            "status": ProfileStatus.DRAFT,  # Set back to draft for editing
+            "feedback": feedback.get("message", ""),
+            "rejection_reason": feedback.get("reason", ""),
+            "updated_at": datetime.now()
+        }}
+    )
+    
+    # Get the updated profile
+    updated_profile = await db.researcher_profiles.find_one({"id": profile_id})
+    
+    # Get user info for notification
+    user = await db.users.find_one({"id": profile["user_id"]})
+    
+    # Send notification in background (just log it for now)
+    if background_tasks and user:
+        background_tasks.add_task(
+            log_notification,
+            user["email"],
+            "Profile Needs Updates",
+            f"Your researcher profile requires some updates before it can be approved: {feedback.get('message', '')}"
+        )
+    
+    return updated_profile
+
+
+async def log_notification(email: str, subject: str, message: str):
+    """
+    Helper function to log notifications until email service is implemented.
+    """
+    logging.info(f"NOTIFICATION TO: {email}")
+    logging.info(f"SUBJECT: {subject}")
+    logging.info(f"MESSAGE: {message}")
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
