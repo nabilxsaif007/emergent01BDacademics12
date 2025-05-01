@@ -2,254 +2,503 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const MultiStepForm = () => {
-  const [currentStep, setCurrentStep] = useState(1);
+const MultiStepForm = ({ user }) => {
+  const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  
   const [formData, setFormData] = useState({
-    // Personal Info
     academic_title: '',
-    
-    // Academic Background
     institution_name: '',
     department: '',
-    education: [],
-    
-    // Research Interests
     research_interests: [],
     bio: '',
-    
-    // Location
-    location: { country: '', city: '', coordinates: null },
-    
-    // Contact Preferences  
-    contact_email: '',
-    public_email: false,
-    social_links: { linkedin: '', twitter: '', researchgate: '', orcid: '' }
+    country: '',
+    city: '',
+    contact_email: user?.email || '',
+    public_email: true,
+    website: '',
+    linkedin: '',
+    twitter: '',
+    researchgate: '',
+    orcid: ''
   });
   
-  const [errors, setErrors] = useState({});
+  const totalSteps = 5;
   
-  const updateFormData = (stepData) => {
-    setFormData({ ...formData, ...stepData });
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value
+    });
   };
   
-  const handleNext = () => {
-    // Validate the current step
-    const stepErrors = validateStep(currentStep);
-    
-    if (Object.keys(stepErrors).length === 0) {
-      setCurrentStep(currentStep + 1);
-      setErrors({});
-    } else {
-      setErrors(stepErrors);
+  const handleResearchAreaChange = (e) => {
+    if (e.key === 'Enter' && e.target.value.trim()) {
+      e.preventDefault();
+      const newArea = e.target.value.trim();
+      if (!formData.research_interests.includes(newArea)) {
+        setFormData({
+          ...formData,
+          research_interests: [...formData.research_interests, newArea]
+        });
+      }
+      e.target.value = '';
     }
   };
   
-  const handlePrevious = () => {
-    setCurrentStep(currentStep - 1);
-    setErrors({});
+  const removeResearchArea = (area) => {
+    setFormData({
+      ...formData,
+      research_interests: formData.research_interests.filter(item => item !== area)
+    });
   };
   
-  const validateStep = (step) => {
-    const stepErrors = {};
+  const nextStep = () => {
+    if (validateStep()) {
+      setStep(step + 1);
+    }
+  };
+  
+  const prevStep = () => {
+    setStep(step - 1);
+  };
+  
+  const validateStep = () => {
+    setError(null);
     
-    switch (step) {
-      case 1: // Personal Info
-        if (!formData.academic_title) {
-          stepErrors.academic_title = 'Academic title is required';
+    // Simple validation for current step
+    switch(step) {
+      case 1: // Basic Info
+        if (!formData.academic_title || !formData.institution_name || !formData.department) {
+          setError('Please fill in all required fields');
+          return false;
         }
         break;
-        
-      case 2: // Academic Background
-        if (!formData.institution_name) {
-          stepErrors.institution_name = 'Institution name is required';
-        }
-        if (!formData.department) {
-          stepErrors.department = 'Department is required';
+      case 2: // Research Interests
+        if (formData.research_interests.length === 0 || !formData.bio) {
+          setError('Please add at least one research interest and a bio');
+          return false;
         }
         break;
-        
-      case 3: // Research Interests
-        if (formData.research_interests.length === 0) {
-          stepErrors.research_interests = 'At least one research interest is required';
-        }
-        if (!formData.bio || formData.bio.length < 50) {
-          stepErrors.bio = 'Bio must be at least 50 characters';
+      case 3: // Location
+        if (!formData.country || !formData.city) {
+          setError('Please fill in your location information');
+          return false;
         }
         break;
-        
-      case 4: // Location
-        if (!formData.location.country) {
-          stepErrors.country = 'Country is required';
-        }
-        if (!formData.location.city) {
-          stepErrors.city = 'City is required';
-        }
-        break;
-        
-      case 5: // Contact Preferences
+      case 4: // Contact
         if (!formData.contact_email) {
-          stepErrors.contact_email = 'Contact email is required';
-        } else if (!/\S+@\S+\.\S+/.test(formData.contact_email)) {
-          stepErrors.contact_email = 'Invalid email format';
+          setError('Please provide a contact email');
+          return false;
         }
         break;
-        
       default:
         break;
     }
     
-    return stepErrors;
+    return true;
   };
   
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateStep()) {
+      return;
+    }
+    
+    setLoading(true);
+    setError(null);
+    
     try {
+      // Format the data for the API
+      const profileData = {
+        ...formData,
+        social_links: {
+          website: formData.website,
+          linkedin: formData.linkedin,
+          twitter: formData.twitter,
+          researchgate: formData.researchgate,
+          orcid: formData.orcid
+        },
+        location: {
+          country: formData.country,
+          city: formData.city
+        }
+      };
+      
+      // Remove redundant fields
+      delete profileData.website;
+      delete profileData.linkedin;
+      delete profileData.twitter;
+      delete profileData.researchgate;
+      delete profileData.orcid;
+      delete profileData.country;
+      delete profileData.city;
+      
       const token = localStorage.getItem('token');
       
-      if (!token) {
-        throw new Error('You must be logged in to create a profile');
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/profiles`, 
+        profileData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      
+      if (response.status === 201 || response.status === 200) {
+        navigate('/dashboard');
       }
-      
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/profiles`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(formData)
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Failed to create profile');
-      }
-      
-      const profile = await response.json();
-      
-      // Redirect to dashboard or profile page
-      window.location.href = '/dashboard';
-      
-    } catch (error) {
-      setErrors({ submit: error.message });
+    } catch (err) {
+      console.error('Error creating profile:', err);
+      setError(err.response?.data?.detail || 'Failed to create profile. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
   
-  const getStepContent = () => {
-    switch (currentStep) {
+  // Render the appropriate step content
+  const renderStep = () => {
+    switch(step) {
       case 1:
         return (
-          <PersonalInfoStep 
-            formData={formData} 
-            updateFormData={updateFormData} 
-            errors={errors}
-          />
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4">Academic Information</h3>
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                Academic Title *
+              </label>
+              <select 
+                name="academic_title"
+                value={formData.academic_title}
+                onChange={handleChange}
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              >
+                <option value="">Select your title</option>
+                <option value="Professor">Professor</option>
+                <option value="Associate Professor">Associate Professor</option>
+                <option value="Assistant Professor">Assistant Professor</option>
+                <option value="Senior Lecturer">Senior Lecturer</option>
+                <option value="Lecturer">Lecturer</option>
+                <option value="Researcher">Researcher</option>
+                <option value="PhD Candidate">PhD Candidate</option>
+                <option value="Master's Student">Master's Student</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                Institution Name *
+              </label>
+              <input
+                type="text"
+                name="institution_name"
+                value={formData.institution_name}
+                onChange={handleChange}
+                placeholder="Your university or research institution"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                Department *
+              </label>
+              <input
+                type="text"
+                name="department"
+                value={formData.department}
+                onChange={handleChange}
+                placeholder="Your department or faculty"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+          </div>
         );
+        
       case 2:
         return (
-          <AcademicBackgroundStep 
-            formData={formData} 
-            updateFormData={updateFormData} 
-            errors={errors}
-          />
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4">Research Interests</h3>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                Research Areas *
+              </label>
+              <div className="flex flex-wrap gap-2 mb-2">
+                {formData.research_interests.map((area, index) => (
+                  <div key={index} className="bg-yellow-900 text-yellow-200 px-3 py-1 rounded-full flex items-center">
+                    <span>{area}</span>
+                    <button
+                      type="button"
+                      className="ml-2 text-yellow-200 hover:text-white focus:outline-none"
+                      onClick={() => removeResearchArea(area)}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <input
+                type="text"
+                placeholder="Type a research area and press Enter"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                onKeyDown={handleResearchAreaChange}
+              />
+              <p className="text-gray-400 text-xs mt-1">Press Enter to add each research area</p>
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                Bio *
+              </label>
+              <textarea
+                name="bio"
+                value={formData.bio}
+                onChange={handleChange}
+                placeholder="Write about your research background, interests, and goals"
+                rows="5"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              ></textarea>
+            </div>
+          </div>
         );
+        
       case 3:
         return (
-          <ResearchInterestsStep 
-            formData={formData} 
-            updateFormData={updateFormData} 
-            errors={errors}
-          />
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4">Location</h3>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                Country *
+              </label>
+              <input
+                type="text"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                placeholder="Your country"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                City *
+              </label>
+              <input
+                type="text"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                placeholder="Your city"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+          </div>
         );
+        
       case 4:
         return (
-          <LocationStep 
-            formData={formData} 
-            updateFormData={updateFormData} 
-            errors={errors}
-          />
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4">Contact Information</h3>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                Contact Email *
+              </label>
+              <input
+                type="email"
+                name="contact_email"
+                value={formData.contact_email}
+                onChange={handleChange}
+                placeholder="Your academic email address"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+            
+            <div className="mb-4 flex items-center">
+              <input
+                type="checkbox"
+                id="public_email"
+                name="public_email"
+                checked={formData.public_email}
+                onChange={handleChange}
+                className="h-4 w-4 text-yellow-600 focus:ring-yellow-500 border-gray-700 rounded bg-gray-800"
+              />
+              <label htmlFor="public_email" className="ml-2 block text-gray-300 text-sm">
+                Make my email publicly visible
+              </label>
+            </div>
+          </div>
         );
+        
       case 5:
         return (
-          <ContactPreferencesStep 
-            formData={formData} 
-            updateFormData={updateFormData} 
-            errors={errors}
-          />
+          <div>
+            <h3 className="text-xl font-semibold text-white mb-4">Professional Links</h3>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                Personal Website
+              </label>
+              <input
+                type="url"
+                name="website"
+                value={formData.website}
+                onChange={handleChange}
+                placeholder="https://yourwebsite.com"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                LinkedIn
+              </label>
+              <input
+                type="url"
+                name="linkedin"
+                value={formData.linkedin}
+                onChange={handleChange}
+                placeholder="https://linkedin.com/in/yourprofile"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                Twitter/X
+              </label>
+              <input
+                type="url"
+                name="twitter"
+                value={formData.twitter}
+                onChange={handleChange}
+                placeholder="https://twitter.com/yourusername"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                ResearchGate
+              </label>
+              <input
+                type="url"
+                name="researchgate"
+                value={formData.researchgate}
+                onChange={handleChange}
+                placeholder="https://researchgate.net/profile/yourprofile"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-gray-300 text-sm font-bold mb-2">
+                ORCID
+              </label>
+              <input
+                type="url"
+                name="orcid"
+                value={formData.orcid}
+                onChange={handleChange}
+                placeholder="https://orcid.org/0000-0000-0000-0000"
+                className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              />
+            </div>
+          </div>
         );
-      case 6:
-        return (
-          <ReviewStep 
-            formData={formData} 
-            onSubmit={handleSubmit} 
-            error={errors.submit}
-          />
-        );
+        
       default:
         return null;
     }
   };
   
   return (
-    <div className="max-w-3xl mx-auto mt-10 bg-white p-8 rounded-lg shadow-md">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">Create Your Researcher Profile</h2>
-        <p className="text-gray-600">Complete all steps to create your academic profile</p>
-        
-        {/* Progress Bar */}
-        <div className="mt-6">
-          <div className="flex justify-between mb-2">
-            {[1, 2, 3, 4, 5, 6].map((step) => (
-              <div key={step} className="text-xs text-gray-600">
-                Step {step}
-              </div>
-            ))}
-          </div>
-          <div className="h-2 bg-gray-200 rounded-full">
-            <div 
-              className="h-full bg-emerald-600 rounded-full transition-all duration-300"
-              style={{ width: `${((currentStep - 1) / 5) * 100}%` }}
-            ></div>
-          </div>
+    <div>
+      {/* Progress bar */}
+      <div className="mb-6">
+        <div className="flex justify-between mb-1">
+          {Array.from({ length: totalSteps }, (_, i) => (
+            <div
+              key={i}
+              className={`text-xs ${
+                i + 1 === step ? 'text-yellow-400' : i + 1 < step ? 'text-white' : 'text-gray-500'
+              }`}
+            >
+              Step {i + 1}
+            </div>
+          ))}
+        </div>
+        <div className="h-2 bg-gray-700 rounded-full">
+          <div
+            className="h-full bg-yellow-600 rounded-full transition-all duration-300"
+            style={{ width: `${((step - 1) / (totalSteps - 1)) * 100}%` }}
+          ></div>
         </div>
       </div>
       
-      {/* Form Content */}
-      <div className="mb-8">
-        {getStepContent()}
-      </div>
-      
-      {/* Navigation Buttons */}
-      <div className="flex justify-between">
-        <button
-          type="button"
-          onClick={handlePrevious}
-          disabled={currentStep === 1}
-          className={`px-6 py-2 rounded-md ${
-            currentStep === 1
-              ? 'bg-gray-300 cursor-not-allowed'
-              : 'bg-gray-500 text-white hover:bg-gray-600'
-          }`}
-        >
-          Previous
-        </button>
-        
-        {currentStep < 6 ? (
-          <button
-            type="button"
-            onClick={handleNext}
-            className="px-6 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700"
-          >
-            Next
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={handleSubmit}
-            className="px-6 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700"
-          >
-            Submit Profile
-          </button>
+      <form onSubmit={handleSubmit}>
+        {/* Show error if any */}
+        {error && (
+          <div className="mb-4 bg-red-900 text-red-200 p-3 rounded-md">
+            {error}
+          </div>
         )}
-      </div>
+        
+        {/* Form step content */}
+        {renderStep()}
+        
+        {/* Navigation buttons */}
+        <div className="flex justify-between mt-6">
+          {step > 1 ? (
+            <button
+              type="button"
+              onClick={prevStep}
+              className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            >
+              Previous
+            </button>
+          ) : (
+            <div></div>
+          )}
+          
+          {step < totalSteps ? (
+            <button
+              type="button"
+              onClick={nextStep}
+              className="px-4 py-2 bg-yellow-700 text-white rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            >
+              Next
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={loading}
+              className={`px-4 py-2 bg-yellow-700 text-white rounded hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                loading ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
+            >
+              {loading ? (
+                <>
+                  <span className="inline-block mr-2 animate-spin">&#8635;</span>
+                  Creating...
+                </>
+              ) : (
+                'Create Profile'
+              )}
+            </button>
+          )}
+        </div>
+      </form>
     </div>
   );
 };
