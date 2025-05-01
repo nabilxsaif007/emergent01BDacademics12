@@ -148,6 +148,7 @@ const DashboardPage = () => {
       </div>
 
       {!profile ? (
+        // No profile created yet
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
           <div className="flex">
             <div className="flex-shrink-0">
@@ -157,7 +158,7 @@ const DashboardPage = () => {
             </div>
             <div className="ml-3">
               <p className="text-sm text-yellow-700">
-                You haven't created your academic profile yet.
+                You haven't created your researcher profile yet.
                 <Link to="/profile/create" className="font-medium underline text-yellow-700 hover:text-yellow-600 ml-2">
                   Create Profile
                 </Link>
@@ -166,6 +167,11 @@ const DashboardPage = () => {
           </div>
         </div>
       ) : (
+        // Profile exists - show status banner
+        <ProfileStatusBanner 
+          profile={profile} 
+          onProfileUpdate={(updatedProfile) => setProfile(updatedProfile)} 
+        />
         <div className="bg-white shadow rounded-lg p-6 mb-8">
           <div className="flex justify-between items-start">
             <div className="flex items-center">
