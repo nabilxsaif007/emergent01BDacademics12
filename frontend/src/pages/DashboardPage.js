@@ -257,7 +257,7 @@ const DashboardPage = () => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-medium text-gray-900">Recommended Connections</h2>
           <Link
-            to="/academics"
+            to="/connections"
             className="text-blue-600 hover:text-blue-800 text-sm font-medium"
           >
             View All
