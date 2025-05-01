@@ -210,6 +210,51 @@ class ConnectionRequest(BaseModel):
 class ConnectionRequestCreate(BaseModel):
     recipient_id: str
     message: Optional[str] = None
+    
+# Project status enum
+class ProjectStatus(str, Enum):
+    DRAFT = "draft"
+    ACTIVE = "active"
+    COMPLETED = "completed"
+    ARCHIVED = "archived"
+
+# Project visibility enum
+class ProjectVisibility(str, Enum):
+    PRIVATE = "private"
+    TEAM = "team"
+    PUBLIC = "public"
+
+# Project model
+class ResearchProject(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str
+    description: str
+    owner_id: str
+    research_areas: List[str] = []
+    status: ProjectStatus = ProjectStatus.DRAFT
+    visibility: ProjectVisibility = ProjectVisibility.PRIVATE
+    team_members: List[Dict] = []  # List of {user_id, role, permissions}
+    resources: List[Dict] = []  # List of {name, type, url}
+    tags: List[str] = []
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+# Project creation model
+class ResearchProjectCreate(BaseModel):
+    title: str
+    description: str
+    research_areas: Optional[List[str]] = None
+    visibility: ProjectVisibility = ProjectVisibility.PRIVATE
+    tags: Optional[List[str]] = None
+
+# Project update model
+class ResearchProjectUpdate(BaseModel):
+    title: Optional[str] = None
+    description: Optional[str] = None
+    research_areas: Optional[List[str]] = None
+    status: Optional[ProjectStatus] = None
+    visibility: Optional[ProjectVisibility] = None
+    tags: Optional[List[str]] = None
 
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
