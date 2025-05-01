@@ -97,6 +97,10 @@ class ResearcherProfile(BaseModel):
     public_email: bool = False
     status: ProfileStatus = ProfileStatus.DRAFT
     completion_percentage: int = 0
+    feedback: Optional[str] = None
+    rejection_reason: Optional[str] = None
+    admin_notes: Optional[Dict] = {}
+    review_date: Optional[datetime] = None
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
 
