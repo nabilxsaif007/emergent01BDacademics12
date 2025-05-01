@@ -168,11 +168,12 @@ const DashboardPage = () => {
         </div>
       ) : (
         // Profile exists - show status banner
-        <ProfileStatusBanner 
-          profile={profile} 
-          onProfileUpdate={(updatedProfile) => setProfile(updatedProfile)} 
-        />
-        <div className="bg-white shadow rounded-lg p-6 mb-8">
+        <>
+          <ProfileStatusBanner 
+            profile={profile} 
+            onProfileUpdate={(updatedProfile) => setProfile(updatedProfile)} 
+          />
+          <div className="bg-white shadow rounded-lg p-6 mb-8">
           <div className="flex justify-between items-start">
             <div className="flex items-center">
               <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-full h-16 w-16 flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 mr-4">
