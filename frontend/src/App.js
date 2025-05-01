@@ -19,6 +19,7 @@ import ProfileCreationPage from './pages/ProfileCreationPage';
 import VerificationPage from './pages/VerificationPage';
 import ResearcherSearchPage from './pages/ResearcherSearchPage';
 import ResearcherProfilePage from './pages/ResearcherProfilePage';
+import ConnectionsPage from './pages/ConnectionsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
