@@ -40,6 +40,54 @@ db = client[os.environ.get('DB_NAME', 'bangladesh_academic_network')]
 # Create the main app without a prefix
 app = FastAPI(title="Bangladesh Academic Mentor Network API")
 
+# Enable CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allow requests from any origin in development
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Define profile status enum
+class ProfileStatus(str, Enum):
+    DRAFT = "draft"
+    PENDING_VERIFICATION = "pending_verification"
+    VERIFIED = "verified"
+    PENDING_APPROVAL = "pending_approval"
+    APPROVED = "approved"
+
+# Model for researcher profiles
+class ResearcherProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    academic_title: Optional[str] = None
+    institution_name: Optional[str] = None
+    department: Optional[str] = None
+    research_interests: List[str] = []
+    bio: Optional[str] = None
+    country: Optional[str] = None
+    city: Optional[str] = None
+    profile_picture_url: Optional[str] = None
+    social_links: Dict = {}
+    contact_email: Optional[EmailStr] = None
+    phone: Optional[str] = None
+    public_email: bool = False
+    status: ProfileStatus = ProfileStatus.DRAFT
+    completion_percentage: int = 0
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+# Model for email verification tokens
+class VerificationToken(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    token: str = Field(default_factory=lambda: secrets.token_urlsafe(32))
+    purpose: str
+    expires_at: datetime
+    created_at: datetime = Field(default_factory=datetime.now)
+    is_used: bool = False
+
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
