@@ -314,24 +314,86 @@ async def get_current_admin(current_user: User = Depends(get_current_user)):
 
 # Auth routes
 @api_router.post("/register", response_model=User)
-async def register_user(user: UserCreate):
+async def register_user(user: UserCreate, background_tasks: BackgroundTasks):
     # Check if user already exists
     existing_user = await db.users.find_one({"email": user.email})
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="User with this email already exists"
+            detail="Email already registered"
         )
     
-    # Create new user
-    new_user = User(**user.dict(exclude={"password"}))
-    new_user_dict = new_user.dict()
-    new_user_dict["password"] = get_password_hash(user.password)
+    # Hash the password
+    hashed_password = get_password_hash(user.password)
+    
+    # Create user object
+    user_id = str(uuid.uuid4())
+    user_data = {
+        "id": user_id,
+        "email": user.email,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "password": hashed_password,
+        "is_admin": user.is_admin,
+        "email_verified": False,
+        "created_at": datetime.now(),
+        "updated_at": datetime.now()
+    }
     
     # Insert into database
-    await db.users.insert_one(new_user_dict)
+    await db.users.insert_one(user_data)
     
-    return new_user
+    # Create a verification token
+    verification_token = await create_verification_token(db, user_id, "email_verification")
+    
+    # Send verification email in background
+    background_tasks.add_task(
+        send_verification_email,
+        user.email,
+        verification_token.token,
+        f"{user.first_name} {user.last_name}"
+    )
+    
+    # Return user without password
+    created_user = await db.users.find_one({"id": user_id})
+    return created_user
+
+
+@api_router.get("/verify-email/{token}")
+async def verify_email(token: str):
+    # Get the token from the database
+    token_data = await get_verification_token(db, token)
+    
+    if not token_data:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid verification token"
+        )
+    
+    # Check if token is expired
+    if datetime.fromisoformat(str(token_data["expires_at"])) < datetime.now():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Verification token has expired"
+        )
+    
+    # Check if token is already used
+    if token_data["is_used"]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Verification token has already been used"
+        )
+    
+    # Mark the token as used
+    await mark_token_as_used(db, token_data["id"])
+    
+    # Update the user's email_verified status
+    await db.users.update_one(
+        {"id": token_data["user_id"]},
+        {"$set": {"email_verified": True}}
+    )
+    
+    return {"message": "Email verified successfully"}
 
 @api_router.post("/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
