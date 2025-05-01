@@ -235,9 +235,10 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         token_data = TokenData(email=email, role=role, user_id=user_id)
     except jwt.PyJWTError:
         raise credentials_exception
-    user = await get_user_by_email(email=token_data.email)
+    user = await db.users.find_one({"email": token_data.email})
     if user is None:
         raise credentials_exception
+    user = User(**user)
     return user
 
 async def get_current_admin(current_user: User = Depends(get_current_user)):
