@@ -166,52 +166,96 @@ const AdminDashboard = () => {
     return users[userId] || { name: 'Loading...', email: 'Loading...' };
   };
   
+  // State for feedback modal
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [feedbackReason, setFeedbackReason] = useState('incomplete');
+
+  const openFeedbackModal = (profile) => {
+    setSelectedProfile(profile);
+    setFeedbackMessage('');
+    setFeedbackReason('incomplete');
+    setShowFeedbackModal(true);
+  };
+
+  const submitFeedback = () => {
+    if (!selectedProfile) return;
+    
+    handleRejectProfile(selectedProfile.id, {
+      message: feedbackMessage,
+      reason: feedbackReason
+    });
+    
+    setShowFeedbackModal(false);
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Admin Dashboard</h1>
-      
-      {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
-          {error}
-        </div>
-      )}
-      
-      <div className="mb-6">
-        <div className="border-b border-gray-200">
-          <nav className="-mb-px flex space-x-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="bg-gray-900 shadow rounded-lg p-6">
+        <h1 className="text-2xl font-bold text-white mb-6">Admin Dashboard</h1>
+        
+        {/* Section Tabs */}
+        <div className="mb-6">
+          <div className="flex space-x-8 border-b border-gray-700 pb-2">
             <button
-              onClick={() => setActiveTab('pending')}
-              className={`pb-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'pending'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              className={`pb-2 px-1 ${
+                activeSection === 'academics'
+                  ? 'border-b-2 border-yellow-500 text-yellow-500'
+                  : 'text-gray-400 hover:text-gray-300'
               }`}
+              onClick={() => setActiveSection('academics')}
+            >
+              Academic Profiles
+            </button>
+            <button
+              className={`pb-2 px-1 ${
+                activeSection === 'profiles'
+                  ? 'border-b-2 border-yellow-500 text-yellow-500'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+              onClick={() => setActiveSection('profiles')}
+            >
+              Researcher Profiles
+            </button>
+          </div>
+        </div>
+        
+        {/* Status Tabs */}
+        <div className="border-b border-gray-700 mb-6">
+          <div className="flex space-x-8">
+            <button
+              className={`pb-4 px-1 ${
+                activeTab === 'pending'
+                  ? 'border-b-2 border-yellow-500 text-yellow-500'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+              onClick={() => setActiveTab('pending')}
             >
               Pending Approval
             </button>
             <button
-              onClick={() => setActiveTab('approved')}
-              className={`pb-4 px-1 border-b-2 font-medium text-sm ${
+              className={`pb-4 px-1 ${
                 activeTab === 'approved'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-b-2 border-yellow-500 text-yellow-500'
+                  : 'text-gray-400 hover:text-gray-300'
               }`}
+              onClick={() => setActiveTab('approved')}
             >
               Approved
             </button>
             <button
-              onClick={() => setActiveTab('rejected')}
-              className={`pb-4 px-1 border-b-2 font-medium text-sm ${
+              className={`pb-4 px-1 ${
                 activeTab === 'rejected'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'border-b-2 border-yellow-500 text-yellow-500'
+                  : 'text-gray-400 hover:text-gray-300'
               }`}
+              onClick={() => setActiveTab('rejected')}
             >
               Rejected
             </button>
-          </nav>
+          </div>
         </div>
-      </div>
       
       {loading ? (
         <div className="flex justify-center py-12">
