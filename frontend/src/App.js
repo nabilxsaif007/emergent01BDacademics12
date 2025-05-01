@@ -331,6 +331,8 @@ function AppContent() {
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/profile/create" element={<ProfileCreationPage />} />
         <Route path="/verify-email" element={<VerificationPage />} />
+        <Route path="/researchers" element={<ResearcherSearchPage />} />
+        <Route path="/researchers/:id" element={<ResearcherProfilePage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       </div>
