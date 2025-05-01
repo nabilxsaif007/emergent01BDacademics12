@@ -49,34 +49,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Define profile status enum
-class ProfileStatus(str, Enum):
-    DRAFT = "draft"
-    PENDING_VERIFICATION = "pending_verification"
-    VERIFIED = "verified"
-    PENDING_APPROVAL = "pending_approval"
-    APPROVED = "approved"
-
-# Model for researcher profiles
-class ResearcherProfile(BaseModel):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    user_id: str
-    academic_title: Optional[str] = None
-    institution_name: Optional[str] = None
-    department: Optional[str] = None
-    research_interests: List[str] = []
-    bio: Optional[str] = None
-    country: Optional[str] = None
-    city: Optional[str] = None
-    profile_picture_url: Optional[str] = None
-    social_links: Dict = {}
-    contact_email: Optional[EmailStr] = None
-    phone: Optional[str] = None
-    public_email: bool = False
-    status: ProfileStatus = ProfileStatus.DRAFT
-    completion_percentage: int = 0
-    created_at: datetime = Field(default_factory=datetime.now)
-    updated_at: datetime = Field(default_factory=datetime.now)
+# Import models
+from models.user import User, UserCreate, UserUpdate
+from models.researcher_profile import ResearcherProfile, ResearcherProfileCreate, ResearcherProfileUpdate, ProfileStatus
+from auth.dependencies import get_current_user, get_current_admin, create_access_token
 
 # Model for email verification tokens
 class VerificationToken(BaseModel):
