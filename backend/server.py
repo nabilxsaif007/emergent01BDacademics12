@@ -195,6 +195,69 @@ def verify_password(plain_password, hashed_password):
 def get_password_hash(password):
     return pwd_context.hash(password)
 
+async def create_verification_token(db, user_id: str, purpose: str) -> VerificationToken:
+    token = VerificationToken(
+        user_id=user_id,
+        purpose=purpose,
+        expires_at=datetime.now() + timedelta(hours=24)
+    )
+    await db.verification_tokens.insert_one(token.dict())
+    return token
+
+async def get_verification_token(db, token: str):
+    return await db.verification_tokens.find_one({"token": token})
+
+async def mark_token_as_used(db, token_id: str):
+    await db.verification_tokens.update_one(
+        {"id": token_id},
+        {"$set": {"is_used": True}}
+    )
+
+async def send_verification_email(email: str, token: str, name: str):
+    # Get email configuration from environment variables
+    smtp_server = os.environ.get("SMTP_SERVER")
+    smtp_port = int(os.environ.get("SMTP_PORT", 587))
+    smtp_username = os.environ.get("SMTP_USERNAME")
+    smtp_password = os.environ.get("SMTP_PASSWORD")
+    from_email = os.environ.get("FROM_EMAIL")
+    
+    # Create verification URL
+    verification_url = f"{os.environ.get('FRONTEND_URL', 'http://localhost:3000')}/verify-email/{token}"
+    
+    # Create email message
+    msg = MIMEMultipart()
+    msg["From"] = from_email
+    msg["To"] = email
+    msg["Subject"] = "Verify your email address"
+    
+    # Email body
+    body = f"""
+    Dear {name},
+    
+    Thank you for registering with Bangladesh Academic Network. Please verify your email address by clicking the link below:
+    
+    {verification_url}
+    
+    This link will expire in 24 hours.
+    
+    If you did not register for an account, please ignore this email.
+    
+    Best regards,
+    Bangladesh Academic Network Team
+    """
+    
+    msg.attach(MIMEText(body, "plain"))
+    
+    try:
+        # Connect to SMTP server and send email
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(smtp_username, smtp_password)
+            server.send_message(msg)
+    except Exception as e:
+        logging.error(f"Failed to send verification email: {str(e)}")
+        # Don't raise the exception as this is running in a background task
+
 async def get_user_by_email(email: str):
     user = await db.users.find_one({"email": email})
     if user:
