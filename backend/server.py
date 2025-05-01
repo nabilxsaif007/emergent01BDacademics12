@@ -22,6 +22,9 @@ import jwt
 from passlib.context import CryptContext
 import re
 
+# Import models
+from models.researcher_profile import ResearcherProfile, ResearcherProfileCreate, ResearcherProfileUpdate
+
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
