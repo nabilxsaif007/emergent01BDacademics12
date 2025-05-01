@@ -1091,6 +1091,155 @@ async def get_academic_by_id(academic_id: str):
 async def root():
     return {"message": "Welcome to Bangladesh Academic Mentor Network API"}
 
+# Profile routes
+@api_router.post("/profiles", response_model=ResearcherProfile)
+async def create_profile(
+    profile_data: Dict = Body(...),
+    current_user: dict = Depends(get_current_user),
+):
+    # Check if profile already exists
+    existing_profile = await db.profiles.find_one({"user_id": current_user["id"]})
+    if existing_profile:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Profile already exists for this user"
+        )
+    
+    # Create new profile object
+    profile = ResearcherProfile(
+        user_id=current_user["id"],
+        **profile_data
+    )
+    
+    # Calculate completion percentage
+    completion_fields = [
+        profile.academic_title,
+        profile.institution_name,
+        profile.department,
+        profile.bio,
+        profile.country,
+        profile.city,
+        profile.contact_email
+    ]
+    completed_fields = sum(1 for field in completion_fields if field)
+    if profile.research_interests:
+        completed_fields += 1
+    
+    profile.completion_percentage = int((completed_fields / 8) * 100)
+    
+    # Set status based on email verification
+    if current_user.get("email_verified", False):
+        profile.status = ProfileStatus.VERIFIED
+    else:
+        profile.status = ProfileStatus.PENDING_VERIFICATION
+    
+    # Save profile to database
+    profile_dict = profile.dict()
+    await db.profiles.insert_one(profile_dict)
+    
+    return profile
+
+# Get user's profile
+@api_router.get("/profiles/me", response_model=ResearcherProfile)
+async def get_my_profile(current_user: dict = Depends(get_current_user)):
+    profile = await db.profiles.find_one({"user_id": current_user["id"]})
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
+    return profile
+
+# Update user's profile
+@api_router.put("/profiles/me", response_model=ResearcherProfile)
+async def update_my_profile(
+    profile_data: Dict = Body(...),
+    current_user: dict = Depends(get_current_user),
+):
+    # Check if profile exists
+    existing_profile = await db.profiles.find_one({"user_id": current_user["id"]})
+    if not existing_profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
+    
+    # Update the profile
+    profile_dict = existing_profile.copy()
+    profile_dict.update(profile_data)
+    profile_dict["updated_at"] = datetime.now()
+    
+    # Calculate completion percentage
+    completion_fields = [
+        profile_dict.get("academic_title"),
+        profile_dict.get("institution_name"),
+        profile_dict.get("department"),
+        profile_dict.get("bio"),
+        profile_dict.get("country"),
+        profile_dict.get("city"),
+        profile_dict.get("contact_email")
+    ]
+    completed_fields = sum(1 for field in completion_fields if field)
+    if profile_dict.get("research_interests"):
+        completed_fields += 1
+    
+    profile_dict["completion_percentage"] = int((completed_fields / 8) * 100)
+    
+    # Update in database
+    await db.profiles.update_one(
+        {"user_id": current_user["id"]},
+        {"$set": profile_dict}
+    )
+    
+    # Return updated profile
+    updated_profile = await db.profiles.find_one({"user_id": current_user["id"]})
+    return updated_profile
+
+# Email verification endpoint
+@api_router.get("/verify-email/{token}")
+async def verify_email(token: str):
+    # Check if token exists
+    token_data = await db.verification_tokens.find_one({"token": token})
+    if not token_data:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid verification token"
+        )
+    
+    # Check if token is expired
+    if token_data["expires_at"] < datetime.now():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Verification token has expired"
+        )
+    
+    # Check if token is already used
+    if token_data["is_used"]:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Verification token has already been used"
+        )
+    
+    # Mark token as used
+    await db.verification_tokens.update_one(
+        {"id": token_data["id"]},
+        {"$set": {"is_used": True}}
+    )
+    
+    # Update user's email_verified status
+    await db.users.update_one(
+        {"id": token_data["user_id"]},
+        {"$set": {"email_verified": True}}
+    )
+    
+    # Update profile status if exists
+    await db.profiles.update_one(
+        {"user_id": token_data["user_id"]},
+        {"$set": {"status": ProfileStatus.VERIFIED}}
+    )
+    
+    return {"message": "Email verified successfully"}
+
 # Include the router in the main app
 app.include_router(api_router)
 
