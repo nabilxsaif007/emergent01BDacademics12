@@ -344,6 +344,101 @@ async def get_profile_by_id(profile_id: str):
     return profile
 
 
+@api_router.get("/researchers/search", response_model=List[ResearcherProfile])
+async def search_researchers(
+    query: str = Query(None, description="General search query"),
+    research_interests: str = Query(None, description="Comma-separated research interests to filter by"),
+    institution: str = Query(None, description="Institution name to filter by"),
+    academic_title: str = Query(None, description="Academic title to filter by"),
+    country: str = Query(None, description="Country to filter by"),
+    city: str = Query(None, description="City to filter by"),
+    min_completion: int = Query(0, description="Minimum profile completion percentage"),
+    limit: int = Query(20, ge=1, le=100, description="Maximum number of results to return"),
+    offset: int = Query(0, ge=0, description="Number of results to skip for pagination")
+):
+    """
+    Search for researchers based on multiple criteria.
+    Returns only approved profiles.
+    """
+    # Start with base filter - only return approved profiles
+    filter_query = {"status": "approved"}
+    
+    # Add additional filters based on query parameters
+    if query:
+        # Search in multiple fields
+        filter_query["$or"] = [
+            {"academic_title": {"$regex": query, "$options": "i"}},
+            {"institution_name": {"$regex": query, "$options": "i"}},
+            {"department": {"$regex": query, "$options": "i"}},
+            {"bio": {"$regex": query, "$options": "i"}}
+        ]
+    
+    if research_interests:
+        interests = [interest.strip() for interest in research_interests.split(",")]
+        filter_query["research_interests"] = {"$in": interests}
+    
+    if institution:
+        filter_query["institution_name"] = {"$regex": institution, "$options": "i"}
+    
+    if academic_title:
+        filter_query["academic_title"] = {"$regex": academic_title, "$options": "i"}
+    
+    if country:
+        filter_query["country"] = {"$regex": country, "$options": "i"}
+    
+    if city:
+        filter_query["city"] = {"$regex": city, "$options": "i"}
+    
+    if min_completion > 0:
+        filter_query["completion_percentage"] = {"$gte": min_completion}
+    
+    # Execute the query
+    profiles = await db.researcher_profiles.find(filter_query).skip(offset).limit(limit).to_list(limit)
+    
+    return profiles
+
+
+@api_router.get("/researchers/filters", response_model=Dict)
+async def get_search_filters():
+    """
+    Get available filter options for the researcher search.
+    """
+    # Query all approved profiles
+    profiles = await db.researcher_profiles.find({"status": "approved"}).to_list(1000)
+    
+    # Extract unique values for filters
+    academic_titles = set()
+    institutions = set()
+    countries = set()
+    cities = set()
+    all_interests = set()
+    
+    for profile in profiles:
+        if profile.get("academic_title"):
+            academic_titles.add(profile["academic_title"])
+        
+        if profile.get("institution_name"):
+            institutions.add(profile["institution_name"])
+        
+        if profile.get("country"):
+            countries.add(profile["country"])
+        
+        if profile.get("city"):
+            cities.add(profile["city"])
+        
+        if profile.get("research_interests"):
+            for interest in profile["research_interests"]:
+                all_interests.add(interest)
+    
+    return {
+        "academic_titles": sorted(list(academic_titles)),
+        "institutions": sorted(list(institutions)),
+        "countries": sorted(list(countries)),
+        "cities": sorted(list(cities)),
+        "research_interests": sorted(list(all_interests))
+    }
+
+
 def calculate_profile_completion(profile: dict) -> int:
     """Calculate the completion percentage of a researcher profile"""
     required_fields = [
