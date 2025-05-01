@@ -386,6 +386,67 @@ const AdminDashboard = () => {
           </div>
         )
       )}
+        {/* Feedback Modal */}
+        {showFeedbackModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-900 rounded-lg p-6 max-w-md w-full border border-gray-700">
+              <h3 className="text-xl font-semibold text-white mb-4">Provide Feedback</h3>
+              
+              <div className="mb-4">
+                <label className="block text-gray-300 text-sm font-bold mb-2">
+                  Reason for Requesting Changes
+                </label>
+                <select
+                  value={feedbackReason}
+                  onChange={(e) => setFeedbackReason(e.target.value)}
+                  className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                >
+                  <option value="incomplete">Profile is Incomplete</option>
+                  <option value="inaccurate">Information is Inaccurate</option>
+                  <option value="inappropriate">Content is Inappropriate</option>
+                  <option value="formatting">Formatting Issues</option>
+                  <option value="verification">Requires Verification</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              
+              <div className="mb-6">
+                <label className="block text-gray-300 text-sm font-bold mb-2">
+                  Detailed Feedback
+                </label>
+                <textarea
+                  value={feedbackMessage}
+                  onChange={(e) => setFeedbackMessage(e.target.value)}
+                  rows="5"
+                  placeholder="Provide specific feedback on what needs to be changed..."
+                  className="bg-gray-800 text-white w-full p-2 border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  required
+                ></textarea>
+              </div>
+              
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setShowFeedbackModal(false)}
+                  className="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={submitFeedback}
+                  disabled={!feedbackMessage.trim()}
+                  className={`px-4 py-2 bg-yellow-700 text-white rounded focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                    !feedbackMessage.trim() ? 'opacity-50 cursor-not-allowed' : 'hover:bg-yellow-600'
+                  }`}
+                >
+                  Send Feedback
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
