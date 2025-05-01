@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
-import PersonalInfoStep from './PersonalInfoStep';
-import AcademicBackgroundStep from './AcademicBackgroundStep';
-import ResearchInterestsStep from './ResearchInterestsStep';
-import LocationStep from './LocationStep';
-import ContactPreferencesStep from './ContactPreferencesStep';
-import ReviewStep from './ReviewStep';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const MultiStepForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
