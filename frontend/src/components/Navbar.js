@@ -30,6 +30,7 @@ const Navbar = () => {
         <div className="hidden md:flex space-x-6">
           <NavLink to="/" label="Home" isActive={isActive('/')} />
           <NavLink to="/academics" label="Academics" isActive={isActive('/academics')} />
+          <NavLink to="/researchers" label="Researchers" isActive={isActive('/researchers')} />
           <NavLink to="/countries" label="Countries" isActive={isActive('/countries')} />
           <NavLink to="/about" label="About" isActive={isActive('/about')} />
           {user && (
