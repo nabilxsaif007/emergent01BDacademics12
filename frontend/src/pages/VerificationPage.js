@@ -9,9 +9,6 @@ const VerificationPage = () => {
   const [verificationStatus, setVerificationStatus] = useState('verifying');
   const [message, setMessage] = useState('');
   
-  // Define API URL from environment variables
-  const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
-  
   useEffect(() => {
     const verifyEmail = async () => {
       try {
@@ -21,7 +18,7 @@ const VerificationPage = () => {
           return;
         }
         
-        const response = await axios.get(`${API}/verify-email/${token}`);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/verify-email/${token}`);
         
         if (response.status === 200) {
           setVerificationStatus('success');
@@ -37,7 +34,7 @@ const VerificationPage = () => {
     };
     
     verifyEmail();
-  }, [token, API]);
+  }, [token]);
   
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -46,14 +43,14 @@ const VerificationPage = () => {
         
         {verificationStatus === 'verifying' && (
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-emerald-400 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-yellow-500 mx-auto mb-4"></div>
             <p className="text-gray-300">Verifying your email address...</p>
           </div>
         )}
         
         {verificationStatus === 'success' && (
           <div className="text-center">
-            <div className="bg-emerald-900 text-emerald-400 p-4 rounded-md mb-4">
+            <div className="bg-yellow-900 text-yellow-300 p-4 rounded-md mb-4">
               <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
               </svg>
@@ -65,7 +62,7 @@ const VerificationPage = () => {
             <div className="flex flex-col space-y-3">
               <Link
                 to="/profile/create"
-                className="px-4 py-2 bg-emerald-700 text-white rounded-md hover:bg-emerald-600 text-center"
+                className="px-4 py-2 bg-yellow-700 text-white rounded-md hover:bg-yellow-600 text-center"
               >
                 Create Profile
               </Link>
