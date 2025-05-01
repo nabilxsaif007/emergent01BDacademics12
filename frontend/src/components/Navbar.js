@@ -84,6 +84,7 @@ const Navbar = () => {
           <div className="flex flex-col p-4 space-y-3">
             <NavLink to="/" label="Home" isActive={isActive('/')} />
             <NavLink to="/academics" label="Academics" isActive={isActive('/academics')} />
+            <NavLink to="/researchers" label="Researchers" isActive={isActive('/researchers')} />
             <NavLink to="/countries" label="Countries" isActive={isActive('/countries')} />
             <NavLink to="/about" label="About" isActive={isActive('/about')} />
             {user ? (
