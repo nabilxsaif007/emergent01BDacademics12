@@ -190,6 +190,27 @@ class VerificationToken(BaseModel):
     created_at: datetime = Field(default_factory=datetime.now)
     is_used: bool = False
 
+# Connection status enum
+class ConnectionStatus(str, Enum):
+    PENDING = "pending"
+    ACCEPTED = "accepted"
+    REJECTED = "rejected"
+
+# Connection request model
+class ConnectionRequest(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    requester_id: str
+    recipient_id: str
+    status: ConnectionStatus = ConnectionStatus.PENDING
+    message: Optional[str] = None
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+# Connection request creation model
+class ConnectionRequestCreate(BaseModel):
+    recipient_id: str
+    message: Optional[str] = None
+
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
