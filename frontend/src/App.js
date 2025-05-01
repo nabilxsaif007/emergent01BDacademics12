@@ -15,6 +15,8 @@ import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import DashboardPage from './pages/DashboardPage';
 import AdminDashboard from './pages/AdminDashboard';
+import ProfileCreationPage from './pages/ProfileCreationPage';
+import VerificationPage from './pages/VerificationPage';
 import NotFoundPage from './pages/NotFoundPage';
 import { AuthProvider } from './context/AuthContext';
 import './App.css';
