@@ -479,6 +479,32 @@ async def get_current_admin(current_user: User = Depends(get_current_user)):
     return current_user
 
 # Auth routes
+async def send_verification_email(user_id: str, email: str, name: str):
+    """
+    Send a verification email to the user
+    """
+    # Create token
+    token_data = VerificationToken(
+        user_id=user_id,
+        purpose="email_verification",
+        expires_at=datetime.now() + timedelta(hours=24)
+    )
+    
+    # Save token to database
+    token_dict = token_data.dict()
+    await db.verification_tokens.insert_one(token_dict)
+    
+    # Build verification link
+    frontend_url = os.environ.get("FRONTEND_URL", "http://localhost:3000")
+    verification_link = f"{frontend_url}/verify-email?token={token_data.token}"
+    
+    # Log the verification email details (in a real app, this would send an actual email)
+    logging.info(f"Verification email would be sent to {email}")
+    logging.info(f"Verification link: {verification_link}")
+    
+    # In a real app, you would send an actual email with the verification link
+    # For this demo, we'll just log the verification link
+
 @api_router.post("/register", response_model=User)
 async def register_user(user: UserCreate, background_tasks: BackgroundTasks):
     # Check if user already exists
@@ -509,14 +535,11 @@ async def register_user(user: UserCreate, background_tasks: BackgroundTasks):
     # Insert into database
     await db.users.insert_one(user_data)
     
-    # Create a verification token
-    verification_token = await create_verification_token(db, user_id, "email_verification")
-    
     # Send verification email in background
     background_tasks.add_task(
         send_verification_email,
+        user_id,
         user.email,
-        verification_token.token,
         f"{user.first_name} {user.last_name}"
     )
     
