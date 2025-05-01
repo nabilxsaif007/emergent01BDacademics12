@@ -261,6 +261,11 @@ async def update_my_profile(
         # Recalculate completion percentage
         update_data["completion_percentage"] = calculate_profile_completion(current_profile)
         update_data["updated_at"] = datetime.now()
+        
+        # If status changed to PENDING_APPROVAL, clear any previous feedback
+        if update_data.get("status") == ProfileStatus.PENDING_APPROVAL:
+            update_data["feedback"] = None
+            update_data["rejection_reason"] = None
     
     # Update in database
     await db.researcher_profiles.update_one(
@@ -270,6 +275,61 @@ async def update_my_profile(
     
     # Return updated profile
     updated_profile = await db.researcher_profiles.find_one({"user_id": current_user.id})
+    return updated_profile
+
+
+@api_router.put("/profiles/me/submit", response_model=ResearcherProfile)
+async def submit_profile_for_approval(
+    current_user: User = Depends(get_current_user),
+    background_tasks: BackgroundTasks = None
+):
+    """
+    Submit a profile for admin approval.
+    """
+    # Check if profile exists
+    profile = await db.researcher_profiles.find_one({"user_id": current_user.id})
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
+    
+    # Check if profile is complete enough to submit
+    if profile.get("completion_percentage", 0) < 70:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Profile is not complete enough to submit (minimum 70% completion required)"
+        )
+    
+    # Update status to pending approval
+    await db.researcher_profiles.update_one(
+        {"user_id": current_user.id},
+        {"$set": {
+            "status": ProfileStatus.PENDING_APPROVAL,
+            "updated_at": datetime.now(),
+            "feedback": None,
+            "rejection_reason": None
+        }}
+    )
+    
+    # Get the updated profile
+    updated_profile = await db.researcher_profiles.find_one({"user_id": current_user.id})
+    
+    # Notify admins (just log it for now)
+    if background_tasks:
+        # Get admin emails
+        admins = await db.users.find({"is_admin": True}).to_list(100)
+        admin_emails = [admin.get("email") for admin in admins if admin.get("email")]
+        
+        # Log notification for each admin
+        for email in admin_emails:
+            background_tasks.add_task(
+                log_notification,
+                email,
+                "New Profile Submission",
+                f"A new researcher profile has been submitted for approval: {current_user.get('first_name')} {current_user.get('last_name')}"
+            )
+    
     return updated_profile
 
 
