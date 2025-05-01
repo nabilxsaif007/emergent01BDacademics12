@@ -1680,6 +1680,227 @@ async def log_notification(email: str, subject: str, message: str):
     logging.info(f"MESSAGE: {message}")
 
 
+# Connection endpoints
+@api_router.post("/connections", response_model=ConnectionRequest)
+async def create_connection_request(
+    connection: ConnectionRequestCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Send a connection request to another researcher.
+    """
+    # Check if recipient exists
+    recipient = await db.users.find_one({"id": connection.recipient_id})
+    if not recipient:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Recipient not found"
+        )
+    
+    # Check if this is a self-connection
+    if current_user["id"] == connection.recipient_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot send connection request to yourself"
+        )
+    
+    # Check if a connection already exists
+    existing_connection = await db.connections.find_one({
+        "$or": [
+            {"requester_id": current_user["id"], "recipient_id": connection.recipient_id},
+            {"requester_id": connection.recipient_id, "recipient_id": current_user["id"]}
+        ]
+    })
+    
+    if existing_connection:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Connection request already exists"
+        )
+    
+    # Create connection request
+    connection_request = ConnectionRequest(
+        requester_id=current_user["id"],
+        recipient_id=connection.recipient_id,
+        message=connection.message
+    )
+    
+    # Insert into database
+    await db.connections.insert_one(connection_request.dict())
+    
+    return connection_request
+
+
+@api_router.get("/connections", response_model=List[ConnectionRequest])
+async def get_my_connections(
+    status: Optional[ConnectionStatus] = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Get all connection requests for the current user.
+    Optionally filter by status.
+    """
+    # Build the query
+    query = {
+        "$or": [
+            {"requester_id": current_user["id"]},
+            {"recipient_id": current_user["id"]}
+        ]
+    }
+    
+    # Add status filter if provided
+    if status:
+        query["status"] = status
+    
+    # Fetch connections
+    connections = await db.connections.find(query).to_list(1000)
+    
+    return connections
+
+
+@api_router.put("/connections/{connection_id}/accept", response_model=ConnectionRequest)
+async def accept_connection(
+    connection_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Accept a connection request.
+    Only the recipient can accept a connection request.
+    """
+    # Find the connection request
+    connection = await db.connections.find_one({"id": connection_id})
+    
+    if not connection:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Connection request not found"
+        )
+    
+    # Check if the current user is the recipient
+    if connection["recipient_id"] != current_user["id"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only the recipient can accept a connection request"
+        )
+    
+    # Check if the connection is already accepted
+    if connection["status"] == ConnectionStatus.ACCEPTED:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Connection request already accepted"
+        )
+    
+    # Update the connection status
+    await db.connections.update_one(
+        {"id": connection_id},
+        {"$set": {
+            "status": ConnectionStatus.ACCEPTED,
+            "updated_at": datetime.now()
+        }}
+    )
+    
+    # Return the updated connection
+    updated_connection = await db.connections.find_one({"id": connection_id})
+    return updated_connection
+
+
+@api_router.put("/connections/{connection_id}/reject", response_model=ConnectionRequest)
+async def reject_connection(
+    connection_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Reject a connection request.
+    Only the recipient can reject a connection request.
+    """
+    # Find the connection request
+    connection = await db.connections.find_one({"id": connection_id})
+    
+    if not connection:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Connection request not found"
+        )
+    
+    # Check if the current user is the recipient
+    if connection["recipient_id"] != current_user["id"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only the recipient can reject a connection request"
+        )
+    
+    # Update the connection status
+    await db.connections.update_one(
+        {"id": connection_id},
+        {"$set": {
+            "status": ConnectionStatus.REJECTED,
+            "updated_at": datetime.now()
+        }}
+    )
+    
+    # Return the updated connection
+    updated_connection = await db.connections.find_one({"id": connection_id})
+    return updated_connection
+
+
+@api_router.get("/connections/suggestions", response_model=List[ResearcherProfile])
+async def get_connection_suggestions(
+    limit: int = Query(10, ge=1, le=50),
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Get connection suggestions based on research interests.
+    """
+    # Get the current user's profile
+    my_profile = await db.researcher_profiles.find_one({"user_id": current_user["id"]})
+    
+    if not my_profile or not my_profile.get("research_interests"):
+        # If no profile or no research interests, just return some random approved profiles
+        suggestions = await db.researcher_profiles.find({
+            "status": "approved",
+            "user_id": {"$ne": current_user["id"]}
+        }).limit(limit).to_list(limit)
+        return suggestions
+    
+    # Get my connections (to exclude them from suggestions)
+    my_connections = await db.connections.find({
+        "$or": [
+            {"requester_id": current_user["id"]},
+            {"recipient_id": current_user["id"]}
+        ],
+        "status": {"$in": [ConnectionStatus.PENDING, ConnectionStatus.ACCEPTED]}
+    }).to_list(1000)
+    
+    connected_user_ids = set()
+    for conn in my_connections:
+        connected_user_ids.add(conn["requester_id"])
+        connected_user_ids.add(conn["recipient_id"])
+    
+    # Remove my own ID if it's in the set
+    if current_user["id"] in connected_user_ids:
+        connected_user_ids.remove(current_user["id"])
+    
+    # Find researchers with similar interests
+    suggestions = await db.researcher_profiles.find({
+        "status": "approved",
+        "user_id": {"$nin": list(connected_user_ids)},
+        "research_interests": {"$in": my_profile.get("research_interests", [])}
+    }).limit(limit).to_list(limit)
+    
+    # If we don't have enough suggestions, get some random ones
+    if len(suggestions) < limit:
+        random_limit = limit - len(suggestions)
+        existing_ids = [s["user_id"] for s in suggestions]
+        random_suggestions = await db.researcher_profiles.find({
+            "status": "approved",
+            "user_id": {"$nin": list(connected_user_ids) + existing_ids}
+        }).limit(random_limit).to_list(random_limit)
+        
+        suggestions.extend(random_suggestions)
+    
+    return suggestions
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
