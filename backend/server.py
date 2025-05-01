@@ -67,18 +67,99 @@ class TokenData(BaseModel):
     role: str
     user_id: str
 
+class ProfileStatus(str, Enum):
+    DRAFT = "draft"
+    PENDING_VERIFICATION = "pending_verification"
+    VERIFIED = "verified"
+    PENDING_APPROVAL = "pending_approval"
+    APPROVED = "approved"
+
+
+class ResearcherProfile(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    academic_title: Optional[str] = None
+    institution_name: Optional[str] = None
+    department: Optional[str] = None
+    research_interests: List[str] = []
+    bio: Optional[str] = None
+    publications: List[Dict] = []
+    education: List[Dict] = []
+    location: Optional[Dict] = None
+    profile_picture_url: Optional[str] = None
+    social_links: Dict = {}
+    contact_email: Optional[EmailStr] = None
+    public_email: bool = False
+    status: ProfileStatus = ProfileStatus.DRAFT
+    completion_percentage: int = 0
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+
+class ResearcherProfileCreate(BaseModel):
+    academic_title: Optional[str] = None
+    institution_name: Optional[str] = None
+    department: Optional[str] = None
+    research_interests: Optional[List[str]] = None
+    bio: Optional[str] = None
+    location: Optional[Dict] = None
+    contact_email: Optional[EmailStr] = None
+    public_email: Optional[bool] = None
+
+
+class ResearcherProfileUpdate(BaseModel):
+    academic_title: Optional[str] = None
+    institution_name: Optional[str] = None
+    department: Optional[str] = None
+    research_interests: Optional[List[str]] = None
+    bio: Optional[str] = None
+    publications: Optional[List[Dict]] = None
+    education: Optional[List[Dict]] = None
+    location: Optional[Dict] = None
+    profile_picture_url: Optional[str] = None
+    social_links: Optional[Dict] = None
+    contact_email: Optional[EmailStr] = None
+    public_email: Optional[bool] = None
+    status: Optional[ProfileStatus] = None
+
+
+class VerificationToken(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    token: str = Field(default_factory=lambda: secrets.token_urlsafe(32))
+    purpose: str
+    expires_at: datetime
+    created_at: datetime = Field(default_factory=datetime.now)
+    is_used: bool = False
+
+
 class UserBase(BaseModel):
     email: EmailStr
-    name: str
-    
+    first_name: str
+    last_name: str
+    is_admin: bool = False
+
+
 class UserCreate(UserBase):
     password: str
-    role: Role = Role.USER
+
+
+class UserUpdate(BaseModel):
+    email: Optional[EmailStr] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    is_admin: Optional[bool] = None
+    password: Optional[str] = None
+
 
 class User(UserBase):
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    role: Role = Role.USER
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    id: str
+    created_at: datetime
+    updated_at: datetime
+    email_verified: bool = False
+
+    class Config:
+        from_attributes = True
     
 class Keyword(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
