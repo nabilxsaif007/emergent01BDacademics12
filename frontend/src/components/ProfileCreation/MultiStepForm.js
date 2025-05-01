@@ -113,7 +113,7 @@ const MultiStepForm = () => {
         throw new Error('You must be logged in to create a profile');
       }
       
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/profiles`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/profiles`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
