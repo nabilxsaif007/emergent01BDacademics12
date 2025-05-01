@@ -16,18 +16,11 @@ from fastapi import BackgroundTasks, Body, Depends, FastAPI, HTTPException, Quer
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-
-# Import models and auth
-from models.user import User
-from auth.dependencies import get_current_user
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, EmailStr, Field
 import jwt
 from passlib.context import CryptContext
 import re
-
-# Import models
-from models.researcher_profile import ResearcherProfile, ResearcherProfileCreate, ResearcherProfileUpdate
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
