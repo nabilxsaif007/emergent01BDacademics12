@@ -8,9 +8,11 @@ const API = `${BACKEND_URL}/api`;
 const AdminDashboard = () => {
   const { user } = useAuth();
   const [academics, setAcademics] = useState([]);
+  const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState('pending');
+  const [activeSection, setActiveSection] = useState('academics');
   const [users, setUsers] = useState({});
   
   useEffect(() => {
