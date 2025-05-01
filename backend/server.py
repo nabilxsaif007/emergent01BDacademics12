@@ -1973,6 +1973,251 @@ async def get_connection_suggestions(
     return suggestions
 
 
+# Research Project endpoints
+@api_router.post("/projects", response_model=ResearchProject)
+async def create_project(
+    project: ResearchProjectCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Create a new research project.
+    """
+    # Create the project with the current user as owner
+    project_data = project.dict(exclude_unset=True)
+    
+    new_project = ResearchProject(
+        **project_data,
+        owner_id=current_user["id"],
+        # Add default team member (the owner) with admin role
+        team_members=[{
+            "user_id": current_user["id"],
+            "role": "owner",
+            "permissions": ["admin"]
+        }]
+    )
+    
+    # Insert into database
+    await db.research_projects.insert_one(new_project.dict())
+    
+    return new_project
+
+
+@api_router.get("/projects", response_model=List[ResearchProject])
+async def list_projects(
+    current_user: dict = Depends(get_current_user),
+    status: Optional[ProjectStatus] = None
+):
+    """
+    List all research projects where the current user is a team member.
+    Optionally filter by status.
+    """
+    # Build query
+    query = {
+        "team_members.user_id": current_user["id"]
+    }
+    
+    if status:
+        query["status"] = status
+    
+    # Execute query
+    projects = await db.research_projects.find(query).to_list(1000)
+    
+    return projects
+
+
+@api_router.get("/projects/{project_id}", response_model=ResearchProject)
+async def get_project(
+    project_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Get a specific research project.
+    User must be a team member or the project must be public.
+    """
+    project = await db.research_projects.find_one({"id": project_id})
+    
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Project not found"
+        )
+    
+    # Check if user is a team member or project is public
+    is_team_member = any(member["user_id"] == current_user["id"] for member in project["team_members"])
+    
+    if not is_team_member and project["visibility"] != ProjectVisibility.PUBLIC:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to view this project"
+        )
+    
+    return project
+
+
+@api_router.put("/projects/{project_id}", response_model=ResearchProject)
+async def update_project(
+    project_id: str,
+    project_update: ResearchProjectUpdate,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Update a research project.
+    User must be a team member with edit permissions.
+    """
+    # Get the project
+    project = await db.research_projects.find_one({"id": project_id})
+    
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Project not found"
+        )
+    
+    # Check if user is a team member with edit permissions
+    is_admin = False
+    for member in project["team_members"]:
+        if member["user_id"] == current_user["id"]:
+            if "admin" in member.get("permissions", []) or member["role"] == "owner":
+                is_admin = True
+                break
+    
+    if not is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to edit this project"
+        )
+    
+    # Update the project
+    update_data = project_update.dict(exclude_unset=True)
+    update_data["updated_at"] = datetime.now()
+    
+    await db.research_projects.update_one(
+        {"id": project_id},
+        {"$set": update_data}
+    )
+    
+    # Get updated project
+    updated_project = await db.research_projects.find_one({"id": project_id})
+    
+    return updated_project
+
+
+@api_router.delete("/projects/{project_id}")
+async def delete_project(
+    project_id: str,
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Delete a research project.
+    Only the project owner can delete it.
+    """
+    # Get the project
+    project = await db.research_projects.find_one({"id": project_id})
+    
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Project not found"
+        )
+    
+    # Check if user is the owner
+    is_owner = False
+    for member in project["team_members"]:
+        if member["user_id"] == current_user["id"] and member["role"] == "owner":
+            is_owner = True
+            break
+    
+    if not is_owner:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only the project owner can delete it"
+        )
+    
+    # Delete the project
+    await db.research_projects.delete_one({"id": project_id})
+    
+    return {"message": "Project deleted successfully"}
+
+
+@api_router.post("/projects/{project_id}/team", response_model=ResearchProject)
+async def add_team_member(
+    project_id: str,
+    member_data: Dict = Body(...),
+    current_user: dict = Depends(get_current_user)
+):
+    """
+    Add a team member to a project.
+    Only team members with admin permissions can add new members.
+    """
+    # Validate input
+    if "user_id" not in member_data or "role" not in member_data:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="user_id and role are required"
+        )
+    
+    # Make sure the user exists
+    user = await db.users.find_one({"id": member_data["user_id"]})
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    
+    # Get the project
+    project = await db.research_projects.find_one({"id": project_id})
+    
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Project not found"
+        )
+    
+    # Check if user is a team member with admin permissions
+    is_admin = False
+    for member in project["team_members"]:
+        if member["user_id"] == current_user["id"]:
+            if "admin" in member.get("permissions", []) or member["role"] == "owner":
+                is_admin = True
+                break
+    
+    if not is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You do not have permission to add team members"
+        )
+    
+    # Check if user is already a team member
+    if any(member["user_id"] == member_data["user_id"] for member in project["team_members"]):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User is already a team member"
+        )
+    
+    # Set default permissions based on role
+    if "permissions" not in member_data:
+        if member_data["role"] == "coordinator":
+            member_data["permissions"] = ["edit", "invite"]
+        elif member_data["role"] == "collaborator":
+            member_data["permissions"] = ["edit"]
+        else:
+            member_data["permissions"] = ["view"]
+    
+    # Add the team member
+    await db.research_projects.update_one(
+        {"id": project_id},
+        {
+            "$push": {"team_members": member_data},
+            "$set": {"updated_at": datetime.now()}
+        }
+    )
+    
+    # Get updated project
+    updated_project = await db.research_projects.find_one({"id": project_id})
+    
+    return updated_project
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
