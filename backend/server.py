@@ -43,6 +43,117 @@ app = FastAPI(title="Bangladesh Academic Mentor Network API")
 # Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
+# Researcher profile routes
+@api_router.post("/profiles", response_model=ResearcherProfile)
+async def create_researcher_profile(
+    profile: ResearcherProfileCreate,
+    current_user: User = Depends(get_current_user)
+):
+    # Check if profile already exists
+    existing_profile = await db.researcher_profiles.find_one({"user_id": current_user.id})
+    if existing_profile:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Profile already exists for this user"
+        )
+    
+    # Create new profile
+    profile_dict = profile.dict(exclude_unset=True)
+    
+    # Calculate completion percentage
+    completion_percentage = calculate_profile_completion(profile_dict)
+    
+    # Create the profile with default values
+    new_profile = ResearcherProfile(
+        user_id=current_user.id,
+        **profile_dict,
+        completion_percentage=completion_percentage
+    )
+    
+    # Insert into database
+    await db.researcher_profiles.insert_one(new_profile.dict())
+    
+    return new_profile
+
+
+@api_router.get("/profiles/me", response_model=ResearcherProfile)
+async def get_my_profile(current_user: User = Depends(get_current_user)):
+    profile = await db.researcher_profiles.find_one({"user_id": current_user.id})
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
+    return profile
+
+
+@api_router.put("/profiles/me", response_model=ResearcherProfile)
+async def update_my_profile(
+    profile_update: ResearcherProfileUpdate,
+    current_user: User = Depends(get_current_user)
+):
+    # Check if profile exists
+    existing_profile = await db.researcher_profiles.find_one({"user_id": current_user.id})
+    if not existing_profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
+    
+    # Update the profile
+    update_data = profile_update.dict(exclude_unset=True)
+    
+    # If any fields are updated, recalculate completion percentage
+    if update_data:
+        # Get the current profile data
+        current_profile = {**existing_profile, **update_data}
+        
+        # Recalculate completion percentage
+        update_data["completion_percentage"] = calculate_profile_completion(current_profile)
+        update_data["updated_at"] = datetime.now()
+    
+    # Update in database
+    await db.researcher_profiles.update_one(
+        {"user_id": current_user.id},
+        {"$set": update_data}
+    )
+    
+    # Return updated profile
+    updated_profile = await db.researcher_profiles.find_one({"user_id": current_user.id})
+    return updated_profile
+
+
+@api_router.get("/profiles/{profile_id}", response_model=ResearcherProfile)
+async def get_profile_by_id(profile_id: str):
+    profile = await db.researcher_profiles.find_one({"id": profile_id})
+    if not profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Profile not found"
+        )
+    return profile
+
+
+def calculate_profile_completion(profile: dict) -> int:
+    """Calculate the completion percentage of a researcher profile"""
+    required_fields = [
+        "academic_title", 
+        "institution_name", 
+        "department", 
+        "research_interests", 
+        "bio", 
+        "location", 
+        "contact_email"
+    ]
+    
+    # Count the number of required fields that are populated
+    completed_fields = sum(1 for field in required_fields if field in profile and profile[field])
+    
+    # Calculate percentage
+    percentage = int((completed_fields / len(required_fields)) * 100)
+    
+    return percentage
+
 # Security
 SECRET_KEY = os.environ.get("SECRET_KEY", "mysecretkey")
 ALGORITHM = "HS256"
