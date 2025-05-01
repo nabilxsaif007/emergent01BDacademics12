@@ -106,23 +106,59 @@ const AdminDashboard = () => {
     try {
       await axios.put(`${API}/admin/academics/${academicId}/approve`);
       
-      // Update the local state to reflect the change
-      setAcademics(academics.filter(academic => academic.id !== academicId));
+      // Remove this academic from the list
+      setAcademics(academics.filter(a => a.id !== academicId));
+      
+      // Show success message
+      alert('Academic profile approved successfully!');
     } catch (err) {
       console.error('Error approving academic:', err);
-      setError('Failed to approve academic. Please try again.');
+      alert('Failed to approve academic profile. Please try again.');
+    }
+  };
+
+  const handleReject = async (academicId, reason) => {
+    try {
+      await axios.put(`${API}/admin/academics/${academicId}/reject`, { reason });
+      
+      // Remove this academic from the list
+      setAcademics(academics.filter(a => a.id !== academicId));
+      
+      // Show success message
+      alert('Academic profile rejected successfully!');
+    } catch (err) {
+      console.error('Error rejecting academic:', err);
+      alert('Failed to reject academic profile. Please try again.');
     }
   };
   
-  const handleReject = async (academicId) => {
+  const handleApproveProfile = async (profileId) => {
     try {
-      await axios.put(`${API}/admin/academics/${academicId}/reject`);
+      await axios.put(`${API}/admin/profiles/${profileId}/approve`);
       
-      // Update the local state to reflect the change
-      setAcademics(academics.filter(academic => academic.id !== academicId));
+      // Remove this profile from the list
+      setProfiles(profiles.filter(p => p.id !== profileId));
+      
+      // Show success message
+      alert('Researcher profile approved successfully!');
     } catch (err) {
-      console.error('Error rejecting academic:', err);
-      setError('Failed to reject academic. Please try again.');
+      console.error('Error approving profile:', err);
+      alert('Failed to approve researcher profile. Please try again.');
+    }
+  };
+
+  const handleRejectProfile = async (profileId, feedback) => {
+    try {
+      await axios.put(`${API}/admin/profiles/${profileId}/reject`, feedback);
+      
+      // Remove this profile from the list
+      setProfiles(profiles.filter(p => p.id !== profileId));
+      
+      // Show success message
+      alert('Researcher profile feedback sent successfully!');
+    } catch (err) {
+      console.error('Error rejecting profile:', err);
+      alert('Failed to send feedback for researcher profile. Please try again.');
     }
   };
   
