@@ -157,7 +157,7 @@ const DashboardPage = () => {
             <div className="ml-3">
               <p className="text-sm text-yellow-700">
                 You haven't created your academic profile yet.
-                <Link to="/create-profile" className="font-medium underline text-yellow-700 hover:text-yellow-600 ml-2">
+                <Link to="/profile/create" className="font-medium underline text-yellow-700 hover:text-yellow-600 ml-2">
                   Create Profile
                 </Link>
               </p>
