@@ -2,10 +2,14 @@ import os
 import uuid
 import random
 import logging
+import secrets
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 from dotenv import load_dotenv
 
 from fastapi import BackgroundTasks, Body, Depends, FastAPI, HTTPException, Query, status, APIRouter
