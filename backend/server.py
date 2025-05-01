@@ -367,6 +367,33 @@ async def get_profile_by_id(profile_id: str):
 
 @api_router.get("/researchers/search", response_model=List[ResearcherProfile])
 async def search_researchers(
+    query: Optional[str] = None,
+    limit: int = Query(20, ge=1, le=100)
+):
+    """
+    Basic researcher search endpoint.
+    Returns only approved profiles matching the query.
+    """
+    # Start with base filter - only return approved profiles
+    filter_query = {"status": "approved"}
+    
+    # Add text search if query is provided
+    if query:
+        filter_query["$or"] = [
+            {"academic_title": {"$regex": query, "$options": "i"}},
+            {"institution_name": {"$regex": query, "$options": "i"}},
+            {"department": {"$regex": query, "$options": "i"}},
+            {"bio": {"$regex": query, "$options": "i"}}
+        ]
+    
+    # Execute the query
+    profiles = await db.researcher_profiles.find(filter_query).limit(limit).to_list(limit)
+    
+    return profiles
+
+
+@api_router.get("/researchers/search", response_model=List[ResearcherProfile])
+async def search_researchers(
     query: str = Query(None, description="General search query"),
     research_interests: str = Query(None, description="Comma-separated research interests to filter by"),
     institution: str = Query(None, description="Institution name to filter by"),
