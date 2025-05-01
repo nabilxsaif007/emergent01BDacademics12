@@ -15,6 +15,51 @@ const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('academics');
   const [users, setUsers] = useState({});
   
+  const fetchProfiles = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      // For profiles, we need to map the activeTab to the ProfileStatus enum values
+      let statusParam = "";
+      if (activeTab === "pending") {
+        statusParam = "pending_approval";
+      } else if (activeTab === "approved") {
+        statusParam = "approved";
+      } else if (activeTab === "rejected") {
+        statusParam = "draft"; // Rejected profiles are set back to draft with feedback
+      }
+      
+      // Fetch profiles from admin endpoint
+      const response = await axios.get(`${API}/admin/profiles${statusParam ? `?status=${statusParam}` : ''}`);
+      setProfiles(response.data);
+      
+      // Fetch user details for each profile
+      const userIds = response.data.map(profile => profile.user_id);
+      const uniqueUserIds = [...new Set(userIds)];
+      
+      const userDetails = { ...users };
+      await Promise.all(uniqueUserIds.map(async (userId) => {
+        // Skip if we already have this user's details
+        if (userDetails[userId]) return;
+        
+        try {
+          const userResponse = await axios.get(`${API}/admin/users/${userId}`);
+          userDetails[userId] = userResponse.data;
+        } catch (err) {
+          console.error(`Error fetching user ${userId}:`, err);
+        }
+      }));
+      
+      setUsers(userDetails);
+    } catch (err) {
+      console.error('Error fetching profiles:', err);
+      setError(err.message || 'Failed to load profiles');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const fetchAcademics = async () => {
       setLoading(true);
@@ -30,29 +75,32 @@ const AdminDashboard = () => {
         const uniqueUserIds = [...new Set(userIds)];
         
         const userDetails = {};
-        await Promise.all(
-          uniqueUserIds.map(async (userId) => {
-            try {
-              const userResponse = await axios.get(`${API}/users/${userId}`);
-              userDetails[userId] = userResponse.data;
-            } catch (err) {
-              console.error(`Error fetching user details for user ${userId}:`, err);
-              userDetails[userId] = { name: 'Unknown User', email: 'unknown@example.com' };
-            }
-          })
-        );
+        await Promise.all(uniqueUserIds.map(async (userId) => {
+          try {
+            const userResponse = await axios.get(`${API}/admin/users/${userId}`);
+            userDetails[userId] = userResponse.data;
+          } catch (err) {
+            console.error(`Error fetching user ${userId}:`, err);
+          }
+        }));
         
         setUsers(userDetails);
       } catch (err) {
         console.error('Error fetching academics:', err);
-        setError('Failed to fetch academics. Please try again later.');
+        setError(err.message || 'Failed to load academics');
       } finally {
         setLoading(false);
       }
     };
     
-    fetchAcademics();
-  }, [activeTab]);
+    if (user?.is_admin) {
+      if (activeSection === 'academics') {
+        fetchAcademics();
+      } else if (activeSection === 'profiles') {
+        fetchProfiles();
+      }
+    }
+  }, [user, activeTab, activeSection]);
   
   const handleApprove = async (academicId) => {
     try {
