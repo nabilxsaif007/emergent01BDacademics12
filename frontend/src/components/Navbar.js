@@ -18,16 +18,16 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex justify-between items-center py-4 px-6 w-full fixed top-0 z-50 bg-black bg-opacity-80 backdrop-filter backdrop-blur-lg border-b border-gray-800 shadow-lg">
+    <nav className="flex justify-between items-center py-3 px-6 w-full fixed top-0 z-50 bg-white shadow-md">
       <div className="flex items-center">
-        <Link to="/" className="text-white font-bold text-2xl mr-10">
-          <span className="text-blue-500">B</span>
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-white">
+        <Link to="/" className="text-brand-emerald-dark font-bold text-2xl mr-10">
+          <span className="text-brand-emerald">B</span>
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-brand-emerald to-brand-emerald-dark">
             Academic Network
           </span>
         </Link>
         
-        <div className="hidden md:flex space-x-6">
+        <div className="hidden md:flex space-x-2">
           <NavLink to="/" label="Home" isActive={isActive('/')} />
           <NavLink to="/academics" label="Academics" isActive={isActive('/academics')} />
           <NavLink to="/researchers" label="Researchers" isActive={isActive('/researchers')} />
@@ -42,22 +42,22 @@ const Navbar = () => {
       <div className="flex items-center space-x-4">
         {user ? (
           <>
-            <span className="hidden md:inline text-gray-300 text-sm">
+            <span className="hidden md:inline text-text-secondary text-sm">
               {user.email}
             </span>
             <button 
               onClick={handleLogout}
-              className="bg-red-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-red-700 transition-colors"
+              className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-red-600 transition-colors shadow-sm"
             >
               Logout
             </button>
           </>
         ) : (
           <>
-            <Link to="/signup" className="hidden md:block bg-transparent text-white hover:text-blue-300 px-4 py-2 rounded-full text-sm font-medium border border-gray-700 transition-colors">
+            <Link to="/signup" className="hidden md:block bg-white text-brand-emerald hover:bg-gray-50 px-4 py-2 rounded-full text-sm font-medium border border-brand-emerald transition-colors shadow-sm">
               Sign Up
             </Link>
-            <Link to="/login" className="bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-blue-700 transition-colors">
+            <Link to="/login" className="bg-brand-emerald text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-brand-emerald-light transition-colors shadow-sm">
               Login
             </Link>
           </>
