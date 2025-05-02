@@ -19,30 +19,30 @@ const Button = ({
   ...props 
 }) => {
   // Base classes
-  const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2';
+  const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm';
   
   // Variant classes
   const variantClasses = {
-    primary: 'bg-brand-emerald hover:bg-brand-emerald-light text-white focus:ring-brand-emerald',
-    secondary: 'bg-brand-gold hover:bg-brand-gold-dark text-gray-900 focus:ring-brand-gold',
-    outline: 'border-2 border-brand-emerald text-brand-emerald hover:bg-brand-emerald hover:text-white focus:ring-brand-emerald',
-    ghost: 'bg-transparent hover:bg-gray-100 text-gray-700 hover:text-gray-900',
-    danger: 'bg-red-600 hover:bg-red-700 text-white focus:ring-red-500',
-    link: 'bg-transparent underline text-brand-emerald hover:text-brand-emerald-light p-0',
+    primary: 'bg-brand-emerald hover:bg-brand-emerald-light text-white focus:ring-brand-emerald-light',
+    secondary: 'bg-brand-gold hover:bg-brand-gold-light text-white focus:ring-brand-gold-light',
+    outline: 'border-2 border-brand-emerald text-brand-emerald hover:bg-opacity-10 hover:bg-brand-emerald focus:ring-brand-emerald',
+    ghost: 'bg-transparent hover:bg-gray-100 text-text-secondary hover:text-text-primary',
+    danger: 'bg-red-600 hover:bg-red-500 text-white focus:ring-red-400',
+    link: 'bg-transparent shadow-none underline text-brand-emerald hover:text-brand-emerald-light p-0 hover:no-underline',
   };
   
   // Size classes
   const sizeClasses = {
-    sm: 'py-1 px-3 text-sm rounded',
+    sm: 'py-1.5 px-3 text-sm rounded-md',
     md: 'py-2 px-4 text-base rounded-md',
-    lg: 'py-3 px-6 text-lg rounded-lg',
+    lg: 'py-2.5 px-5 text-lg rounded-lg',
   };
   
   // Width classes
   const widthClasses = fullWidth ? 'w-full' : '';
   
   // Disabled classes
-  const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : 'transform hover:-translate-y-0.5 active:translate-y-0';
+  const disabledClasses = disabled ? 'opacity-60 cursor-not-allowed' : 'transform hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm';
   
   // Icon spacing
   const iconSpacing = children ? (iconPosition === 'left' ? 'mr-2' : 'ml-2') : '';
