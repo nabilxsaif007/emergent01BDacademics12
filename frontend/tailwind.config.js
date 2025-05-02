@@ -6,21 +6,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#121212",
+        background: "#FFFFFF",
+        surface: "#F8FAFC",
         primary: "#4285F4",
+        secondary: "#F59E0B",
         'brand': {
-          'emerald': '#006E51',
-          'emerald-light': '#008C68',
-          'emerald-dark': '#00513C',
-          'gold': '#FFD700',
-          'gold-light': '#FFEB99',
-          'gold-dark': '#B39700'
+          'emerald': '#0D9488',
+          'emerald-light': '#14B8A6',
+          'emerald-dark': '#0F766E',
+          'gold': '#F59E0B',
+          'gold-light': '#FBBF24',
+          'gold-dark': '#D97706'
+        },
+        'text': {
+          'primary': '#1E293B',
+          'secondary': '#475569',
+          'tertiary': '#94A3B8'
         }
       },
       boxShadow: {
-        glow: "0 0 20px rgba(255, 255, 255, 0.2)",
-        'emerald-glow': "0 0 15px rgba(0, 110, 81, 0.5)",
-        'gold-glow': "0 0 15px rgba(255, 215, 0, 0.5)",
+        'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        'DEFAULT': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+        'emerald-glow': "0 0 15px rgba(13, 148, 136, 0.3)",
+        'gold-glow': "0 0 15px rgba(245, 158, 11, 0.3)",
       },
       animation: {
         'spin-slow': 'spin 8s linear infinite',
