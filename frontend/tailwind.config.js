@@ -40,6 +40,8 @@ module.exports = {
         'spin-slow': 'spin 8s linear infinite',
         'fade-in': 'fadeIn 0.5s ease-in forwards',
         'slide-in': 'slideIn 0.5s ease-out forwards',
+        'fade-up': 'fadeUp 0.5s ease-out forwards',
+        'pulse-subtle': 'pulseSubtle 3s infinite',
       },
       keyframes: {
         fadeIn: {
