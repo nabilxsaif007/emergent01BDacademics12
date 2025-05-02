@@ -37,6 +37,9 @@ module.exports = {
         'slideIn': 'slideIn 0.3s ease-out',
         'bounce': 'bounce 1s infinite',
         'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'spin-slow': 'spin 8s linear infinite',
+        'fade-in': 'fadeIn 0.5s ease-in forwards',
+        'slide-in': 'slideIn 0.5s ease-out forwards',
       },
       keyframes: {
         fadeIn: {
@@ -61,11 +64,6 @@ module.exports = {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '.5' },
         },
-      },
-      animation: {
-        'spin-slow': 'spin 8s linear infinite',
-        'fade-in': 'fadeIn 0.5s ease-in forwards',
-        'slide-in': 'slideIn 0.5s ease-out forwards',
         'fade-up': 'fadeUp 0.5s ease-out forwards',
         'pulse-subtle': 'pulseSubtle 3s infinite',
       },
