@@ -375,7 +375,6 @@ const DashboardPage = () => {
           </Link>
         </div>
       </div>
-    </>
     </div>
   );
 };
