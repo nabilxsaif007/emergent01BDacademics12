@@ -25,15 +25,15 @@ const Input = forwardRef(({
   ...props 
 }, ref) => {
   // Base classes
-  const baseClasses = 'form-input border focus:ring-2 focus:ring-opacity-50 transition-colors duration-200';
+  const baseClasses = 'form-input border shadow-sm focus:ring-2 focus:ring-opacity-30 transition-all duration-200';
   
   // State classes
   const stateClasses = error
-    ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-    : 'border-gray-300 focus:border-brand-emerald focus:ring-brand-emerald';
+    ? 'border-red-300 focus:border-red-400 focus:ring-red-300 bg-red-50'
+    : 'border-gray-200 focus:border-brand-emerald focus:ring-brand-emerald-light';
   
   // Size and shape classes
-  const sizeClasses = 'py-2 px-4 rounded-md';
+  const sizeClasses = 'py-2.5 px-4 rounded-md';
   
   // Width classes
   const widthClasses = fullWidth ? 'w-full' : '';
@@ -43,7 +43,7 @@ const Input = forwardRef(({
   const rightIconClasses = rightIcon ? 'pr-10' : '';
   
   // Disabled classes
-  const disabledClasses = disabled ? 'bg-gray-100 cursor-not-allowed opacity-75' : 'bg-white';
+  const disabledClasses = disabled ? 'bg-gray-50 cursor-not-allowed opacity-75' : 'bg-white';
   
   return (
     <div className={fullWidth ? 'w-full' : ''}>
