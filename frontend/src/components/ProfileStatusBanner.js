@@ -158,7 +158,7 @@ const ProfileStatusBanner = ({ profile, onProfileUpdate }) => {
               {profile.status === 'pending_verification' && (
                 <button
                   type="button"
-                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-brand-emerald hover:bg-brand-emerald-light transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-emerald-light"
                   onClick={() => alert('Verification email has been resent.')}
                 >
                   Resend Verification Email
