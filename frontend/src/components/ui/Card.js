@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * Card component for consistent content containers
+ * Card component for displaying content in containers
  */
 const Card = ({ 
   children, 
