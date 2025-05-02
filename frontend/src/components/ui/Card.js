@@ -40,7 +40,7 @@ const Card = ({
 // Card Header component
 const CardHeader = ({ children, className = '', ...props }) => {
   return (
-    <div className={`px-6 py-4 border-b border-gray-200 ${className}`} {...props}>
+    <div className={`px-6 py-4 border-b border-gray-100 bg-gray-50 bg-opacity-50 ${className}`} {...props}>
       {children}
     </div>
   );
@@ -58,7 +58,7 @@ const CardBody = ({ children, className = '', ...props }) => {
 // Card Footer component
 const CardFooter = ({ children, className = '', ...props }) => {
   return (
-    <div className={`px-6 py-4 border-t border-gray-200 ${className}`} {...props}>
+    <div className={`px-6 py-4 border-t border-gray-100 bg-gray-50 bg-opacity-30 ${className}`} {...props}>
       {children}
     </div>
   );
