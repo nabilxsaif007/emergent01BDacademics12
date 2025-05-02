@@ -66,32 +66,6 @@ module.exports = {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '.5' },
         },
-        'fade-up': 'fadeUp 0.5s ease-out forwards',
-        'pulse-subtle': 'pulseSubtle 3s infinite',
-      },
-      keyframes: {
-        fadeIn: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
-        slideIn: {
-          '0%': { transform: 'translateY(-10px)', opacity: '0' },
-          '100%': { transform: 'translateY(0)', opacity: '1' },
-        },
-        bounce: {
-          '0%, 100%': { 
-            transform: 'translateY(-5%)',
-            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)'
-          },
-          '50%': {
-            transform: 'translateY(0)',
-            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'
-          },
-        },
-        pulse: {
-          '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '.5' },
-        },
         fadeUp: {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
@@ -101,11 +75,11 @@ module.exports = {
           '50%': { opacity: '0.85' },
         },
       },
-      blur: {
-        '2xl': '40px',
-      },
-      transitionDuration: {
-        '2000': '2000ms',
+      spacing: {
+        '72': '18rem',
+        '84': '21rem',
+        '96': '24rem',
+        '128': '32rem',
       },
     },
   },
