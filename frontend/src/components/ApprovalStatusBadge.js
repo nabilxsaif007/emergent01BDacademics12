@@ -61,7 +61,7 @@ const ApprovalStatusBadge = ({ status }) => {
   };
   
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getBadgeStyles()}`}>
+    <span className={`inline-flex items-center ml-2 px-2.5 py-0.5 rounded-full text-xs font-medium shadow-sm ${getBadgeStyles()}`}>
       {getStatusIcon()}
       {getStatusText()}
     </span>
