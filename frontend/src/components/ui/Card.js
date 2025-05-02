@@ -12,20 +12,20 @@ const Card = ({
   ...props 
 }) => {
   // Base classes
-  const baseClasses = 'rounded-lg overflow-hidden transition-all duration-300';
+  const baseClasses = 'rounded-lg overflow-hidden transition-all duration-200';
   
   // Variant classes
   const variantClasses = {
-    default: 'bg-white border border-gray-200 shadow',
+    default: 'bg-white border border-gray-100 shadow-sm',
     outlined: 'bg-white border-2 border-gray-200',
     elevated: 'bg-white shadow-md',
-    emerald: 'bg-white border-l-4 border-brand-emerald shadow',
-    gold: 'bg-white border-l-4 border-brand-gold shadow',
-    dark: 'bg-gray-800 text-white shadow-md',
+    emerald: 'bg-white border-l-4 border-brand-emerald shadow-sm',
+    gold: 'bg-white border-l-4 border-brand-gold shadow-sm',
+    dark: 'bg-gray-100 text-text-primary shadow-sm',
   };
   
   // Hover effect
-  const hoverClasses = hover ? 'transform hover:-translate-y-1 hover:shadow-lg' : '';
+  const hoverClasses = hover ? 'transform hover:-translate-y-1 hover:shadow-lg transition-shadow' : '';
   
   return (
     <div
