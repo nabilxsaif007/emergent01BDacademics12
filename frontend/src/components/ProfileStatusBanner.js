@@ -13,9 +13,9 @@ const ProfileStatusBanner = ({ profile, onProfileUpdate }) => {
     switch (profile.status) {
       case 'draft':
         return {
-          color: 'bg-yellow-50 border-yellow-400',
-          textColor: 'text-yellow-700',
-          iconColor: 'text-yellow-400',
+          color: 'bg-amber-50 border-brand-gold',
+          textColor: 'text-amber-700',
+          iconColor: 'text-brand-gold',
           title: 'Profile Not Submitted',
           message: profile.rejection_reason 
             ? 'Your profile needs changes before it can be approved.' 
@@ -23,33 +23,33 @@ const ProfileStatusBanner = ({ profile, onProfileUpdate }) => {
         };
       case 'pending_verification':
         return {
-          color: 'bg-blue-50 border-blue-400',
+          color: 'bg-blue-50 border-blue-500',
           textColor: 'text-blue-700',
-          iconColor: 'text-blue-400',
+          iconColor: 'text-blue-500',
           title: 'Email Verification Required',
           message: 'Please verify your email address to proceed with profile approval.'
         };
       case 'pending_approval':
         return {
-          color: 'bg-indigo-50 border-indigo-400',
+          color: 'bg-indigo-50 border-indigo-500',
           textColor: 'text-indigo-700',
-          iconColor: 'text-indigo-400',
+          iconColor: 'text-indigo-500',
           title: 'Profile Pending Approval',
           message: 'Your profile is currently under review by our administrators.'
         };
       case 'approved':
         return {
-          color: 'bg-green-50 border-green-400',
-          textColor: 'text-green-700',
-          iconColor: 'text-green-400',
+          color: 'bg-emerald-50 border-brand-emerald',
+          textColor: 'text-emerald-700',
+          iconColor: 'text-brand-emerald',
           title: 'Profile Approved',
           message: 'Your profile has been approved and is now visible to other researchers.'
         };
       default:
         return {
-          color: 'bg-gray-50 border-gray-400',
-          textColor: 'text-gray-700',
-          iconColor: 'text-gray-400',
+          color: 'bg-gray-50 border-gray-300',
+          textColor: 'text-text-secondary',
+          iconColor: 'text-text-tertiary',
           title: 'Profile Status',
           message: 'Update your profile information and submit it for review.'
         };
