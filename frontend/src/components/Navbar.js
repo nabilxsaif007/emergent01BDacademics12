@@ -65,7 +65,7 @@ const Navbar = () => {
         
         {/* Mobile menu button */}
         <button 
-          className="md:hidden text-white p-1"
+          className="md:hidden text-brand-emerald p-1"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -80,8 +80,8 @@ const Navbar = () => {
       
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="fixed top-[60px] left-0 right-0 bg-black bg-opacity-95 backdrop-blur-lg border-t border-gray-800 md:hidden shadow-lg z-40 max-h-[calc(100vh-60px)] overflow-y-auto">
-          <div className="flex flex-col p-4 space-y-3">
+        <div className="fixed top-[56px] left-0 right-0 bg-white border-t border-gray-100 md:hidden shadow-lg z-40 max-h-[calc(100vh-56px)] overflow-y-auto">
+          <div className="flex flex-col p-4 space-y-2">
             <NavLink to="/" label="Home" isActive={isActive('/')} />
             <NavLink to="/academics" label="Academics" isActive={isActive('/academics')} />
             <NavLink to="/researchers" label="Researchers" isActive={isActive('/researchers')} />
@@ -92,17 +92,17 @@ const Navbar = () => {
                 <NavLink to="/dashboard" label="Dashboard" isActive={isActive('/dashboard')} />
                 <button 
                   onClick={handleLogout}
-                  className="bg-red-600 text-white px-4 py-2 text-sm font-medium rounded-full mt-2 text-left"
+                  className="bg-red-500 text-white px-4 py-2 text-sm font-medium rounded-md shadow-sm mt-2 text-left w-full"
                 >
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <Link to="/signup" className="bg-transparent text-white hover:text-blue-300 px-4 py-2 text-sm font-medium border border-gray-700 rounded-full mt-2 text-left">
+                <Link to="/signup" className="bg-white text-brand-emerald hover:bg-gray-50 px-4 py-2 text-sm font-medium border border-brand-emerald rounded-md shadow-sm mt-2 text-center w-full">
                   Sign Up
                 </Link>
-                <Link to="/login" className="bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700 transition-colors rounded-full mt-2 text-left">
+                <Link to="/login" className="bg-brand-emerald text-white px-4 py-2 text-sm font-medium hover:bg-brand-emerald-light transition-colors rounded-md shadow-sm mt-2 text-center w-full">
                   Login
                 </Link>
               </>
