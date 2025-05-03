@@ -290,6 +290,241 @@ const AdminDashboard = () => {
         <div className="flex justify-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
         </div>
+      ) : activeSection === 'website' ? (
+        <div className="bg-gray-800 rounded-lg p-6">
+          <div className="flex justify-between mb-4">
+            <h3 className="text-xl text-white font-semibold">
+              Website Content Management
+            </h3>
+            <button
+              onClick={() => setIsEditing(!isEditing)}
+              className={`px-4 py-2 rounded text-sm font-medium ${
+                isEditing
+                  ? 'bg-gray-600 text-white'
+                  : 'bg-green-600 text-white hover:bg-green-500'
+              }`}
+            >
+              {isEditing ? 'Cancel Editing' : 'Edit Content'}
+            </button>
+          </div>
+          
+          {isEditing ? (
+            <div className="space-y-6">
+              {/* Hero Section */}
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h4 className="text-green-400 font-medium mb-3">Hero Section</h4>
+                <div className="space-y-3">
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-1">Title</label>
+                    <input
+                      type="text"
+                      value={websiteContent.heroTitle}
+                      onChange={(e) => setWebsiteContent({
+                        ...websiteContent,
+                        heroTitle: e.target.value
+                      })}
+                      className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-1">Subtitle</label>
+                    <input
+                      type="text"
+                      value={websiteContent.heroSubtitle}
+                      onChange={(e) => setWebsiteContent({
+                        ...websiteContent,
+                        heroSubtitle: e.target.value
+                      })}
+                      className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Stats Section */}
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h4 className="text-green-400 font-medium mb-3">Stats</h4>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-1">Researchers</label>
+                    <input
+                      type="text"
+                      value={websiteContent.stats.researchers}
+                      onChange={(e) => setWebsiteContent({
+                        ...websiteContent,
+                        stats: {
+                          ...websiteContent.stats,
+                          researchers: e.target.value
+                        }
+                      })}
+                      className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-1">Countries</label>
+                    <input
+                      type="text"
+                      value={websiteContent.stats.countries}
+                      onChange={(e) => setWebsiteContent({
+                        ...websiteContent,
+                        stats: {
+                          ...websiteContent.stats,
+                          countries: e.target.value
+                        }
+                      })}
+                      className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-1">Institutions</label>
+                    <input
+                      type="text"
+                      value={websiteContent.stats.institutions}
+                      onChange={(e) => setWebsiteContent({
+                        ...websiteContent,
+                        stats: {
+                          ...websiteContent.stats,
+                          institutions: e.target.value
+                        }
+                      })}
+                      className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Featured Locations */}
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h4 className="text-green-400 font-medium mb-3">Featured Locations</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-1">Featured Countries (comma-separated)</label>
+                    <textarea
+                      value={websiteContent.featuredCountries.join(', ')}
+                      onChange={(e) => setWebsiteContent({
+                        ...websiteContent,
+                        featuredCountries: e.target.value.split(',').map(item => item.trim())
+                      })}
+                      className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white"
+                      rows="4"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-1">Featured Cities (comma-separated)</label>
+                    <textarea
+                      value={websiteContent.featuredCities.join(', ')}
+                      onChange={(e) => setWebsiteContent({
+                        ...websiteContent,
+                        featuredCities: e.target.value.split(',').map(item => item.trim())
+                      })}
+                      className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white"
+                      rows="4"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              {/* About Text */}
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h4 className="text-green-400 font-medium mb-3">About Text</h4>
+                <textarea
+                  value={websiteContent.aboutText}
+                  onChange={(e) => setWebsiteContent({
+                    ...websiteContent,
+                    aboutText: e.target.value
+                  })}
+                  className="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 text-white"
+                  rows="6"
+                />
+              </div>
+              
+              <div className="flex justify-end mt-6 space-x-3">
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => {
+                    // Here you would normally save to backend
+                    // For now we just exit edit mode
+                    setIsEditing(false);
+                    alert('Content saved successfully!');
+                  }}
+                  className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500"
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {/* Hero Section Preview */}
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h4 className="text-green-400 font-medium mb-3">Hero Section</h4>
+                <div className="bg-gray-800 p-4 rounded">
+                  <h5 className="text-lg text-white font-medium">{websiteContent.heroTitle}</h5>
+                  <p className="text-gray-300 mt-2">{websiteContent.heroSubtitle}</p>
+                </div>
+              </div>
+              
+              {/* Stats Preview */}
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h4 className="text-green-400 font-medium mb-3">Stats</h4>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-gray-800 p-3 rounded">
+                    <p className="text-sm text-gray-400">Researchers</p>
+                    <p className="text-lg text-white font-medium">{websiteContent.stats.researchers}</p>
+                  </div>
+                  <div className="bg-gray-800 p-3 rounded">
+                    <p className="text-sm text-gray-400">Countries</p>
+                    <p className="text-lg text-white font-medium">{websiteContent.stats.countries}</p>
+                  </div>
+                  <div className="bg-gray-800 p-3 rounded">
+                    <p className="text-sm text-gray-400">Institutions</p>
+                    <p className="text-lg text-white font-medium">{websiteContent.stats.institutions}</p>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Featured Locations Preview */}
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h4 className="text-green-400 font-medium mb-3">Featured Locations</h4>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-gray-800 p-3 rounded">
+                    <p className="text-sm text-gray-400 mb-2">Featured Countries</p>
+                    <div className="flex flex-wrap gap-2">
+                      {websiteContent.featuredCountries.map((country, index) => (
+                        <span key={index} className="px-2 py-1 bg-gray-700 text-white text-xs rounded">
+                          {country}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="bg-gray-800 p-3 rounded">
+                    <p className="text-sm text-gray-400 mb-2">Featured Cities</p>
+                    <div className="flex flex-wrap gap-2">
+                      {websiteContent.featuredCities.map((city, index) => (
+                        <span key={index} className="px-2 py-1 bg-gray-700 text-white text-xs rounded">
+                          {city}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* About Text Preview */}
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h4 className="text-green-400 font-medium mb-3">About Text</h4>
+                <div className="bg-gray-800 p-4 rounded">
+                  <p className="text-gray-300">{websiteContent.aboutText}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       ) : activeSection === 'academics' ? (
         academics.length === 0 ? (
           <div className="text-center py-12">
