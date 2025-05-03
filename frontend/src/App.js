@@ -246,7 +246,7 @@ function AppContent() {
                       className="w-full py-3.5 px-6 bg-white border border-gray-200 rounded-full text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-coral-500 transition-all shadow-sm hover:shadow-md"
                       style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
                     />
-                    <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-coral-500 to-coral-400 text-white p-2.5 rounded-full hover:from-coral-600 hover:to-coral-500 transition-all hover:shadow-md">
+                    <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-green-600 to-green-500 text-white p-2.5 rounded-full hover:from-green-700 hover:to-green-600 transition-all hover:shadow-md">
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                       </svg>
