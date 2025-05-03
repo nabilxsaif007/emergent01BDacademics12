@@ -1,87 +1,93 @@
-import React, { useEffect, useRef, useState } from 'react';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import React, { useState, useEffect, useRef } from 'react';
+
+const researchers = [
+  {
+    id: 1,
+    name: "Dr. Ahmed Khan",
+    position: "Professor, University of Cambridge",
+    fields: ["Mathematics", "Theoretical Physics"],
+    location: { lat: 52.2053, lng: 0.1218 }, // Cambridge, UK
+    country: "United Kingdom"
+  },
+  {
+    id: 2,
+    name: "Dr. Maria Rodriguez",
+    position: "Senior Researcher, CERN",
+    fields: ["Particle Physics", "Quantum Mechanics"],
+    location: { lat: 46.2324, lng: 6.0550 }, // CERN, Switzerland
+    country: "Switzerland"
+  },
+  {
+    id: 3,
+    name: "Dr. Hiroshi Tanaka",
+    position: "Director, Tokyo Institute of Technology",
+    fields: ["Robotics", "Artificial Intelligence"],
+    location: { lat: 35.6047, lng: 139.6822 }, // Tokyo, Japan
+    country: "Japan"
+  },
+  {
+    id: 4,
+    name: "Dr. Sophia Chen",
+    position: "Lead Scientist, Max Planck Institute",
+    fields: ["Biochemistry", "Molecular Biology"],
+    location: { lat: 48.1351, lng: 11.5820 }, // Munich, Germany
+    country: "Germany"
+  },
+  {
+    id: 5,
+    name: "Dr. Rahman Ali",
+    position: "Department Chair, University of Dhaka",
+    fields: ["Computer Science", "Machine Learning"],
+    location: { lat: 23.7461, lng: 90.3742 }, // Dhaka, Bangladesh
+    country: "Bangladesh"
+  },
+  {
+    id: 6,
+    name: "Dr. Fatima Al-Zahrawi",
+    position: "Research Director, Institut Pasteur",
+    fields: ["Virology", "Immunology"],
+    location: { lat: 48.8417, lng: 2.3130 }, // Paris, France
+    country: "France"
+  }
+];
 
 const ArtisticGlobe = () => {
+  const [selectedResearcher, setSelectedResearcher] = useState(null);
+  const [mapRotation, setMapRotation] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
   const containerRef = useRef(null);
-  const rendererRef = useRef(null);
-  const sceneRef = useRef(null);
-  const cameraRef = useRef(null);
-  const controlsRef = useRef(null);
-  const globeRef = useRef(null);
-  const markersRef = useRef([]);
+  const animationRef = useRef(null);
   
-  const [selectedCountry, setSelectedCountry] = useState(null);
-  
-  useEffect(() => {
-    // Initialize scene
-    const scene = new THREE.Scene();
-    sceneRef.current = scene;
+  // Function to convert lat/lng to SVG coordinates
+  const latLngToCoordinates = (lat, lng, width, height) => {
+    // Adjust longitude based on rotation
+    const adjustedLng = (lng + mapRotation + 540) % 360 - 180;
     
-    // Background color (white)
-    scene.background = new THREE.Color('#FFFFFF');
+    // Calculate visibility - if the point is on the visible side of Earth
+    const isVisible = adjustedLng > -90 && adjustedLng < 90;
     
-    // Camera
-    const camera = new THREE.PerspectiveCamera(
-      50, // field of view
-      window.innerWidth / window.innerHeight, // aspect ratio
-      0.1, // near plane
-      1000 // far plane
-    );
-    camera.position.z = 4;
-    cameraRef.current = camera;
+    // Calculate x position (0-1) from adjusted longitude
+    const x = (adjustedLng + 180) / 360;
     
-    // Renderer
-    const renderer = new THREE.WebGLRenderer({ 
-      antialias: true,
-      alpha: true
-    });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    // Calculate y position (0-1) from latitude
+    const y = (90 - lat) / 180;
     
-    // Add the renderer to the DOM
-    if (containerRef.current.firstChild) {
-      containerRef.current.removeChild(containerRef.current.firstChild);
-    }
-    containerRef.current.appendChild(renderer.domElement);
-    rendererRef.current = renderer;
+    // Calculate size based on longitude (simulating perspective)
+    const distanceFromCenter = Math.abs(adjustedLng) / 90;
+    const size = Math.max(5, 12 * (1 - distanceFromCenter * 0.6));
     
-    // Add OrbitControls for interactive rotation
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.25;
-    controls.rotateSpeed = 0.5;
-    controls.enableZoom = true;
-    controls.minDistance = 2.5;
-    controls.maxDistance = 10;
-    controls.enablePan = false;
-    controlsRef.current = controls;
+    // Calculate opacity based on longitude
+    const opacity = 1 - Math.max(0, Math.abs(adjustedLng) - 60) / 30;
     
-    // Load Earth texture
-    const textureLoader = new THREE.TextureLoader();
-    const earthTexture = textureLoader.load('/earth-day-map.jpg', () => {
-      // Fallback texture if the first one fails to load
-      const fallbackTexture = textureLoader.load('https://raw.githubusercontent.com/turban/webgl-earth/master/images/2_no_clouds_4k.jpg');
-      if (globeRef.current) {
-        globeRef.current.material.map = fallbackTexture;
-        globeRef.current.material.needsUpdate = true;
-      }
-    });
-    
-    // Load bump map and specular map
-    const bumpMap = textureLoader.load('/earth-topology.jpg');
-    const specularMap = textureLoader.load('/earth-specular.jpg');
-    
-    // Create 3D globe
-    const globeGeometry = new THREE.SphereGeometry(1.5, 64, 64);
-    const globeMaterial = new THREE.MeshPhongMaterial({
-      map: earthTexture,
-      bumpMap: bumpMap,
-      bumpScale: 0.05,
-      specularMap: specularMap,
-      specular: new THREE.Color('#444444'),
-      shininess: 10
-    });
+    return {
+      x: x * width,
+      y: y * height,
+      isVisible,
+      size,
+      opacity
+    };
+  };
     const globe = new THREE.Mesh(globeGeometry, globeMaterial);
     scene.add(globe);
     globeRef.current = globe;
