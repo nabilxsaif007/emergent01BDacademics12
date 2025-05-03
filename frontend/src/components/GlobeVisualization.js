@@ -10,6 +10,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
   const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const tooltipRef = useRef(null);
   const [isGlobeReady, setIsGlobeReady] = useState(false);
+  const [showSurpriseAnimation, setShowSurpriseAnimation] = useState(false);
   const navigate = useNavigate();
 
   // Enhance globe with custom texture and effects for Airbnb-inspired bright appearance
