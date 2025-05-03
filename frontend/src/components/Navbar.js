@@ -465,12 +465,13 @@ const NavLink = ({ to, label, isActive = false }) => {
   return (
     <Link
       to={to}
-      className={`text-sm font-medium px-3 py-2 rounded-md transition-all duration-200 ${
+      className={`text-sm font-medium px-3 py-2 rounded-full transition-all duration-300 ${
         isActive
-          ? 'text-cta-primary after:block after:h-0.5 after:bg-cta-primary after:mt-0.5'
-          : 'text-text-secondary hover:text-cta-primary hover:bg-background-secondary'
+          ? 'text-gray-900 after:block after:h-0.5 after:bg-coral-500 after:mt-0.5'
+          : 'text-gray-700 hover:text-coral-500 hover:bg-gray-50'
       }`}
       aria-current={isActive ? 'page' : undefined}
+      style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
     >
       {label}
     </Link>
