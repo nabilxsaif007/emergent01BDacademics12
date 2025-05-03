@@ -309,11 +309,7 @@ function AppContent() {
             
             <FilterPanel onFilter={handleFilter} />
             <div className="globe-container">
-              <GlobeVisualization 
-                dataPoints={filteredDataPoints} 
-                isLoading={isLoading} 
-                onPointClick={handleGlobePointClick}
-              />
+              <ArtisticGlobe />
             </div>
             <InfoPanel 
               isVisible={showInfoPanel} 
