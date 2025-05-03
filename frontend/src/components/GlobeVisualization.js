@@ -34,8 +34,8 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       directionalLight.position.set(0.5, 1, 0.5);
       scene.add(directionalLight);
       
-      // Secondary light for fill lighting
-      const secondaryLight = new THREE.DirectionalLight(0xCCDDFF, 0.4);
+      // Secondary light for fill lighting - subtle blue tint to simulate sky reflection
+      const secondaryLight = new THREE.DirectionalLight(0xCCDDFF, 0.5);
       secondaryLight.position.set(-0.5, 0.5, -0.5);
       scene.add(secondaryLight);
       
