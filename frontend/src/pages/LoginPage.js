@@ -149,7 +149,7 @@ const LoginPage = () => {
         
         <form onSubmit={handleSubmit}>
           <div className="mb-6">
-            <label htmlFor="email" className="block text-gray-300 text-sm font-medium mb-2">
+            <label htmlFor="email" className="block text-gray-700 text-sm font-medium mb-2">
               Email Address
             </label>
             <input
@@ -157,7 +157,7 @@ const LoginPage = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-gray-900 bg-opacity-80 border border-gray-700 text-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full bg-white border border-gray-300 text-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Enter your email"
               required
             />
