@@ -12,22 +12,52 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
   const [isGlobeReady, setIsGlobeReady] = useState(false);
   const navigate = useNavigate();
 
-  // Enhance globe with custom texture and effects
+  // Enhance globe with custom texture and effects for Airbnb-inspired bright appearance
   useEffect(() => {
     if (!isLoading && globeEl.current) {
       // Set initial rotation and camera position
       globeEl.current.controls().autoRotate = true;
-      globeEl.current.controls().autoRotateSpeed = 0.5;
+      globeEl.current.controls().autoRotateSpeed = 0.4; // Slightly slower for a more elegant rotation
       globeEl.current.pointOfView({ lat: 23.6850, lng: 90.3563, altitude: 2.5 }); // Center on Bangladesh
       
-      // Add directional light for 3D effect
-      const directionalLight = new THREE.DirectionalLight(0x3a9dc4, 0.6);
-      directionalLight.position.set(1, 1, 1);
-      globeEl.current.scene().add(directionalLight);
+      // Get the scene
+      const scene = globeEl.current.scene();
       
-      // Add ambient light for better visibility
-      const ambientLight = new THREE.AmbientLight(0xbbbbbb, 0.3);
-      globeEl.current.scene().add(ambientLight);
+      // Clear existing lights
+      scene.children
+        .filter(child => child instanceof THREE.Light)
+        .forEach(light => scene.remove(light));
+      
+      // Add new lighting for bright daytime appearance
+      // Main sunlight
+      const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+      directionalLight.position.set(0.5, 1, 0.5);
+      scene.add(directionalLight);
+      
+      // Secondary light for fill lighting
+      const secondaryLight = new THREE.DirectionalLight(0xCCDDFF, 0.4);
+      secondaryLight.position.set(-0.5, 0.5, -0.5);
+      scene.add(secondaryLight);
+      
+      // Ambient light for overall illumination
+      const ambientLight = new THREE.AmbientLight(0xDDDDDD, 0.6);
+      scene.add(ambientLight);
+      
+      // Set background color to very light blue instead of black
+      scene.background = new THREE.Color(0xF8FBFD);
+      
+      // Get access to the globe material for customization
+      if (globeEl.current.globeMaterial) {
+        const globeMaterial = globeEl.current.globeMaterial();
+        if (globeMaterial) {
+          // Reduce bump mapping for a smoother appearance
+          globeMaterial.bumpScale = 0.5;
+          
+          // Add subtle specular highlights
+          globeMaterial.specular = new THREE.Color(0xFFFFFF);
+          globeMaterial.shininess = 30;
+        }
+      }
       
       setIsGlobeReady(true);
       
@@ -36,6 +66,12 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       controls.addEventListener('start', () => {
         controls.autoRotate = false;
       });
+      
+      // Add support for touch gestures on mobile
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.1;
+      controls.rotateSpeed = 0.5;
+      controls.enablePan = false; // Disable panning for better UX
     }
   }, [isLoading]);
 
