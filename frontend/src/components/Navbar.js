@@ -117,20 +117,12 @@ const Navbar = () => {
           {/* Desktop navigation */}
           <div className="hidden md:flex items-center space-x-1">
             {navigationItems.map((item) => (
-              item.isNewCombinedItem ? (
-                <NavDropdown 
-                  key={item.path} 
-                  label={item.label} 
-                  isActive={isActive('/academics') || isActive('/researchers') || isActive('/countries') || isActive('/explore')}
-                />
-              ) : (
-                <NavLink 
-                  key={item.path} 
-                  to={item.path} 
-                  label={item.label} 
-                  isActive={isActive(item.path)} 
-                />
-              )
+              <NavLink 
+                key={item.path} 
+                to={item.path} 
+                label={item.label} 
+                isActive={isActive(item.path)} 
+              />
             ))}
           </div>
         </div>
