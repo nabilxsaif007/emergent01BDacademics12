@@ -324,10 +324,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       )}
       
       {isLoading ? (
-                
-                // Trigger the click handler after animation completes
-                setTimeout(() => {
-                  if (onPointClick && typeof onPointClick === 'function') {
                     onPointClick(randomResearcher);
                   }
                 }, 1600);
