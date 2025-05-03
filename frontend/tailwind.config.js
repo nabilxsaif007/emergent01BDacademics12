@@ -247,5 +247,75 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Plugin for generating aspect ratio classes
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.aspect-ratio-square': {
+          aspectRatio: '1 / 1',
+        },
+        '.aspect-ratio-video': {
+          aspectRatio: '16 / 9',
+        },
+        '.aspect-ratio-portrait': {
+          aspectRatio: '3 / 4',
+        },
+        '.aspect-ratio-landscape': {
+          aspectRatio: '4 / 3',
+        },
+        '.aspect-ratio-wide': {
+          aspectRatio: '21 / 9',
+        },
+      };
+      addUtilities(newUtilities);
+    },
+    
+    // Plugin for focus-visible utility (progressive enhancement)
+    function({ addVariant, e }) {
+      addVariant('focus-visible', ({ modifySelectors, separator }) => {
+        modifySelectors(({ className }) => {
+          return `.${e(`focus-visible${separator}${className}`)}:focus-visible`;
+        });
+      });
+    },
+    
+    // Plugin for screen reader utilities
+    function({ addUtilities }) {
+      const newUtilities = {
+        '.sr-only': {
+          position: 'absolute',
+          width: '1px',
+          height: '1px',
+          padding: '0',
+          margin: '-1px',
+          overflow: 'hidden',
+          clip: 'rect(0, 0, 0, 0)',
+          whiteSpace: 'nowrap',
+          borderWidth: '0',
+        },
+        '.not-sr-only': {
+          position: 'static',
+          width: 'auto',
+          height: 'auto',
+          padding: '0',
+          margin: '0',
+          overflow: 'visible',
+          clip: 'auto',
+          whiteSpace: 'normal',
+        },
+      };
+      addUtilities(newUtilities);
+    },
+    
+    // Plugin for reduced-motion preference
+    function({ addVariant }) {
+      addVariant('prefers-reduced-motion', ['@media (prefers-reduced-motion: reduce)']);
+    },
+    
+    // Plugin for high contrast mode
+    function({ addVariant }) {
+      addVariant('forced-colors', ['@media (forced-colors: active)']);
+      addVariant('high-contrast', ['@media (-ms-high-contrast: active)']);
+    },
+  ],
 }
