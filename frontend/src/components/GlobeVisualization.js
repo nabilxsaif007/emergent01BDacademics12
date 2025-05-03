@@ -362,7 +362,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       ) : (
       <Globe
         ref={globeEl}
-        globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
+        globeImageUrl="//unpkg.com/three-globe/example/img/earth-day.jpg" // Bright daytime earth
         bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
         backgroundImageUrl={null} // Remove the starry background for clean white look
         width={window.innerWidth}
