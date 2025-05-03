@@ -103,8 +103,8 @@ const LoginPage = () => {
     <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-white">
       <div className="w-full max-w-md px-8 py-10 bg-white rounded-xl shadow-lg border border-gray-100 transform transition-all">
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-          <p className="text-gray-400">Log in to your account</p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h1>
+          <p className="text-gray-600">Log in to your account</p>
         </div>
         
         {/* Demo Account Notice */}
