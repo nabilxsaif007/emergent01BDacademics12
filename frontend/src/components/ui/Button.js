@@ -67,10 +67,10 @@ const Button = forwardRef(({
       focus-visible:ring-green-500 focus-visible:ring-opacity-40
     `,
     subtle: `
-      bg-gray-50 hover:bg-gray-100
-      text-gray-700 hover:text-gray-900
+      bg-transparent hover:bg-green-50
+      text-gray-700 hover:text-green-600
       border border-transparent
-      focus-visible:ring-gray-400
+      focus-visible:ring-green-400
     `,
     danger: `
       bg-status-error hover:bg-red-600
