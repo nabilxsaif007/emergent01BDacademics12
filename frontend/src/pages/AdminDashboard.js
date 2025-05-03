@@ -14,6 +14,19 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('pending');
   const [activeSection, setActiveSection] = useState('academics');
   const [users, setUsers] = useState({});
+  const [websiteContent, setWebsiteContent] = useState({
+    heroTitle: "Explore Bangladesh's Global Academic Network",
+    heroSubtitle: "Connect with researchers and academics worldwide",
+    featuredCountries: ["Bangladesh", "USA", "UK", "Canada", "Australia"],
+    featuredCities: ["Dhaka", "New York", "London", "Toronto", "Sydney"],
+    stats: {
+      researchers: "250+",
+      countries: "45",
+      institutions: "120+"
+    },
+    aboutText: "The Bangladesh Academic Network connects researchers and academics worldwide, facilitating collaboration and knowledge sharing across borders."
+  });
+  const [isEditing, setIsEditing] = useState(false);
   
   // Function to get user name from the users object
   const getUserName = (userId) => {
