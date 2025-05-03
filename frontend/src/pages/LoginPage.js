@@ -189,9 +189,9 @@ const LoginPage = () => {
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="h-4 w-4 text-blue-600 border-gray-700 rounded focus:ring-blue-500 bg-gray-900"
+              className="h-4 w-4 text-green-600 border-gray-300 rounded focus:ring-green-500 bg-white"
             />
-            <label htmlFor="remember-me" className="ml-2 block text-gray-300 text-sm">
+            <label htmlFor="remember-me" className="ml-2 block text-gray-700 text-sm">
               Remember me
             </label>
           </div>
