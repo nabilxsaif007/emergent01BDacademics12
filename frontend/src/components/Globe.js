@@ -1,41 +1,46 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import Globe from 'react-globe.gl';
 
 const GlobeComponent = ({ dataPoints = [], isLoading, onPointClick }) => {
   const globeEl = useRef();
-  const tooltipRef = useRef();
-  const [hoveredPoint, setHoveredPoint] = useState(null);
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef();
-  const [dimensions, setDimensions] = useState({ width: 800, height: 800 });
+  const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
+  const [hoveredPoint, setHoveredPoint] = useState(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   // Debug log for dataPoints
   useEffect(() => {
-    console.log("Globe component received dataPoints:", dataPoints ? dataPoints.length : 0);
+    console.log("Globe component received dataPoints:", dataPoints ? dataPoints.length : 0, dataPoints);
   }, [dataPoints]);
 
   // Set up globe on mount
   useEffect(() => {
-    // Update dimensions based on container size
-    if (containerRef.current) {
-      const { width, height } = containerRef.current.getBoundingClientRect();
-      setDimensions({ 
-        width: width || 800, 
-        height: height || 800 
-      });
-    }
-
-    // Set up auto-rotation
     if (globeEl.current) {
+      // Update dimensions
+      if (containerRef.current) {
+        const { width, height } = containerRef.current.getBoundingClientRect();
+        setDimensions({ 
+          width: width || 800, 
+          height: Math.min(600, height || 600)
+        });
+      }
+
       // Add auto-rotation
       const controls = globeEl.current.controls();
-      controls.autoRotate = true;
-      controls.autoRotateSpeed = 0.5;
-      
-      // Stop auto-rotation on user interaction
-      controls.addEventListener('start', function() {
-        controls.autoRotate = false;
-      });
+      if (controls) {
+        controls.autoRotate = true;
+        controls.autoRotateSpeed = 0.5;
+        controls.enableZoom = true;
+        controls.enablePan = false;
+        
+        // Initial position focused on Bangladesh
+        globeEl.current.pointOfView({ lat: 23.6850, lng: 90.3563, altitude: 2.5 }, 1000);
+        
+        // Stop auto-rotation on user interaction
+        controls.addEventListener('start', function() {
+          controls.autoRotate = false;
+        });
+      }
     }
   }, []);
 
@@ -44,59 +49,46 @@ const GlobeComponent = ({ dataPoints = [], isLoading, onPointClick }) => {
     const handleResize = () => {
       if (containerRef.current) {
         const { width, height } = containerRef.current.getBoundingClientRect();
-        setDimensions({ width, height });
+        setDimensions({ 
+          width: width || 800, 
+          height: Math.min(600, height || 600)
+        });
       }
     };
 
-    // Initial call
-    handleResize();
-
     window.addEventListener('resize', handleResize);
+    handleResize(); // Initial call
+    
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Handle point hover
-  const handlePointHover = useCallback((point, event) => {
-    setHoveredPoint(point);
+  // Track mouse position for tooltips
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
     
-    if (point && event) {
-      // Use mouse position directly from event
-      setTooltipPosition({ 
-        x: event.clientX, 
-        y: event.clientY 
-      });
-    }
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Handle point click
+  // Handle point hover with console logs for debugging
+  const handlePointHover = useCallback((point) => {
+    if (point) {
+      console.log("Point hovered:", point.name, point.university);
+    }
+    setHoveredPoint(point);
+  }, []);
+
+  // Handle point click with console logs and callback
   const handlePointClick = useCallback((point) => {
-    console.log("Point clicked:", point);
-    if (point && onPointClick) {
-      onPointClick(point);
+    if (point) {
+      console.log("Point clicked:", point.name, point.id);
+      if (onPointClick) {
+        onPointClick(point);
+      }
     }
   }, [onPointClick]);
-
-  // Custom tooltip component
-  const CustomTooltip = useMemo(() => {
-    if (!hoveredPoint) return null;
-    
-    return (
-      <div 
-        ref={tooltipRef}
-        className="fixed z-50 bg-white px-4 py-3 rounded-lg shadow-lg border border-green-300 text-gray-700 pointer-events-none"
-        style={{
-          left: tooltipPosition.x + 10,
-          top: tooltipPosition.y - 10,
-        }}
-      >
-        <div className="font-bold text-green-700 text-base mb-1">{hoveredPoint.name}</div>
-        <div className="text-sm text-gray-700 mb-1">{hoveredPoint.university}</div>
-        <div className="text-xs text-gray-600 mb-1">{hoveredPoint.field}</div>
-        <div className="text-xs text-gray-600">{hoveredPoint.city}, {hoveredPoint.country}</div>
-        <div className="text-xs text-green-600 mt-2 font-medium">Click for details</div>
-      </div>
-    );
-  }, [hoveredPoint, tooltipPosition]);
 
   if (isLoading) {
     return (
@@ -108,7 +100,8 @@ const GlobeComponent = ({ dataPoints = [], isLoading, onPointClick }) => {
   }
 
   return (
-    <div ref={containerRef} className="relative w-full h-full">
+    <div ref={containerRef} className="relative w-full h-full rounded-xl overflow-hidden">
+      {/* Main Globe */}
       <Globe
         ref={globeEl}
         width={dimensions.width}
@@ -120,22 +113,52 @@ const GlobeComponent = ({ dataPoints = [], isLoading, onPointClick }) => {
         
         // Points data
         pointsData={dataPoints}
-        pointColor={() => "#22c55e"}
+        pointColor={() => "#16a34a"}
         pointAltitude={0.1}
-        pointRadius={0.5}
+        pointRadius={0.6}
+        pointResolution={32}
         pointsMerge={false}
         
-        // Hover and click events
+        // Events
         onPointHover={handlePointHover}
         onPointClick={handlePointClick}
         
-        // Green atmosphere
+        // Labels (needed for hover to work properly)
+        pointLabel={(d) => d.name}
+        
+        // Atmosphere
         atmosphereColor="rgba(34, 197, 94, 0.2)"
         atmosphereAltitude={0.15}
       />
       
       {/* Tooltip */}
-      {CustomTooltip}
+      {hoveredPoint && (
+        <div 
+          className="fixed z-50 bg-white px-4 py-3 rounded-lg shadow-lg border border-green-300 text-gray-700 pointer-events-none"
+          style={{
+            left: mousePosition.x + 10,
+            top: mousePosition.y - 10,
+            maxWidth: '300px'
+          }}
+        >
+          <div className="font-bold text-green-700 text-base mb-1">{hoveredPoint.name}</div>
+          <div className="text-sm text-gray-700 mb-1">{hoveredPoint.university}</div>
+          <div className="text-xs text-gray-600 mb-1">{hoveredPoint.field}</div>
+          <div className="text-xs text-gray-600">{hoveredPoint.city}, {hoveredPoint.country}</div>
+          <div className="text-xs text-green-600 mt-2 font-medium">Click for details</div>
+        </div>
+      )}
+      
+      {/* Overlay gradient for better readability */}
+      <div className="absolute inset-0 pointer-events-none" style={{ 
+        background: 'radial-gradient(circle at center, transparent 40%, rgba(255,255,255,0.3) 100%)',
+        opacity: 0.5
+      }} />
+      
+      {/* Debug counter - can be removed in production */}
+      <div className="absolute bottom-2 left-2 text-xs text-green-600 bg-white bg-opacity-50 px-2 py-1 rounded">
+        {dataPoints ? dataPoints.length : 0} academics loaded
+      </div>
     </div>
   );
 };
