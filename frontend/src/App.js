@@ -29,12 +29,15 @@ const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 // Main content component that uses location
 function AppContent() {
+  const { user, logout } = useAuth();
+  
   const [dataPoints, setDataPoints] = useState([]);
   const [filteredDataPoints, setFilteredDataPoints] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAcademic, setSelectedAcademic] = useState(null);
   const [showInfoPanel, setShowInfoPanel] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  
   const location = useLocation();
 
   // Only show globe on certain pages
