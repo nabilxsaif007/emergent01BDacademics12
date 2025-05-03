@@ -39,9 +39,14 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       secondaryLight.position.set(-0.5, 0.5, -0.5);
       scene.add(secondaryLight);
       
-      // Ambient light for overall illumination
-      const ambientLight = new THREE.AmbientLight(0xDDDDDD, 0.6);
+      // Ambient light for overall illumination - warmer tone for more inviting feel
+      const ambientLight = new THREE.AmbientLight(0xE0E0E0, 0.7);
       scene.add(ambientLight);
+       
+      // Soft rim light for edge definition
+      const rimLight = new THREE.DirectionalLight(0xFFFFDD, 0.3);
+      rimLight.position.set(0, -1, 0);
+      scene.add(rimLight);
       
       // Set background color to very light blue instead of black
       scene.background = new THREE.Color(0xF8FBFD);
