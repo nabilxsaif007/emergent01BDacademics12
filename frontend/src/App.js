@@ -5,7 +5,7 @@ import Navbar from './components/Navbar';
 import WelcomeOverlay from './components/WelcomeOverlay';
 import SearchBar from './components/SearchBar';
 import FilterPanel from './components/FilterPanel';
-import ArtisticGlobe from './components/ArtisticGlobe';
+import Globe from './components/Globe';
 import InfoPanel from './components/InfoPanel';
 import AcademicsPage from './pages/AcademicsPage';
 import AcademicDetailPage from './pages/AcademicDetailPage';
