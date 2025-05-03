@@ -324,10 +324,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       )}
       
       {isLoading ? (
-                  controls.dollyOut(1.2);
-                  controls.update();
-                }
-              } catch (err) {
                 console.error("Error zooming out:", err);
               }
             }
