@@ -282,7 +282,48 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
           </svg>
           Surprise Me
         </button>
-        <button 
+      </div>
+      
+      {/* Selection Info Badge */}
+      {selectedPoints.length > 0 && (
+        <div className="absolute top-20 right-6 z-10">
+          <div 
+            className="bg-white text-gray-700 px-3 py-2 rounded-full shadow-md" 
+            style={{
+              fontSize: '13px',
+              fontWeight: 500,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+            }}
+          >
+            {selectedPoints.length} {selectedPoints.length === 1 ? 'researcher' : 'researchers'} selected
+          </div>
+        </div>
+      )}
+      
+      {/* Confetti Animation for Surprise Me */}
+      {showSurpriseAnimation && (
+        <div className="absolute inset-0 z-20 pointer-events-none overflow-hidden">
+          <div className="surprise-confetti-container">
+            {[...Array(50)].map((_, i) => (
+              <div 
+                key={i}
+                className="surprise-confetti"
+                style={{
+                  backgroundColor: ['#FF5A5F', '#00A699', '#FC642D', '#4D67FF', '#FFB400'][i % 5],
+                  left: `${Math.random() * 100}%`,
+                  width: `${5 + Math.random() * 7}px`,
+                  height: `${5 + Math.random() * 7}px`,
+                  opacity: Math.random(),
+                  animation: `surprise-confetti-fall ${1 + Math.random() * 2}s linear forwards, 
+                             surprise-confetti-shake ${0.5 + Math.random() * 1}s ease-in-out infinite alternate`
+                }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+      
+      {isLoading ? (
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
