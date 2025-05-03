@@ -75,11 +75,20 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         controls.autoRotate = false;
       });
       
-      // Add support for touch gestures on mobile
+      // Enhanced touch support for mobile
       controls.enableDamping = true;
-      controls.dampingFactor = 0.1;
-      controls.rotateSpeed = 0.5;
+      controls.dampingFactor = 0.12;
+      controls.rotateSpeed = 0.4; // Slightly slower for more precise control
       controls.enablePan = false; // Disable panning for better UX
+      controls.enableZoom = true; // Enable zoom
+      controls.minDistance = 120; // Prevent zooming too close
+      controls.maxDistance = 400; // Prevent zooming too far out
+      
+      // Improved mobile pinch-to-zoom feel
+      controls.touches = {
+        ONE: THREE.TOUCH.ROTATE,
+        TWO: THREE.TOUCH.DOLLY_PAN
+      };
     }
   }, [isLoading]);
 
