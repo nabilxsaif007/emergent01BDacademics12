@@ -161,17 +161,6 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
         </button>
-        
-        {/* Connect Button */}
-        <button 
-          className="mt-3 w-full bg-white text-green-600 border border-green-200 hover:border-green-400 py-3 rounded-xl transition-all duration-300 font-medium flex items-center justify-center hover:bg-green-50"
-          style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
-        >
-          <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-          </svg>
-          <span>Connect with Researcher</span>
-        </button>
       </div>
     </div>
   );
