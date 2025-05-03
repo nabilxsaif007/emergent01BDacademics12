@@ -220,7 +220,7 @@ const AdminDashboard = () => {
             <button
               className={`pb-2 px-1 ${
                 activeSection === 'academics'
-                  ? 'border-b-2 border-yellow-500 text-yellow-500'
+                  ? 'border-b-2 border-green-500 text-green-500'
                   : 'text-gray-400 hover:text-gray-300'
               }`}
               onClick={() => setActiveSection('academics')}
@@ -230,12 +230,22 @@ const AdminDashboard = () => {
             <button
               className={`pb-2 px-1 ${
                 activeSection === 'profiles'
-                  ? 'border-b-2 border-yellow-500 text-yellow-500'
+                  ? 'border-b-2 border-green-500 text-green-500'
                   : 'text-gray-400 hover:text-gray-300'
               }`}
               onClick={() => setActiveSection('profiles')}
             >
               Researcher Profiles
+            </button>
+            <button
+              className={`pb-2 px-1 ${
+                activeSection === 'website'
+                  ? 'border-b-2 border-green-500 text-green-500'
+                  : 'text-gray-400 hover:text-gray-300'
+              }`}
+              onClick={() => setActiveSection('website')}
+            >
+              Website Content
             </button>
           </div>
         </div>
