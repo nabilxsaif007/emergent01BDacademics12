@@ -275,9 +275,12 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
             boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
           }}
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" stroke="#FF5A5F" strokeWidth="2">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+            <path d="M15 3h6v6"></path>
+            <path d="M10 14L21 3"></path>
           </svg>
+          Surprise Me
         </button>
         <button 
           onClick={(e) => {
