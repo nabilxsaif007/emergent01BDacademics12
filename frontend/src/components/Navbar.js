@@ -243,7 +243,7 @@ const Navbar = () => {
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Link 
                 to="/login" 
-                className="text-gray-700 hover:text-coral-500 text-sm font-medium py-2 px-3 rounded-full transition-colors duration-200"
+                className="text-gray-700 hover:text-green-600 text-sm font-medium py-2 px-3 rounded-full transition-colors duration-200"
                 aria-label="Log in to your account"
                 style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
               >
