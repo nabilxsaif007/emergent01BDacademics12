@@ -262,10 +262,10 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
   }
 
   return (
-    <div className="h-full relative">
-      {/* Responsive controls for mobile */}
-      <div className="absolute bottom-6 right-6 z-10 flex flex-col space-y-3 md:hidden">
-        <button 
+    <div className="globe-container" style={{width: '100%', height: '100%', position: 'relative'}}>
+      {/* Surprise Me Button */}
+      <div className="absolute top-6 right-6 z-10">
+        <button
           onClick={(e) => {
             e.preventDefault(); 
             e.stopPropagation();
