@@ -530,7 +530,7 @@ const NavDropdown = ({ label, isActive = false }) => {
             </div>
             <Link
               to="/academics"
-              className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-coral-500"
+              className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-green-50 hover:text-green-600"
               role="menuitem"
             >
               <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
