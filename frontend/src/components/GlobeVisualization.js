@@ -17,7 +17,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
     if (!isLoading && globeEl.current) {
       // Set initial rotation and camera position
       globeEl.current.controls().autoRotate = true;
-      globeEl.current.controls().autoRotateSpeed = 0.4; // Slightly slower for a more elegant rotation
+      globeEl.current.controls().autoRotateSpeed = 0.3; // Even slower for a more elegant rotation
       globeEl.current.pointOfView({ lat: 23.6850, lng: 90.3563, altitude: 2.5 }); // Center on Bangladesh
       
       // Get the scene
