@@ -47,7 +47,7 @@ function AppContent() {
       try {
         // Fetch data from API
         const response = await axios.get(`${API}/globe-data`);
-        
+         
         // If API returns data, use it
         if (response.data && response.data.length > 0) {
           console.log("Using API data:", response.data.length, "data points");
@@ -228,7 +228,7 @@ function AppContent() {
                       Connect with researchers and academics worldwide
                     </p>
                   </div>
-                 
+                  
                   {/* New search input */}
                   <div className="relative mb-10 max-w-2xl mx-auto">
                     <input
@@ -249,7 +249,7 @@ function AppContent() {
                       </svg>
                     </button>
                   </div>
-                   
+                    
                   {/* Key facts about the network */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                     <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
@@ -292,96 +292,42 @@ function AppContent() {
                       </div>
                     </div>
                   </div>
-                  </div>
-                </div>
-                
-                {/* Enhanced search bar with autocomplete */}
-                <div className="mt-6">
-                  <form onSubmit={(e) => { e.preventDefault(); handleSearch(document.getElementById('search-input').value); }} className="relative">
-                    <div className="flex items-center">
-                      <div className="relative flex-grow">
-                        <input
-                          id="search-input"
-                          type="text"
-                          placeholder="Search academics, fields, or universities..."
-                          className="w-full py-3 px-6 bg-black bg-opacity-60 backdrop-blur-md border border-gray-600 rounded-full text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                          list="search-suggestions"
-                        />
-                        <datalist id="search-suggestions">
-                          <option value="Computer Science" />
-                          <option value="Medicine" />
-                          <option value="Physics" />
-                          <option value="Bioengineering" />
-                          <option value="Environmental Science" />
-                          <option value="University of Dhaka" />
-                          <option value="BUET" />
-                          <option value="artificial intelligence" />
-                          <option value="machine learning" />
-                          <option value="climate research" />
-                        </datalist>
-                        <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-1">
-                          <button
-                            type="submit"
-                            className="bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition-colors focus:outline-none"
-                          >
-                            <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                            </svg>
-                          </button>
-                          
-                          <button 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              document.querySelector('.filter-toggle-button').click();
-                            }}
-                            className="bg-blue-600 p-2 rounded-full hover:bg-blue-700 transition-colors focus:outline-none"
-                            aria-label="Open filters"
-                          >
-                            <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                            </svg>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
                 </div>
               </div>
-            </div>
-            
-            {/* Original SearchBar hidden but still functional for state management */}
-            <div className="hidden">
-              <SearchBar onSearch={handleSearch} academics={dataPoints} />
-            </div>
-            
-            {/* Debug info and testing button removed as requested */}
-            
-            <FilterPanel onFilter={handleFilter} />
-            <div className="globe-container">
-              <ArtisticGlobe />
-            </div>
-            
-            <InfoPanel 
-              isVisible={showInfoPanel} 
-              academic={selectedAcademic} 
-              onClose={() => setShowInfoPanel(false)}
-            />
-          </>
-        } />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/academics" element={<AcademicsPage academics={dataPoints} />} />
-        <Route path="/academics/:id" element={<AcademicDetailPage academics={dataPoints} />} />
-        <Route path="/countries" element={<CountriesPage academics={dataPoints} />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/profile/create" element={<ProfileCreationPage />} />
-        <Route path="/verify-email" element={<VerificationPage />} />
-        <Route path="/researchers" element={<ResearcherSearchPage />} />
-        <Route path="/researchers/:id" element={<ResearcherProfilePage />} />
-        <Route path="/connections" element={<ConnectionsPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+              
+              {/* Original SearchBar hidden but still functional for state management */}
+              <div className="hidden">
+                <SearchBar onSearch={handleSearch} academics={dataPoints} />
+              </div>
+              
+              {/* Debug info and testing button removed as requested */}
+              
+              <FilterPanel onFilter={handleFilter} />
+              <div className="globe-container">
+                <ArtisticGlobe />
+              </div>
+              
+              <InfoPanel 
+                isVisible={showInfoPanel} 
+                academic={selectedAcademic} 
+                onClose={() => setShowInfoPanel(false)}
+              />
+            </>
+          } />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/academics" element={<AcademicsPage academics={dataPoints} />} />
+          <Route path="/academics/:id" element={<AcademicDetailPage academics={dataPoints} />} />
+          <Route path="/countries" element={<CountriesPage academics={dataPoints} />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/profile/create" element={<ProfileCreationPage />} />
+          <Route path="/verify-email" element={<VerificationPage />} />
+          <Route path="/researchers" element={<ResearcherSearchPage />} />
+          <Route path="/researchers/:id" element={<ResearcherProfilePage />} />
+          <Route path="/connections" element={<ConnectionsPage />} />
+          <Route path="*" element={<NotFoundPage />} />
       </Routes>
       </div>
     </div>
