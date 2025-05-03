@@ -204,7 +204,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
   return (
     <div className="h-full relative">
       {/* Responsive controls for mobile */}
-      <div className="absolute bottom-4 right-4 z-10 flex flex-col space-y-2 md:hidden">
+      <div className="absolute bottom-6 right-6 z-10 flex flex-col space-y-3 md:hidden">
         <button 
           onClick={(e) => {
             e.preventDefault(); 
@@ -217,9 +217,10 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
               }
             }
           }}
-          className="bg-blue-600 p-2 rounded-full border border-blue-700 text-white hover:bg-blue-700 transition-all shadow-lg"
+          className="bg-white p-3 rounded-full border border-border-light text-cta-primary hover:shadow-md transition-all shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cta-primary focus-visible:ring-opacity-50"
           title="Reset view"
           type="button"
+          aria-label="Reset globe view"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -241,9 +242,10 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
               }
             }
           }}
-          className="bg-blue-600 p-2 rounded-full border border-blue-700 text-white hover:bg-blue-700 transition-all shadow-lg"
+          className="bg-white p-3 rounded-full border border-border-light text-cta-primary hover:shadow-md transition-all shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cta-primary focus-visible:ring-opacity-50"
           title="Zoom in"
           type="button"
+          aria-label="Zoom in"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -265,12 +267,52 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
               }
             }
           }}
-          className="bg-blue-600 p-2 rounded-full border border-blue-700 text-white hover:bg-blue-700 transition-all shadow-lg"
+          className="bg-white p-3 rounded-full border border-border-light text-cta-primary hover:shadow-md transition-all shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cta-primary focus-visible:ring-opacity-50"
           title="Zoom out"
           type="button"
+          aria-label="Zoom out"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 12H6" />
+          </svg>
+        </button>
+        
+        {/* Surprise Me button */}
+        <button 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (dataPoints && dataPoints.length > 0) {
+              // Select a random researcher
+              const randomIndex = Math.floor(Math.random() * dataPoints.length);
+              const randomResearcher = dataPoints[randomIndex];
+              
+              // Animate to this researcher's location
+              if (globeEl.current && randomResearcher) {
+                globeEl.current.pointOfView({ 
+                  lat: randomResearcher.lat, 
+                  lng: randomResearcher.lng, 
+                  altitude: 1.5
+                }, 1500);
+                
+                // Trigger the click handler after animation completes
+                setTimeout(() => {
+                  if (onPointClick && typeof onPointClick === 'function') {
+                    onPointClick(randomResearcher);
+                  }
+                }, 1600);
+              }
+            }
+          }}
+          className="bg-cta-primary p-3 rounded-full text-white hover:bg-cta-hover shadow-md transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-50"
+          title="Surprise Me"
+          type="button"
+          aria-label="Show random researcher profile"
+        >
+          <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 16.8c-2.65 0-4.8-2.15-4.8-4.8 0-2.65 2.15-4.8 4.8-4.8 2.65 0 4.8 2.15 4.8 4.8 0 2.65-2.15 4.8-4.8 4.8zm0-8.4c-1.98 0-3.6 1.62-3.6 3.6s1.62 3.6 3.6 3.6 3.6-1.62 3.6-3.6-1.62-3.6-3.6-3.6z"/>
+            <path d="M12 22c-5.52 0-10-4.48-10-10S6.48 2 12 2s10 4.48 10 10-4.48 10-10 10zm0-18.8c-4.85 0-8.8 3.95-8.8 8.8s3.95 8.8 8.8 8.8 8.8-3.95 8.8-8.8-3.95-8.8-8.8-8.8z"/>
+            <path d="M12.94 7.94c-.47 0-.85-.38-.85-.85s.38-.85.85-.85c.47 0 .85.38.85.85s-.38.85-.85.85zM8.67 18.02c-.47 0-.85-.38-.85-.85s.38-.85.85-.85c.47 0 .85.38.85.85s-.38.85-.85.85zM17.78 14.95c-.47 0-.85-.38-.85-.85s.38-.85.85-.85c.47 0 .85.38.85.85s-.38.85-.85.85z"/>
           </svg>
         </button>
       </div>
