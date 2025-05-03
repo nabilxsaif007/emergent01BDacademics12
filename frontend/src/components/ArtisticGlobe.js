@@ -270,31 +270,32 @@ const ArtisticGlobe = () => {
         }} 
       />
       
-      {/* Countries, Regions, and Cities Labels */}
-      <div className="absolute top-10 left-10 z-10 bg-white bg-opacity-80 p-4 rounded-lg shadow-md">
-        <h3 className="text-green-700 font-semibold mb-3">Featured Locations</h3>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-2">
-          <div>
-            <p className="text-green-800 font-medium">Countries</p>
-            <ul className="text-sm text-gray-700">
-              <li>Bangladesh</li>
-              <li>United States</li>
-              <li>United Kingdom</li>
-              <li>Canada</li>
-              <li>Australia</li>
-            </ul>
+      {/* Information tooltip for selected location */}
+      {selectedCountry && (
+        <div className="absolute top-6 right-6 z-10 bg-white p-4 rounded-lg shadow-md animate-fade-in">
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-green-600 font-bold text-lg">{selectedCountry.name}</h3>
+            <button 
+              onClick={() => setSelectedCountry(null)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-          <div>
-            <p className="text-green-800 font-medium">Cities</p>
-            <ul className="text-sm text-gray-700">
-              <li>Dhaka</li>
-              <li>New York</li>
-              <li>London</li>
-              <li>Toronto</li>
-              <li>Sydney</li>
-            </ul>
+          <div className="text-gray-700">
+            <p>Lat: {selectedCountry.lat.toFixed(4)}</p>
+            <p>Lng: {selectedCountry.lng.toFixed(4)}</p>
+            <p className="mt-2 text-green-600 font-medium">10 researchers in this area</p>
           </div>
         </div>
+      )}
+      
+      {/* Instructions */}
+      <div className="absolute bottom-6 right-6 z-10 bg-white bg-opacity-90 p-3 rounded-lg shadow-md text-xs text-gray-600">
+        <p>🔍 Click on blue markers to explore locations</p>
+        <p>🖱️ Drag to rotate | Scroll to zoom</p>
       </div>
     </div>
   );
