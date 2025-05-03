@@ -283,27 +283,57 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       ) : (
       <Globe
         ref={globeEl}
-        globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+        globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
         bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-        backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+        backgroundImageUrl={null} // Remove the starry background for clean white look
         width={window.innerWidth}
         height={window.innerHeight}
         lineHoverPrecision={0}
         
-        // Country polygons
+        // Country polygons with lighter colors and labels
         hexPolygonsData={countries}
         hexPolygonResolution={3}
         hexPolygonMargin={0.3}
-        hexPolygonColor={() => `rgba(255, 255, 255, ${isGlobeReady ? 0.1 : 0})`}
+        hexPolygonColor={() => `rgba(13, 148, 136, ${isGlobeReady ? 0.15 : 0})`} // Subtle emerald color
+        hexPolygonLabel={d => `
+          <div style="
+            background-color: white; 
+            color: #484848; 
+            padding: 5px 10px; 
+            border-radius: 5px; 
+            font-size: 12px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            border: 1px solid #EBEBEB;
+          ">
+            <b>${d.properties.name}</b>
+          </div>
+        `}
         
-        // Render points
+        // Render points with Airbnb color scheme
         pointsData={dataPoints}
-        pointColor={(d) => d === hoveredPoint ? '#ff8800' : '#4285F4'}
-        pointAltitude={0.1} // Increased from 0.07
-        pointRadius={(d) => d === hoveredPoint ? 0.6 : 0.4} // Increased from 0.4/0.25
+        pointColor={(d) => d === hoveredPoint ? '#FF5A5F' : '#0D9488'} // Airbnb coral for hover, emerald for default
+        pointAltitude={0.1}
+        pointRadius={(d) => d === hoveredPoint ? 0.6 : 0.4}
         pointResolution={12}
         pointsMerge={false}
-        pointLabel={(d) => `${d.name} (${d.university})`}
+        pointLabel={(d) => `
+          <div style="
+            background-color: white; 
+            color: #484848; 
+            padding: 8px 12px; 
+            border-radius: 8px; 
+            font-size: 13px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            border: 1px solid #EBEBEB;
+            max-width: 250px;
+          ">
+            <div style="font-weight: 600; color: #FF5A5F; margin-bottom: 4px;">${d.name}</div>
+            <div style="margin-bottom: 2px;">${d.university}</div>
+            <div style="font-size: 12px; color: #717171;">${d.city}, ${d.country}</div>
+          </div>
+        `}
         onPointClick={(point, event) => {
           console.log('Direct point click:', point);
           // Ensure the click handler works by calling both the local function and parent callback
@@ -317,12 +347,17 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         onPointRightClick={handlePointDoubleClick}
         onPointHover={handlePointHover}
         
-        // Atmosphere
-        atmosphereColor="rgba(51, 153, 255, 0.3)"
+        // Atmosphere with subtle effect
+        atmosphereColor="rgba(0, 166, 153, 0.2)" // Subtle teal atmosphere
         atmosphereAltitude={0.15}
         
         // Performance optimizations
-        rendererConfig={{ antialias: true, alpha: true }}
+        rendererConfig={{ 
+          antialias: true, 
+          alpha: true,
+          precision: 'highp',
+          powerPreference: 'high-performance'
+        }}
       />
       )}
       
