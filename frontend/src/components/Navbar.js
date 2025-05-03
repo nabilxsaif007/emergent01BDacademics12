@@ -71,7 +71,7 @@ const Navbar = () => {
   // Combine navigation items for reuse in mobile and desktop
   const navigationItems = [
     { path: '/', label: 'Home' },
-    { path: '/explore', label: 'Explore', isNewCombinedItem: true },
+    { path: '/academics', label: 'All Academics' },
     { path: '/about', label: 'About' },
   ];
   
