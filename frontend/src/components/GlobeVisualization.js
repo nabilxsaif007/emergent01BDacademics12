@@ -324,10 +324,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       )}
       
       {isLoading ? (
-            if (globeEl.current) {
-              try {
-                const controls = globeEl.current.controls();
-                if (controls && controls.dollyOut) {
                   controls.dollyOut(1.2);
                   controls.update();
                 }
