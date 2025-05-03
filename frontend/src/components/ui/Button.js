@@ -49,10 +49,10 @@ const Button = forwardRef(({
   // Button variants following Airbnb style
   const variantClasses = {
     primary: `
-      bg-gradient-to-r from-coral-500 to-coral-400 hover:from-coral-600 hover:to-coral-500
+      bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600
       text-white
       shadow-sm hover:shadow
-      focus-visible:ring-coral-500 focus-visible:ring-opacity-50
+      focus-visible:ring-green-500 focus-visible:ring-opacity-50
     `,
     secondary: `
       bg-teal-500 hover:bg-teal-600
