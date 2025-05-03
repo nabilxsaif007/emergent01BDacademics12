@@ -58,9 +58,12 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
           // Reduce bump mapping for a smoother appearance
           globeMaterial.bumpScale = 0.4;
           
-          // Add subtle specular highlights
-          globeMaterial.specular = new THREE.Color(0xFFFFFF);
-          globeMaterial.shininess = 30;
+          // Add subtle specular highlights with warmer tone
+          globeMaterial.specular = new THREE.Color(0xFFFFEE);
+          globeMaterial.shininess = 25;
+          
+          // Optional: Add subtle environment map for reflectivity
+          // This would require preloading an env map
         }
       }
       
