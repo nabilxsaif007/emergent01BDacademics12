@@ -472,8 +472,8 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         onPointRightClick={handlePointDoubleClick}
         onPointHover={handlePointHover}
         
-        // Atmosphere with subtle effect - using Airbnb colors
-        atmosphereColor="rgba(255, 90, 95, 0.1)" // Very subtle Airbnb coral atmosphere
+        // Atmosphere with subtle effect - using green colors
+        atmosphereColor="rgba(34, 197, 94, 0.1)" // Very subtle green atmosphere
         atmosphereAltitude={0.17}
         
         // Performance optimizations
