@@ -85,7 +85,7 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
         
         {/* Profile Header */}
         <div className="flex items-start">
-          <div className="bg-gradient-to-r from-coral-500 to-coral-400 rounded-full h-20 w-20 flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 shadow-md">
+          <div className="bg-gradient-to-r from-green-600 to-green-500 rounded-full h-20 w-20 flex items-center justify-center text-2xl font-bold text-white flex-shrink-0 shadow-md">
             {academic.name.charAt(0)}
           </div>
           <div className="ml-5">
