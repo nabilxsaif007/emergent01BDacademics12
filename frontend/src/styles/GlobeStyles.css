@@ -12,8 +12,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to bottom, #e0f2fe, #f0fdfa);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  background: #06141f;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .globe-container canvas {
