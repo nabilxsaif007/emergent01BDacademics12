@@ -243,7 +243,7 @@ function AppContent() {
                         // Also update the hidden SearchBar component state
                         handleSearch(e.target.value);
                       }}
-                      className="w-full py-3.5 px-6 bg-white border border-gray-200 rounded-full text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-coral-500 transition-all shadow-sm hover:shadow-md"
+                      className="w-full py-3.5 px-6 bg-white border border-gray-200 rounded-full text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all shadow-sm hover:shadow-md"
                       style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
                     />
                     <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-green-600 to-green-500 text-white p-2.5 rounded-full hover:from-green-700 hover:to-green-600 transition-all hover:shadow-md">
