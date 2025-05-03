@@ -291,9 +291,25 @@ def test_demo_login():
     print(f"\n📊 Tests passed: {tester.tests_passed}/{tester.tests_run}")
     return 0 if tester.tests_passed == tester.tests_run else 1
 
+def test_globe_visualization():
+    """Test only the globe visualization data"""
+    tester = BangladeshAcademicNetworkTester()
+    
+    # Test root endpoint
+    if not tester.test_root_endpoint():
+        print("❌ Root API test failed, stopping tests")
+        return 1
+    
+    # Test globe data
+    globe_data_success = tester.test_globe_data()
+    
+    # Print results
+    print(f"\n📊 Tests passed: {tester.tests_passed}/{tester.tests_run}")
+    return 0 if globe_data_success else 1
+
 def main():
-    # Run the demo login test
-    return test_demo_login()
+    # Run the globe visualization test
+    return test_globe_visualization()
 
 if __name__ == "__main__":
     sys.exit(main())
