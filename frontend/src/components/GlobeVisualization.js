@@ -324,9 +324,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       )}
       
       {isLoading ? (
-        </button>
-      </div>
-      
       {isLoading ? (
         <div className="globe-loading flex items-center justify-center h-screen bg-white">
           <div className="text-center">
