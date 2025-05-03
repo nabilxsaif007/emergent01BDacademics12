@@ -36,12 +36,48 @@ body, html {
 }
 
 .globe-container {
-  position: relative;
   width: 100%;
-  height: 70vh; /* Fixed height for the globe */
-  min-height: 400px;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* Surprise Me Confetti Animation */
+@keyframes surprise-confetti-fall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
+
+@keyframes surprise-confetti-shake {
+  0% {
+    transform: translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateX(15px) rotate(15deg);
+  }
+}
+
+.surprise-confetti-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.surprise-confetti {
+  position: absolute;
+  top: -20px;
+  border-radius: 50%;
+  z-index: 100;
 }
 
 /* Add responsive styles */
