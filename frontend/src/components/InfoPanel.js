@@ -139,7 +139,7 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
             <div>
               <h4 className="text-gray-500 text-xs font-semibold uppercase tracking-wide mb-2" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>Email</h4>
               <div className="flex items-center">
-                <svg className="h-5 w-5 text-coral-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
                 <a href={`mailto:${academic.name.toLowerCase().replace(' ', '.')}@example.com`} className="text-teal-600 hover:text-teal-700 transition-colors duration-200 font-medium">
