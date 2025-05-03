@@ -100,8 +100,8 @@ const LoginPage = () => {
   };
   
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-gradient-to-b from-gray-900 to-black">
-      <div className="w-full max-w-md px-8 py-10 bg-black bg-opacity-70 backdrop-blur-xl rounded-xl shadow-2xl border border-gray-800 transform transition-all">
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 py-12 bg-white">
+      <div className="w-full max-w-md px-8 py-10 bg-white rounded-xl shadow-lg border border-gray-100 transform transition-all">
         <div className="text-center mb-6">
           <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
           <p className="text-gray-400">Log in to your account</p>
