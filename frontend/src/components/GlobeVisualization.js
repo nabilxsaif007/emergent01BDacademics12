@@ -56,7 +56,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         const globeMaterial = globeEl.current.globeMaterial();
         if (globeMaterial) {
           // Reduce bump mapping for a smoother appearance
-          globeMaterial.bumpScale = 0.5;
+          globeMaterial.bumpScale = 0.4;
           
           // Add subtle specular highlights
           globeMaterial.specular = new THREE.Color(0xFFFFFF);
