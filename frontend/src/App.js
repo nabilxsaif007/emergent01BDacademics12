@@ -34,6 +34,7 @@ function AppContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAcademic, setSelectedAcademic] = useState(null);
   const [showInfoPanel, setShowInfoPanel] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
 
   // Only show globe on certain pages
