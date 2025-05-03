@@ -128,19 +128,19 @@ const LoginPage = () => {
         </div>
         
         {error && (
-          <div className="bg-red-900 bg-opacity-50 text-red-200 px-4 py-3 rounded-lg mb-6">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
             {error}
           </div>
         )}
         
         {success && (
-          <div className="bg-green-900 bg-opacity-50 text-green-200 px-4 py-3 rounded-lg mb-6">
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg mb-6">
             {success}
           </div>
         )}
         
         {showDemoNotice && (
-          <div className="bg-yellow-900 bg-opacity-50 text-yellow-200 px-4 py-3 rounded-lg mb-6">
+          <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-lg mb-6">
             <p className="text-sm">
               <span className="font-semibold">Demo credentials loaded!</span> Click "Log In" to access the dashboard.
             </p>
