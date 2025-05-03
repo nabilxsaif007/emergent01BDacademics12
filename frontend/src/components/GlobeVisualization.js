@@ -324,10 +324,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       )}
       
       {isLoading ? (
-        <button 
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
             if (globeEl.current) {
               try {
                 const controls = globeEl.current.controls();
