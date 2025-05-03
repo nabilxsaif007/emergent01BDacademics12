@@ -324,10 +324,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       )}
       
       {isLoading ? (
-              // Select a random researcher
-              const randomIndex = Math.floor(Math.random() * dataPoints.length);
-              const randomResearcher = dataPoints[randomIndex];
-              
               // Animate to this researcher's location
               if (globeEl.current && randomResearcher) {
                 globeEl.current.pointOfView({ 
