@@ -99,6 +99,17 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         TWO: THREE.TOUCH.DOLLY_PAN
       };
     }
+    
+    // Clean up function
+    return () => {
+      if (globeEl.current) {
+        const controls = globeEl.current.controls();
+        if (controls) {
+          // Clean up event listeners if component unmounts
+          controls.dispose();
+        }
+      }
+    };
   }, [isLoading]);
 
   // Load country data for globe
