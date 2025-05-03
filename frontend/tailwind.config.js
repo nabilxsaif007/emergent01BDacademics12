@@ -6,47 +6,52 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Airbnb-inspired color palette
-        'airbnb': {
-          'rausch': '#FF5A5F',     // Primary red/coral
-          'babu': '#00A699',       // Teal
-          'arches': '#FC642D',     // Orange
-          'hof': '#484848',        // Text gray
-          'foggy': '#767676',      // Secondary text
+        // Green-focused palette
+        'green': {
+          '50': '#f0fdf4',
+          '100': '#dcfce7',
+          '200': '#bbf7d0',
+          '300': '#86efac',
+          '400': '#4ade80',
+          '500': '#22c55e',
+          '600': '#16a34a',
+          '700': '#15803d',
+          '800': '#166534',
+          '900': '#14532d',
         },
         // Background colors
         'background': {
           'primary': '#FFFFFF',    // Pure white
-          'secondary': '#F7F7F7',  // Light gray
-          'tertiary': '#F5F5F5',   // Slightly darker gray
+          'secondary': '#f0fdf4',  // Light green
+          'tertiary': '#dcfce7',   // Slightly darker green
         },
         // Text colors with accessible contrast ratios
         'text': {
-          'primary': '#484848',    // Dark gray - passes 7:1 contrast on white
-          'secondary': '#717171',  // Medium gray - passes 4.5:1 on white
-          'tertiary': '#999999',   // Light gray - passes 3:1 on white
+          'primary': '#166534',    // Dark green - passes 7:1 contrast on white
+          'secondary': '#15803d',  // Medium green - passes 4.5:1 on white
+          'tertiary': '#4ade80',   // Light green - passes 3:1 on white
           'inverse': '#FFFFFF',    // White text for dark backgrounds
         },
         // Call to action colors
         'cta': {
-          'primary': '#FF5A5F',    // Airbnb red
-          'secondary': '#00A699',  // Teal
-          'hover': '#FF7E82',      // Lighter red for hover states
-          'active': '#E00007',     // Darker red for active states
-          'disabled': '#FFD1D3',   // Very light red for disabled states
+          'primary': '#16a34a',    // Primary green
+          'secondary': '#22c55e',  // Secondary green
+          'hover': '#4ade80',      // Lighter green for hover states
+          'active': '#15803d',     // Darker green for active states
+          'disabled': '#bbf7d0',   // Very light green for disabled states
         },
         // Status colors for feedback
         'status': {
-          'success': '#00A699',    // Teal
-          'error': '#FF5A5F',      // Red
-          'warning': '#FFB400',    // Amber
-          'info': '#007A87',       // Dark teal
+          'success': '#16a34a',    // Green
+          'error': '#ef4444',      // Red
+          'warning': '#f59e0b',    // Amber
+          'info': '#3b82f6',       // Blue
         },
         // Border colors
         'border': {
-          'light': '#EBEBEB',      // Very light gray
-          'default': '#DDDDDD',    // Light gray
-          'dark': '#B0B0B0',       // Medium gray
+          'light': '#dcfce7',      // Very light green
+          'default': '#86efac',    // Light green
+          'dark': '#4ade80',       // Medium green
         }
       },
       // Shadow system with reduced opacity for subtle effects
