@@ -2,27 +2,156 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Inter font family with font-display:swap for better performance */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
+/* Reset and Base Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Enhanced focus styling system */
+:focus {
+  @apply outline-none ring-2 ring-cta-primary ring-opacity-40;
+}
+
+/* Remove focus styles for mouse users, but keep them for keyboard navigation */
+:focus:not(:focus-visible) {
+  @apply outline-none ring-0;
+}
+
+:focus-visible {
+  @apply outline-none ring-2 ring-cta-primary ring-opacity-60;
+}
+
+/* Base HTML element styles */
+html {
+  height: 100%;
+  font-size: 16px; /* Base font size */
+  scroll-behavior: smooth;
+  text-size-adjust: 100%; /* Prevent font size adjustment on orientation change */
+}
+
 body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-        "Helvetica Neue", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #FFFFFF;
-    color: #1E293B;
-    overflow: hidden;
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+      "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+      "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: theme('colors.background.primary');
+  color: theme('colors.text.primary');
+  line-height: 1.5;
+  /* Set up for better readability with max-width */
+  text-rendering: optimizeSpeed;
+  /* Prevent content reflow due to scrollbar appearance */
+  overflow-y: scroll;
 }
 
-html, body, #root {
-    height: 100%;
-    width: 100%;
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-        monospace;
+/* Typography Scale */
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: theme('colors.text.primary');
+}
+
+h1 { font-size: theme('fontSize.4xl[0]'); }
+h2 { font-size: theme('fontSize.3xl[0]'); }
+h3 { font-size: theme('fontSize.2xl[0]'); }
+h4 { font-size: theme('fontSize.xl[0]'); }
+h5 { font-size: theme('fontSize.lg[0]'); }
+h6 { font-size: theme('fontSize.base[0]'); }
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+ol, ul {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+}
+
+code, pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.9em;
+}
+
+/* Accessibility Helpers */
+.visually-hidden {
+  @apply sr-only;
+}
+
+.skip-to-content {
+  @apply sr-only absolute z-50 p-3 bg-background-primary text-cta-primary border-2 border-border-default rounded-md left-2;
+}
+
+.skip-to-content:focus {
+  @apply not-sr-only top-2;
+}
+
+/* Responsive image handling */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Form element standardization */
+button, input, optgroup, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+button, [type="button"], [type="reset"], [type="submit"] {
+  -webkit-appearance: button;
+}
+
+/* Custom scrollbar for better user experience */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: theme('colors.background.secondary');
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: theme('colors.border.default');
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: theme('colors.border.dark');
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* High contrast mode improvements */
+@media (forced-colors: active) {
+  * {
+    forced-color-adjust: none;
+  }
 }
