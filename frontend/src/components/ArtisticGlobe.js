@@ -1,13 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const ArtisticGlobe = () => {
   const containerRef = useRef(null);
   const rendererRef = useRef(null);
   const sceneRef = useRef(null);
   const cameraRef = useRef(null);
-  const materialRef = useRef(null);
-  const sphereRef = useRef(null);
+  const controlsRef = useRef(null);
+  const globeRef = useRef(null);
+  const markersRef = useRef([]);
+  
+  const [selectedCountry, setSelectedCountry] = useState(null);
   
   useEffect(() => {
     // Initialize scene
@@ -42,18 +46,42 @@ const ArtisticGlobe = () => {
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
     
-    // Create artistic globe (abstract shape)
-    const geometry = new THREE.SphereGeometry(1.5, 64, 64);
+    // Add OrbitControls for interactive rotation
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.25;
+    controls.rotateSpeed = 0.5;
+    controls.enableZoom = true;
+    controls.minDistance = 2.5;
+    controls.maxDistance = 10;
+    controls.enablePan = false;
+    controlsRef.current = controls;
     
-    // Stylized material for abstract art globe
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        time: { value: 0 },
-        color1: { value: new THREE.Color("#16a34a") },  // Primary green
-        color2: { value: new THREE.Color("#22c55e") },  // Secondary green
-        color3: { value: new THREE.Color("#86efac") },  // Light green
-        resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
-      },
+    // Load Earth texture
+    const textureLoader = new THREE.TextureLoader();
+    const earthTexture = textureLoader.load('/earth-day-map.jpg', () => {
+      // Fallback texture if the first one fails to load
+      const fallbackTexture = textureLoader.load('https://raw.githubusercontent.com/turban/webgl-earth/master/images/2_no_clouds_4k.jpg');
+      if (globeRef.current) {
+        globeRef.current.material.map = fallbackTexture;
+        globeRef.current.material.needsUpdate = true;
+      }
+    });
+    
+    // Load bump map and specular map
+    const bumpMap = textureLoader.load('/earth-topology.jpg');
+    const specularMap = textureLoader.load('/earth-specular.jpg');
+    
+    // Create 3D globe
+    const globeGeometry = new THREE.SphereGeometry(1.5, 64, 64);
+    const globeMaterial = new THREE.MeshPhongMaterial({
+      map: earthTexture,
+      bumpMap: bumpMap,
+      bumpScale: 0.05,
+      specularMap: specularMap,
+      specular: new THREE.Color('#444444'),
+      shininess: 10
+    });
       vertexShader: `
         varying vec2 vUv;
         varying vec3 vPosition;
