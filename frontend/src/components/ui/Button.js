@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * Button component with multiple variants
+ * Airbnb-inspired Button component with enhanced accessibility
+ * 
+ * @example
+ * // Primary button
+ * <Button variant="primary">Book Now</Button>
+ * 
+ * // Secondary button
+ * <Button variant="secondary">See All Options</Button>
+ * 
+ * // With left icon
+ * <Button icon={<SearchIcon />}>Search</Button>
+ * 
+ * // With loading state
+ * <Button isLoading>Processing</Button>
  */
-const Button = ({ 
+const Button = forwardRef(({ 
   children, 
   onClick, 
   type = 'button', 
@@ -12,60 +25,159 @@ const Button = ({
   size = 'md', 
   disabled = false, 
   fullWidth = false,
+  isLoading = false,
   icon = null,
   iconPosition = 'left',
   className = '',
   ariaLabel,
+  ariaDescribedby,
+  ariaExpanded,
+  ariaControls,
+  ariaPressed,
   ...props 
-}) => {
-  // Base classes
-  const baseClasses = 'inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm';
+}, ref) => {
+  // Base classes with focus styles
+  const baseClasses = `
+    inline-flex items-center justify-center font-medium
+    transition-all duration-200 
+    border border-transparent
+    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+    select-none
+  `;
   
-  // Variant classes
+  // Button variants following Airbnb style
   const variantClasses = {
-    primary: 'bg-brand-emerald hover:bg-brand-emerald-light text-white focus:ring-brand-emerald-light',
-    secondary: 'bg-brand-gold hover:bg-brand-gold-light text-white focus:ring-brand-gold-light',
-    outline: 'border-2 border-brand-emerald text-brand-emerald hover:bg-opacity-10 hover:bg-brand-emerald focus:ring-brand-emerald',
-    ghost: 'bg-transparent hover:bg-gray-100 text-text-secondary hover:text-text-primary',
-    danger: 'bg-red-600 hover:bg-red-500 text-white focus:ring-red-400',
-    link: 'bg-transparent shadow-none underline text-brand-emerald hover:text-brand-emerald-light p-0 hover:no-underline',
+    primary: `
+      bg-cta-primary hover:bg-cta-hover active:bg-cta-active
+      text-text-inverse
+      shadow-sm hover:shadow
+      focus-visible:ring-cta-primary focus-visible:ring-opacity-50
+    `,
+    secondary: `
+      bg-cta-secondary hover:opacity-90 active:opacity-100
+      text-text-inverse
+      shadow-sm hover:shadow
+      focus-visible:ring-cta-secondary focus-visible:ring-opacity-50
+    `,
+    outline: `
+      bg-transparent
+      border border-cta-primary hover:border-cta-hover
+      text-cta-primary hover:text-cta-hover active:text-cta-active
+      hover:bg-cta-primary hover:bg-opacity-5
+      focus-visible:ring-cta-primary focus-visible:ring-opacity-40
+    `,
+    subtle: `
+      bg-background-tertiary hover:bg-border-light
+      text-text-secondary hover:text-text-primary
+      border border-transparent
+      focus-visible:ring-border-default
+    `,
+    danger: `
+      bg-status-error hover:opacity-90 active:opacity-100
+      text-text-inverse
+      shadow-sm hover:shadow
+      focus-visible:ring-status-error focus-visible:ring-opacity-50
+    `,
+    link: `
+      bg-transparent
+      text-cta-primary hover:text-cta-hover active:text-cta-active
+      underline hover:no-underline
+      p-0 shadow-none
+      focus-visible:ring-cta-primary focus-visible:ring-opacity-30
+    `,
   };
   
-  // Size classes
+  // Size classes with better touch targets for mobile
   const sizeClasses = {
-    sm: 'py-1.5 px-3 text-sm rounded-md',
+    xs: 'py-1 px-2.5 text-xs rounded',
+    sm: 'py-1.5 px-3.5 text-sm rounded',
     md: 'py-2 px-4 text-base rounded-md',
-    lg: 'py-2.5 px-5 text-lg rounded-lg',
+    lg: 'py-3 px-5 text-lg rounded-md',
+    xl: 'py-3.5 px-6 text-xl rounded-lg',
+  };
+  
+  // State classes
+  const stateClasses = {
+    // Disabled state
+    disabled: 'opacity-50 cursor-not-allowed bg-opacity-80 pointer-events-none',
+    // Loading state 
+    loading: 'relative !text-transparent pointer-events-none',
+    // Normal interactive state with hover effect
+    normal: 'transform hover:translate-y-[-1px] active:translate-y-[0px]',
   };
   
   // Width classes
   const widthClasses = fullWidth ? 'w-full' : '';
   
-  // Disabled classes
-  const disabledClasses = disabled ? 'opacity-60 cursor-not-allowed' : 'transform hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:shadow-sm';
+  // Figure out which state to apply
+  const currentState = isLoading ? 'loading' : disabled ? 'disabled' : 'normal';
   
   // Icon spacing
   const iconSpacing = children ? (iconPosition === 'left' ? 'mr-2' : 'ml-2') : '';
   
+  // Accessibility attributes
+  const a11yProps = {
+    'aria-label': ariaLabel,
+    'aria-describedby': ariaDescribedby,
+    'aria-expanded': ariaExpanded,
+    'aria-controls': ariaControls,
+    'aria-pressed': ariaPressed,
+    'aria-busy': isLoading || undefined,
+    'aria-disabled': disabled || undefined,
+  };
+  
   return (
     <button
+      ref={ref}
       type={type}
       onClick={onClick}
-      disabled={disabled}
-      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${widthClasses} ${disabledClasses} ${className}`}
-      aria-label={ariaLabel || null}
+      disabled={disabled || isLoading}
+      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${widthClasses} ${stateClasses[currentState]} ${className}`}
+      {...a11yProps}
       {...props}
     >
-      {icon && iconPosition === 'left' && (
-        <span className={iconSpacing}>{icon}</span>
+      {/* Show loading spinner when isLoading is true */}
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg 
+            className="animate-spin w-5 h-5 text-current" 
+            xmlns="http://www.w3.org/2000/svg" 
+            fill="none" 
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <circle 
+              className="opacity-25" 
+              cx="12" cy="12" r="10" 
+              stroke="currentColor" 
+              strokeWidth="4"
+            />
+            <path 
+              className="opacity-75" 
+              fill="currentColor" 
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+            />
+          </svg>
+        </div>
       )}
-      {children}
+      
+      {/* Left icon */}
+      {icon && iconPosition === 'left' && (
+        <span className={`${iconSpacing} flex-shrink-0`} aria-hidden="true">{icon}</span>
+      )}
+      
+      {/* Button text */}
+      <span className="flex-1 truncate">
+        {children}
+      </span>
+      
+      {/* Right icon */}
       {icon && iconPosition === 'right' && (
-        <span className={iconSpacing}>{icon}</span>
+        <span className={`${iconSpacing} flex-shrink-0`} aria-hidden="true">{icon}</span>
       )}
     </button>
   );
-};
+});
 
 Button.propTypes = {
   children: PropTypes.node,
