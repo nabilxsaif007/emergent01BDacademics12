@@ -392,7 +392,7 @@ const Navbar = () => {
                 variant="primary"
                 size="md"
                 fullWidth
-                className="rounded-xl bg-gradient-to-r from-coral-500 to-coral-400 hover:shadow-md transition-all duration-300"
+                className="rounded-xl bg-gradient-to-r from-green-600 to-green-500 hover:shadow-md transition-all duration-300"
               >
                 Sign up
               </Button>
