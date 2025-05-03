@@ -113,20 +113,28 @@ const GlobeComponent = ({ dataPoints = [], isLoading, onPointClick }) => {
         globeImageUrl={EARTH_TEXTURE_URL}
         backgroundColor="rgba(0,0,0,0)"
         
-        // Academic rods (vertical location indicators)
-        ringsData={academicPoints}
-        ringColor={() => "#16a34a"}
-        ringMaxRadius={0.5}
-        ringPropagationSpeed={0.1}
-        ringRepeatPeriod={1500}
-        
-        // Academic points
-        hexBinPointsData={dataPoints}
-        hexBinPointWeight="size"
-        hexBinResolution={4}
-        hexTopColor={() => "#16a34a"}
-        hexSideColor={() => "#15803d"}
-        hexBinMerge={true}
+        // Academic location rods/indicators
+        customLayerData={dataPoints}
+        customThreeObject={d => {
+          // Create a vertical rod for each academic point
+          const rod = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.04, 0.04, 1, 8),
+            new THREE.MeshLambertMaterial({ color: '#16a34a', transparent: true, opacity: 0.8 })
+          );
+          rod.geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(0, 0.5, 0));
+          rod.lookAt(0, 0, 0);
+          
+          return rod;
+        }}
+        customThreeObjectUpdate={(obj, d) => {
+          Object.assign(obj.position, globeEl.current.getCoords(d.lat, d.lng, 0));
+          
+          // Adjust rod to point outward from the globe center
+          obj.lookAt(0, 0, 0);
+          
+          // Rotate the rod to be perpendicular to the globe surface
+          obj.rotateX(Math.PI / 2);
+        }}
         
         // Regular points for tooltips and interaction
         pointsData={dataPoints}
