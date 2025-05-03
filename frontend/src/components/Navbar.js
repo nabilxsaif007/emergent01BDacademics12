@@ -271,17 +271,18 @@ const Navbar = () => {
           
           {/* Mobile menu button */}
           <button
-            className="md:hidden ml-4 text-text-primary hover:text-cta-primary p-1 rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-cta-primary focus-visible:ring-opacity-50"
+            className="md:hidden ml-4 text-gray-700 hover:text-coral-500 p-1.5 rounded-full focus:outline-none focus:ring-2 focus:ring-coral-500 focus:ring-opacity-30"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            style={{ transition: 'all 0.2s ease' }}
           >
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ strokeWidth: 2.5 }}>
               {isMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               )}
             </svg>
           </button>
@@ -291,42 +292,57 @@ const Navbar = () => {
       {/* Mobile menu with animation */}
       <div
         id="mobile-menu"
-        className={`md:hidden bg-background-primary border-t border-border-light overflow-hidden transition-all duration-300 ease-in-out ${
+        className={`md:hidden bg-white border-t border-gray-100 overflow-hidden transition-all duration-300 ease-in-out ${
           isMenuOpen ? 'max-h-[80vh] shadow-lg' : 'max-h-0'
         }`}
         aria-hidden={!isMenuOpen}
       >
-        <div className="px-4 py-3 space-y-2">
+        <div className="px-5 py-4 space-y-2.5">
           {navigationItems.map((item) => (
-            item.hasDropdown ? (
-              <div key={item.path}>
-                <button
-                  className="flex justify-between items-center w-full text-left px-3 py-2 text-text-primary hover:text-cta-primary rounded-md"
-                  aria-expanded="false"
+            item.isNewCombinedItem ? (
+              <div key={item.path} className="mb-4">
+                <div
+                  className="flex justify-between items-center w-full text-left px-1 py-2 text-gray-800 font-medium text-base"
+                  style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
                 >
                   <span>{item.label}</span>
-                  <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                  </svg>
-                </button>
-                <div className="pl-4 py-1 space-y-1">
+                </div>
+                <div className="py-1 space-y-0.5 mt-1">
                   <Link 
                     to="/academics" 
-                    className="block px-3 py-2 text-text-secondary hover:text-cta-primary hover:bg-background-secondary rounded-md"
+                    className="flex items-center px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-coral-500 rounded-lg"
                   >
+                    <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
                     All Academics
                   </Link>
                   <Link 
                     to="/researchers" 
-                    className="block px-3 py-2 text-text-secondary hover:text-cta-primary hover:bg-background-secondary rounded-md"
+                    className="flex items-center px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-coral-500 rounded-lg"
                   >
+                    <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
                     Researchers
                   </Link>
                   <Link 
                     to="/countries" 
-                    className="block px-3 py-2 text-text-secondary hover:text-cta-primary hover:bg-background-secondary rounded-md"
+                    className="flex items-center px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-coral-500 rounded-lg"
                   >
-                    By Country
+                    <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Browse by Country
+                  </Link>
+                  <Link 
+                    to="/map" 
+                    className="flex items-center px-3 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-coral-500 rounded-lg"
+                  >
+                    <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                    </svg>
+                    Interactive Map
                   </Link>
                 </div>
               </div>
@@ -334,12 +350,24 @@ const Navbar = () => {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`block px-3 py-2 rounded-md ${
+                className={`flex items-center px-3 py-2.5 rounded-lg ${
                   isActive(item.path)
-                    ? 'text-cta-primary font-medium'
-                    : 'text-text-primary hover:text-cta-primary hover:bg-background-secondary'
+                    ? 'text-coral-500 font-medium bg-gray-50'
+                    : 'text-gray-700 hover:text-coral-500 hover:bg-gray-50'
                 }`}
+                style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
               >
+                {item.label === 'Home' ? (
+                  <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                  </svg>
+                ) : item.label === 'About' ? (
+                  <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ) : (
+                  <span className="w-5 h-5 mr-3"></span>
+                )}
                 {item.label}
               </Link>
             )
@@ -348,32 +376,69 @@ const Navbar = () => {
           {/* Additional mobile links for user dashboard or auth */}
           {user ? (
             <>
-              <Link
-                to="/dashboard"
-                className={`block px-3 py-2 rounded-md ${
-                  isActive('/dashboard')
-                    ? 'text-cta-primary font-medium'
-                    : 'text-text-primary hover:text-cta-primary hover:bg-background-secondary'
-                }`}
-              >
-                Dashboard
-              </Link>
-              <hr className="my-2 border-border-light" />
-              <button
-                onClick={handleLogout}
-                className="w-full text-left px-3 py-2 text-status-error hover:bg-background-secondary rounded-md"
-              >
-                Log out
-              </button>
+              <div className="border-t border-gray-100 my-3 pt-2">
+                <Link
+                  to="/dashboard"
+                  className={`flex items-center px-3 py-2.5 rounded-lg ${
+                    isActive('/dashboard')
+                      ? 'text-coral-500 font-medium bg-gray-50'
+                      : 'text-gray-700 hover:text-coral-500 hover:bg-gray-50'
+                  }`}
+                >
+                  <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  Dashboard
+                </Link>
+                <Link
+                  to="/profile"
+                  className={`flex items-center px-3 py-2.5 rounded-lg ${
+                    isActive('/profile')
+                      ? 'text-coral-500 font-medium bg-gray-50'
+                      : 'text-gray-700 hover:text-coral-500 hover:bg-gray-50'
+                  }`}
+                >
+                  <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  Profile
+                </Link>
+                <Link
+                  to="/admin"
+                  className={`flex items-center px-3 py-2.5 rounded-lg ${
+                    isActive('/admin')
+                      ? 'text-coral-500 font-medium bg-gray-50'
+                      : 'text-gray-700 hover:text-coral-500 hover:bg-gray-50'
+                  }`}
+                >
+                  <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Admin Panel
+                </Link>
+              </div>
+              <div className="border-t border-gray-100 mt-3 pt-3">
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center w-full text-left px-3 py-2.5 text-coral-500 hover:bg-gray-50 rounded-lg font-medium"
+                  style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
+                >
+                  <svg className="w-5 h-5 mr-3 text-coral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  </svg>
+                  Log out
+                </button>
+              </div>
             </>
           ) : (
-            <div className="grid grid-cols-2 gap-2 pt-2">
+            <div className="grid grid-cols-2 gap-3 pt-4 pb-2 border-t border-gray-100 mt-3">
               <Button
                 as={Link}
                 to="/login"
                 variant="outline"
-                size="sm"
+                size="md"
                 fullWidth
+                className="rounded-xl hover:border-coral-300 hover:text-coral-500 transition-all duration-300"
               >
                 Log in
               </Button>
@@ -381,8 +446,9 @@ const Navbar = () => {
                 as={Link}
                 to="/signup"
                 variant="primary"
-                size="sm"
+                size="md"
                 fullWidth
+                className="rounded-xl bg-gradient-to-r from-coral-500 to-coral-400 hover:shadow-md transition-all duration-300"
               >
                 Sign up
               </Button>
