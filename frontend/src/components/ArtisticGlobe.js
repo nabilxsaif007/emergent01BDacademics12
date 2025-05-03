@@ -82,138 +82,142 @@ const ArtisticGlobe = () => {
       specular: new THREE.Color('#444444'),
       shininess: 10
     });
-      vertexShader: `
-        varying vec2 vUv;
-        varying vec3 vPosition;
-        
-        void main() {
-          vUv = uv;
-          vPosition = position;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        uniform float time;
-        uniform vec3 color1;
-        uniform vec3 color2;
-        uniform vec3 color3;
-        uniform vec2 resolution;
-        
-        varying vec2 vUv;
-        varying vec3 vPosition;
-        
-        // Simplex noise function
-        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-        vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-        vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
-        
-        float snoise(vec2 v) {
-          const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
-                             0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
-                             -0.577350269189626,  // -1.0 + 2.0 * C.x
-                             0.024390243902439); // 1.0 / 41.0
-          vec2 i  = floor(v + dot(v, C.yy) );
-          vec2 x0 = v -   i + dot(i, C.xx);
-          vec2 i1;
-          i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-          vec4 x12 = x0.xyxy + C.xxzz;
-          x12.xy -= i1;
-          i = mod289(i);
-          vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
-            + i.x + vec3(0.0, i1.x, 1.0 ));
-          vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-          m = m*m ;
-          m = m*m ;
-          vec3 x = 2.0 * fract(p * C.www) - 1.0;
-          vec3 h = abs(x) - 0.5;
-          vec3 ox = floor(x + 0.5);
-          vec3 a0 = x - ox;
-          m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
-          vec3 g;
-          g.x  = a0.x  * x0.x  + h.x  * x0.y;
-          g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-          return 130.0 * dot(m, g);
-        }
-        
-        void main() {
-          // Calculate normalized coordinates
-          vec2 st = gl_FragCoord.xy / resolution;
-          
-          // Spherical coordinates based on position
-          float phi = acos(vPosition.y / length(vPosition));
-          float theta = atan(vPosition.z, vPosition.x);
-          
-          // Use noise to create organic patterns
-          float noise1 = snoise(vec2(theta * 3.0, phi * 3.0 + time * 0.05)) * 0.5 + 0.5;
-          float noise2 = snoise(vec2(theta * 5.0 - time * 0.03, phi * 5.0)) * 0.5 + 0.5;
-          float noise3 = snoise(vec2(theta * 8.0, phi * 8.0 - time * 0.07)) * 0.5 + 0.5;
-          
-          // Create gradient based on position
-          float gradientY = vPosition.y * 0.5 + 0.5; // -1 to 1 mapped to 0 to 1
-          
-          // Mix colors based on noise and position
-          vec3 color = mix(color1, color2, noise1);
-          color = mix(color, color3, noise2 * 0.6);
-          
-          // Add subtle brightness variation based on position
-          float brightness = 0.8 + 0.2 * noise3;
-          color *= brightness;
-          
-          // Add subtle highlight at the top
-          float highlight = smoothstep(0.7, 0.9, gradientY) * 0.3;
-          color = mix(color, vec3(1.0), highlight);
-          
-          // Add subtle edge effect
-          float edge = 1.0 - smoothstep(0.8, 1.0, length(vPosition) / 1.5);
-          color *= edge;
-          
-          gl_FragColor = vec4(color, 1.0);
-        }
-      `,
-      transparent: true
-    });
-    
-    materialRef.current = material;
-    
-    const sphere = new THREE.Mesh(geometry, material);
-    scene.add(sphere);
-    sphereRef.current = sphere;
+    const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+    scene.add(globe);
+    globeRef.current = globe;
     
     // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
     
-    // Add directional light
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(1, 1, 1);
+    // Add directional light (sunlight)
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 3, 5);
     scene.add(directionalLight);
     
-    // Animation loop
-    let lastTime = 0;
-    const animate = (time) => {
-      const normalizedTime = time * 0.001; // Convert to seconds
+    // Add point light to enhance 3D effect
+    const pointLight = new THREE.PointLight(0xffffff, 0.5);
+    pointLight.position.set(-5, 3, 5);
+    scene.add(pointLight);
+    
+    // Add location markers
+    const addMarker = (lat, lng, name, color = '#3b82f6') => {
+      // Convert lat,lng to 3D position
+      const phi = (90 - lat) * (Math.PI / 180);
+      const theta = (lng + 180) * (Math.PI / 180);
       
-      // Update time uniform
-      if (materialRef.current) {
-        materialRef.current.uniforms.time.value = normalizedTime;
+      // Calculate position on sphere
+      const radius = 1.52; // Slightly above globe surface
+      const x = -radius * Math.sin(phi) * Math.cos(theta);
+      const y = radius * Math.cos(phi);
+      const z = radius * Math.sin(phi) * Math.sin(theta);
+      
+      // Create marker geometry
+      const markerGeometry = new THREE.SphereGeometry(0.02, 16, 16);
+      const markerMaterial = new THREE.MeshBasicMaterial({ color: color });
+      const marker = new THREE.Mesh(markerGeometry, markerMaterial);
+      
+      marker.position.set(x, y, z);
+      marker.userData = { name, lat, lng };
+      scene.add(marker);
+      markersRef.current.push(marker);
+      
+      return marker;
+    };
+    
+    // Add key cities
+    addMarker(23.8103, 90.4125, 'Dhaka', '#FF5A5F'); // Bangladesh
+    addMarker(40.7128, -74.0060, 'New York', '#3b82f6'); // USA
+    addMarker(51.5074, -0.1278, 'London', '#3b82f6'); // UK
+    addMarker(43.6532, -79.3832, 'Toronto', '#3b82f6'); // Canada
+    addMarker(-33.8688, 151.2093, 'Sydney', '#3b82f6'); // Australia
+    addMarker(28.6139, 77.2090, 'New Delhi', '#3b82f6'); // India
+    addMarker(35.6762, 139.6503, 'Tokyo', '#3b82f6'); // Japan
+    addMarker(1.3521, 103.8198, 'Singapore', '#3b82f6'); // Singapore
+    
+    // Raycaster for interactive marker selection
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    
+    const onMouseMove = (event) => {
+      // Calculate mouse position in normalized device coordinates
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    };
+    
+    const onClick = (event) => {
+      // Update the picking ray with the camera and mouse position
+      raycaster.setFromCamera(mouse, camera);
+      
+      // Calculate objects intersecting the picking ray
+      const intersects = raycaster.intersectObjects(markersRef.current);
+      
+      if (intersects.length > 0) {
+        const selectedMarker = intersects[0].object;
+        setSelectedCountry(selectedMarker.userData);
+        
+        // Rotate globe to center on this marker
+        const { lat, lng } = selectedMarker.userData;
+        rotateGlobeToLatLng(lat, lng);
       }
+    };
+    
+    const rotateGlobeToLatLng = (lat, lng) => {
+      if (!controlsRef.current) return;
       
-      // Gentle rotation
-      if (sphereRef.current) {
-        sphereRef.current.rotation.y = normalizedTime * 0.1;
-        sphereRef.current.rotation.z = Math.sin(normalizedTime * 0.05) * 0.05;
-        sphereRef.current.rotation.x = Math.cos(normalizedTime * 0.07) * 0.05;
+      // Convert lat, lng to spherical coordinates
+      const phi = (90 - lat) * (Math.PI / 180);
+      const theta = (lng + 180) * (Math.PI / 180);
+      
+      // Calculate the target position for the camera
+      const radius = 4; // Distance from globe center
+      const targetX = -radius * Math.sin(phi) * Math.cos(theta);
+      const targetY = radius * Math.cos(phi);
+      const targetZ = radius * Math.sin(phi) * Math.sin(theta);
+      
+      // Animate the camera position
+      const duration = 1000; // ms
+      const startTime = Date.now();
+      const startPos = camera.position.clone();
+      const endPos = new THREE.Vector3(targetX, targetY, targetZ);
+      
+      const updateCameraPosition = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Use an easing function for smoother animation
+        const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
+        
+        camera.position.lerpVectors(startPos, endPos, easeProgress);
+        camera.lookAt(0, 0, 0);
+        
+        if (progress < 1) {
+          requestAnimationFrame(updateCameraPosition);
+        }
+      };
+      
+      updateCameraPosition();
+    };
+    
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('click', onClick);
+    
+    // Animation loop
+    const animate = () => {
+      requestAnimationFrame(animate);
+      
+      // Update OrbitControls
+      if (controlsRef.current) {
+        controlsRef.current.update();
       }
       
       // Render
       if (rendererRef.current && sceneRef.current && cameraRef.current) {
         rendererRef.current.render(sceneRef.current, cameraRef.current);
       }
-      
-      requestAnimationFrame(animate);
     };
     
-    animate(0);
+    animate();
     
     // Handle window resize
     const handleResize = () => {
@@ -221,11 +225,6 @@ const ArtisticGlobe = () => {
         cameraRef.current.aspect = window.innerWidth / window.innerHeight;
         cameraRef.current.updateProjectionMatrix();
         rendererRef.current.setSize(window.innerWidth, window.innerHeight);
-        
-        // Update resolution uniform
-        if (materialRef.current) {
-          materialRef.current.uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
-        }
       }
     };
     
@@ -234,11 +233,24 @@ const ArtisticGlobe = () => {
     // Cleanup
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('click', onClick);
       
       // Dispose of resources
-      if (sphereRef.current) {
-        sphereRef.current.geometry.dispose();
-        sphereRef.current.material.dispose();
+      if (globeRef.current) {
+        globeRef.current.geometry.dispose();
+        globeRef.current.material.dispose();
+      }
+      
+      // Dispose of markers
+      markersRef.current.forEach(marker => {
+        scene.remove(marker);
+        marker.geometry.dispose();
+        marker.material.dispose();
+      });
+      
+      if (controlsRef.current) {
+        controlsRef.current.dispose();
       }
       
       if (rendererRef.current) {
