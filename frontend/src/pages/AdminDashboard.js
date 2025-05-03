@@ -15,6 +15,12 @@ const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('academics');
   const [users, setUsers] = useState({});
   
+  // Function to get user name from the users object
+  const getUserName = (userId) => {
+    if (!users[userId]) return 'Unknown User';
+    return users[userId].name || users[userId].email || 'Unknown';
+  };
+  
   const fetchProfiles = async () => {
     setLoading(true);
     setError(null);
