@@ -227,8 +227,70 @@ function AppContent() {
                       Connect with researchers and academics worldwide
                     </p>
                   </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 md:gap-3">
-                  <div className="bg-blue-900 bg-opacity-40 rounded-lg px-3 py-2 text-sm text-blue-200 flex items-center">
+                 
+                  {/* New search input */}
+                  <div className="relative mb-10 max-w-2xl mx-auto">
+                    <input
+                      type="text"
+                      placeholder="Search by name, university, or research field"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        // Also update the hidden SearchBar component state
+                        handleSearch(e.target.value);
+                      }}
+                      className="w-full py-3.5 px-6 bg-white border border-gray-200 rounded-full text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-coral-500 transition-all shadow-sm hover:shadow-md"
+                      style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
+                    />
+                    <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-coral-500 to-coral-400 text-white p-2.5 rounded-full hover:from-coral-600 hover:to-coral-500 transition-all hover:shadow-md">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                    </button>
+                  </div>
+                   
+                  {/* Key facts about the network */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                      <div className="flex items-center">
+                        <div className="bg-gradient-to-r from-coral-500 to-coral-400 p-3 rounded-full mr-4 shadow-sm">
+                          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="text-gray-800 font-semibold" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>250+ Researchers</h3>
+                          <p className="text-gray-500 text-sm">From diverse academic fields</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                      <div className="flex items-center">
+                        <div className="bg-gradient-to-r from-teal-500 to-teal-400 p-3 rounded-full mr-4 shadow-sm">
+                          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="text-gray-800 font-semibold" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>45 Countries</h3>
+                          <p className="text-gray-500 text-sm">Global academic presence</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+                      <div className="flex items-center">
+                        <div className="bg-gradient-to-r from-coral-400 to-coral-300 p-3 rounded-full mr-4 shadow-sm">
+                          <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                          </svg>
+                        </div>
+                        <div>
+                          <h3 className="text-gray-800 font-semibold" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>120+ Institutions</h3>
+                          <p className="text-gray-500 text-sm">Universities and research centers</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                     <svg className="w-4 h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
                     </svg>
