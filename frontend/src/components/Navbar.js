@@ -351,8 +351,8 @@ const Navbar = () => {
                   to="/admin"
                   className={`flex items-center px-3 py-2.5 rounded-lg ${
                     isActive('/admin')
-                      ? 'text-coral-500 font-medium bg-gray-50'
-                      : 'text-gray-700 hover:text-coral-500 hover:bg-gray-50'
+                      ? 'text-green-600 font-medium bg-gray-50'
+                      : 'text-gray-700 hover:text-green-600 hover:bg-gray-50'
                   }`}
                 >
                   <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
