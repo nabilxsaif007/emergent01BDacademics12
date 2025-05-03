@@ -88,182 +88,62 @@ const ArtisticGlobe = () => {
       opacity
     };
   };
-    const globe = new THREE.Mesh(globeGeometry, globeMaterial);
-    scene.add(globe);
-    globeRef.current = globe;
-    
-    // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-    scene.add(ambientLight);
-    
-    // Add directional light (sunlight)
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(5, 3, 5);
-    scene.add(directionalLight);
-    
-    // Add point light to enhance 3D effect
-    const pointLight = new THREE.PointLight(0xffffff, 0.5);
-    pointLight.position.set(-5, 3, 5);
-    scene.add(pointLight);
-    
-    // Add location markers
-    const addMarker = (lat, lng, name, color = '#3b82f6') => {
-      // Convert lat,lng to 3D position
-      const phi = (90 - lat) * (Math.PI / 180);
-      const theta = (lng + 180) * (Math.PI / 180);
-      
-      // Calculate position on sphere
-      const radius = 1.52; // Slightly above globe surface
-      const x = -radius * Math.sin(phi) * Math.cos(theta);
-      const y = radius * Math.cos(phi);
-      const z = radius * Math.sin(phi) * Math.sin(theta);
-      
-      // Create marker geometry
-      const markerGeometry = new THREE.SphereGeometry(0.02, 16, 16);
-      const markerMaterial = new THREE.MeshBasicMaterial({ color: color });
-      const marker = new THREE.Mesh(markerGeometry, markerMaterial);
-      
-      marker.position.set(x, y, z);
-      marker.userData = { name, lat, lng };
-      scene.add(marker);
-      markersRef.current.push(marker);
-      
-      return marker;
-    };
-    
-    // Add key cities
-    addMarker(23.8103, 90.4125, 'Dhaka', '#FF5A5F'); // Bangladesh
-    addMarker(40.7128, -74.0060, 'New York', '#3b82f6'); // USA
-    addMarker(51.5074, -0.1278, 'London', '#3b82f6'); // UK
-    addMarker(43.6532, -79.3832, 'Toronto', '#3b82f6'); // Canada
-    addMarker(-33.8688, 151.2093, 'Sydney', '#3b82f6'); // Australia
-    addMarker(28.6139, 77.2090, 'New Delhi', '#3b82f6'); // India
-    addMarker(35.6762, 139.6503, 'Tokyo', '#3b82f6'); // Japan
-    addMarker(1.3521, 103.8198, 'Singapore', '#3b82f6'); // Singapore
-    
-    // Raycaster for interactive marker selection
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    
-    const onMouseMove = (event) => {
-      // Calculate mouse position in normalized device coordinates
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-    };
-    
-    const onClick = (event) => {
-      // Update the picking ray with the camera and mouse position
-      raycaster.setFromCamera(mouse, camera);
-      
-      // Calculate objects intersecting the picking ray
-      const intersects = raycaster.intersectObjects(markersRef.current);
-      
-      if (intersects.length > 0) {
-        const selectedMarker = intersects[0].object;
-        setSelectedCountry(selectedMarker.userData);
-        
-        // Rotate globe to center on this marker
-        const { lat, lng } = selectedMarker.userData;
-        rotateGlobeToLatLng(lat, lng);
-      }
-    };
-    
-    const rotateGlobeToLatLng = (lat, lng) => {
-      if (!controlsRef.current) return;
-      
-      // Convert lat, lng to spherical coordinates
-      const phi = (90 - lat) * (Math.PI / 180);
-      const theta = (lng + 180) * (Math.PI / 180);
-      
-      // Calculate the target position for the camera
-      const radius = 4; // Distance from globe center
-      const targetX = -radius * Math.sin(phi) * Math.cos(theta);
-      const targetY = radius * Math.cos(phi);
-      const targetZ = radius * Math.sin(phi) * Math.sin(theta);
-      
-      // Animate the camera position
-      const duration = 1000; // ms
-      const startTime = Date.now();
-      const startPos = camera.position.clone();
-      const endPos = new THREE.Vector3(targetX, targetY, targetZ);
-      
-      const updateCameraPosition = () => {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        // Use an easing function for smoother animation
-        const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic
-        
-        camera.position.lerpVectors(startPos, endPos, easeProgress);
-        camera.lookAt(0, 0, 0);
-        
-        if (progress < 1) {
-          requestAnimationFrame(updateCameraPosition);
-        }
-      };
-      
-      updateCameraPosition();
-    };
-    
-    window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('click', onClick);
-    
-    // Animation loop
+  
+  // Auto-rotation animation
+  useEffect(() => {
     const animate = () => {
-      requestAnimationFrame(animate);
-      
-      // Update OrbitControls
-      if (controlsRef.current) {
-        controlsRef.current.update();
+      if (!isDragging) {
+        setMapRotation(prev => (prev + 0.2) % 360);
       }
-      
-      // Render
-      if (rendererRef.current && sceneRef.current && cameraRef.current) {
-        rendererRef.current.render(sceneRef.current, cameraRef.current);
-      }
+      animationRef.current = requestAnimationFrame(animate);
     };
     
-    animate();
+    animationRef.current = requestAnimationFrame(animate);
     
-    // Handle window resize
-    const handleResize = () => {
-      if (cameraRef.current && rendererRef.current) {
-        cameraRef.current.aspect = window.innerWidth / window.innerHeight;
-        cameraRef.current.updateProjectionMatrix();
-        rendererRef.current.setSize(window.innerWidth, window.innerHeight);
-      }
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
-    // Cleanup
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('mousemove', onMouseMove);
-      window.removeEventListener('click', onClick);
-      
-      // Dispose of resources
-      if (globeRef.current) {
-        globeRef.current.geometry.dispose();
-        globeRef.current.material.dispose();
-      }
-      
-      // Dispose of markers
-      markersRef.current.forEach(marker => {
-        scene.remove(marker);
-        marker.geometry.dispose();
-        marker.material.dispose();
-      });
-      
-      if (controlsRef.current) {
-        controlsRef.current.dispose();
-      }
-      
-      if (rendererRef.current) {
-        rendererRef.current.dispose();
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
     };
-  }, []);
+  }, [isDragging]);
+  
+  // Mouse event handlers
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.clientX);
+    e.preventDefault();
+  };
+  
+  const handleMouseMove = (e) => {
+    if (isDragging) {
+      const dx = e.clientX - startX;
+      setMapRotation(prev => (prev - dx * 0.5) % 360);
+      setStartX(e.clientX);
+    }
+    e.preventDefault();
+  };
+  
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+  
+  // Touch event handlers for mobile
+  const handleTouchStart = (e) => {
+    setIsDragging(true);
+    setStartX(e.touches[0].clientX);
+  };
+  
+  const handleTouchMove = (e) => {
+    if (isDragging) {
+      const dx = e.touches[0].clientX - startX;
+      setMapRotation(prev => (prev - dx * 0.5) % 360);
+      setStartX(e.touches[0].clientX);
+    }
+  };
+  
+  const handleTouchEnd = () => {
+    setIsDragging(false);
+  };
   
   return (
     <div className="relative">
