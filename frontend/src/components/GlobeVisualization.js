@@ -182,46 +182,68 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const handlePointHover = useCallback((point, event) => {
-    if (point) {
-      setHoveredPoint(point);
-      
-      // Calculate tooltip position based on mouse or touch event
-      const x = event?.clientX || (event?.touches && event.touches[0] ? event.touches[0].clientX : window.innerWidth / 2);
-      const y = event?.clientY || (event?.touches && event.touches[0] ? event.touches[0].clientY : window.innerHeight / 2);
-      
-      setTooltipPosition({ x, y });
-    } else {
-      setHoveredPoint(null);
-    }
+  // Handle point hover for tooltip display
+  const handlePointHover = useCallback((point) => {
+    setHoveredPoint(point);
   }, []);
 
-  // Handle point click to focus on location and show info panel
-  const handlePointClick = useCallback((point) => {
-    console.log("Globe point clicked:", point); // Debug logging
-    
-    if (point && globeEl.current) {
-      // Clear any existing hover state
-      setHoveredPoint(null);
+  // "Surprise Me" functionality - select a random researcher
+  const handleSurpriseMe = useCallback(() => {
+    if (dataPoints && dataPoints.length > 0) {
+      // Show animation effect
+      setShowSurpriseAnimation(true);
       
-      // Animate to point location
-      globeEl.current.pointOfView({
-        lat: point.lat,
-        lng: point.lng,
-        altitude: 1.5
-      }, 1000); // 1000ms animation duration
+      // Generate a random index
+      const randomIndex = Math.floor(Math.random() * dataPoints.length);
+      const randomPoint = dataPoints[randomIndex];
       
-      // Call the provided click handler with a slight delay to allow animation to start
-      setTimeout(() => {
-        if (onPointClick && typeof onPointClick === 'function') {
-          console.log("Calling onPointClick with:", point);
-          onPointClick(point);
-        } else {
-          console.error("onPointClick is not a function:", onPointClick);
-        }
-      }, 100);
+      // Animate to the selected point
+      if (globeEl.current && randomPoint) {
+        // First rotate globe to the point
+        const { lat, lng } = randomPoint;
+        globeEl.current.pointOfView({ lat, lng, altitude: 2.5 }, 1000);
+        
+        // Then select it after a slight delay
+        setTimeout(() => {
+          setSelectedPoints([randomPoint]);
+          
+          // Call parent handler
+          if (onPointClick && typeof onPointClick === 'function') {
+            onPointClick(randomPoint);
+          }
+          
+          // Hide animation after a delay
+          setTimeout(() => {
+            setShowSurpriseAnimation(false);
+          }, 1500);
+        }, 1200);
+      }
     }
-  }, [onPointClick]);
+  }, [dataPoints, onPointClick]);
+  
+  // Handle multi-selection with modifier keys
+  const handlePointClick = useCallback((point) => {
+    if (point) {
+      // Check if Shift or Ctrl/Cmd key is pressed for multi-selection
+      const isModifierKeyPressed = 
+        window.event && (window.event.shiftKey || window.event.ctrlKey || window.event.metaKey);
+      
+      if (isModifierKeyPressed) {
+        // Add to selection if not already selected, otherwise remove
+        setSelectedPoints(prevPoints => {
+          const pointExists = prevPoints.find(p => p.id === point.id);
+          if (pointExists) {
+            return prevPoints.filter(p => p.id !== point.id);
+          } else {
+            return [...prevPoints, point];
+          }
+        });
+      } else {
+        // Normal click - replace selection
+        setSelectedPoints([point]);
+      }
+    }
+  }, []);
 
   // Navigate to academic's profile on double click
   const handlePointDoubleClick = useCallback((point) => {
