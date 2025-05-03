@@ -153,7 +153,7 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
         {/* View Profile Button */}
         <button 
           onClick={handleViewProfile}
-          className="mt-6 w-full bg-gradient-to-r from-coral-500 to-coral-400 hover:from-coral-600 hover:to-coral-500 text-white py-3.5 rounded-xl transition-all duration-300 font-medium flex items-center justify-center hover:shadow-md transform hover:translate-y-[-2px]"
+          className="mt-6 w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white py-3.5 rounded-xl transition-all duration-300 font-medium flex items-center justify-center hover:shadow-md transform hover:translate-y-[-2px]"
           style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
         >
           <span>View Full Profile</span>
