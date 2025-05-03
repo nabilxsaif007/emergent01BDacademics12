@@ -174,6 +174,40 @@ class BangladeshAcademicNetworkTester:
         )
         
         return success1 and success2, {"city_stats": city_stats, "field_stats": field_stats}
+        
+    def test_globe_data(self):
+        """Test the globe-data endpoint"""
+        success, response = self.run_test(
+            "Get Globe Data",
+            "GET",
+            "globe-data",
+            200
+        )
+        
+        if success:
+            # Validate the response structure
+            if not isinstance(response, list):
+                print("❌ Failed - Expected a list of academics")
+                return False
+            
+            if len(response) == 0:
+                print("❌ Failed - Expected non-empty list of academics")
+                return False
+            
+            # Check if the first item has the expected fields
+            first_item = response[0]
+            required_fields = ["id", "name", "university", "field", "country", "city", "lat", "lng"]
+            
+            missing_fields = [field for field in required_fields if field not in first_item]
+            if missing_fields:
+                print(f"❌ Failed - Missing required fields: {', '.join(missing_fields)}")
+                return False
+            
+            print(f"✅ Successfully retrieved {len(response)} academics")
+            print(f"✅ Sample academic: {first_item['name']} from {first_item['university']}")
+            return True
+        
+        return False
 
     def test_create_academic_profile(self):
         """Test creating an academic profile"""
