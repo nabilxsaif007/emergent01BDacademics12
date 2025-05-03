@@ -90,7 +90,7 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
           </div>
           <div className="ml-5">
             <h3 className="text-gray-800 text-xl font-bold" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>{academic.name}</h3>
-            <p className="text-coral-500 text-sm font-medium" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>{getDesignation(academic.field)}</p>
+            <p className="text-green-600 text-sm font-medium" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>{getDesignation(academic.field)}</p>
             <p className="text-gray-700 text-sm mt-1">{academic.field}</p>
             <p className="text-gray-500 text-sm">{academic.university}</p>
           </div>
