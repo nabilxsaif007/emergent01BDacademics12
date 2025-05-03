@@ -256,7 +256,7 @@ const AdminDashboard = () => {
             <button
               className={`pb-4 px-1 ${
                 activeTab === 'pending'
-                  ? 'border-b-2 border-yellow-500 text-yellow-500'
+                  ? 'border-b-2 border-green-500 text-green-500'
                   : 'text-gray-400 hover:text-gray-300'
               }`}
               onClick={() => setActiveTab('pending')}
@@ -266,7 +266,7 @@ const AdminDashboard = () => {
             <button
               className={`pb-4 px-1 ${
                 activeTab === 'approved'
-                  ? 'border-b-2 border-yellow-500 text-yellow-500'
+                  ? 'border-b-2 border-green-500 text-green-500'
                   : 'text-gray-400 hover:text-gray-300'
               }`}
               onClick={() => setActiveTab('approved')}
@@ -276,7 +276,7 @@ const AdminDashboard = () => {
             <button
               className={`pb-4 px-1 ${
                 activeTab === 'rejected'
-                  ? 'border-b-2 border-yellow-500 text-yellow-500'
+                  ? 'border-b-2 border-green-500 text-green-500'
                   : 'text-gray-400 hover:text-gray-300'
               }`}
               onClick={() => setActiveTab('rejected')}
