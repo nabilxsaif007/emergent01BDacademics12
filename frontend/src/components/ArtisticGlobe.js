@@ -220,14 +220,43 @@ const ArtisticGlobe = () => {
   }, []);
   
   return (
-    <div 
-      ref={containerRef} 
-      style={{ 
-        width: '100%', 
-        height: '100vh', 
-        background: 'transparent' 
-      }} 
-    />
+    <div className="relative">
+      <div 
+        ref={containerRef} 
+        style={{ 
+          width: '100%', 
+          height: '100vh', 
+          background: 'transparent' 
+        }} 
+      />
+      
+      {/* Countries, Regions, and Cities Labels */}
+      <div className="absolute top-10 left-10 z-10 bg-white bg-opacity-80 p-4 rounded-lg shadow-md">
+        <h3 className="text-green-700 font-semibold mb-3">Featured Locations</h3>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-2">
+          <div>
+            <p className="text-green-800 font-medium">Countries</p>
+            <ul className="text-sm text-gray-700">
+              <li>Bangladesh</li>
+              <li>United States</li>
+              <li>United Kingdom</li>
+              <li>Canada</li>
+              <li>Australia</li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-green-800 font-medium">Cities</p>
+            <ul className="text-sm text-gray-700">
+              <li>Dhaka</li>
+              <li>New York</li>
+              <li>London</li>
+              <li>Toronto</li>
+              <li>Sydney</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
