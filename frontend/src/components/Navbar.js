@@ -296,8 +296,8 @@ const Navbar = () => {
                 to={item.path}
                 className={`flex items-center px-3 py-2.5 rounded-lg ${
                   isActive(item.path)
-                    ? 'text-coral-500 font-medium bg-gray-50'
-                    : 'text-gray-700 hover:text-coral-500 hover:bg-gray-50'
+                    ? 'text-green-600 font-medium bg-gray-50'
+                    : 'text-gray-700 hover:text-green-600 hover:bg-gray-50'
                 }`}
                 style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
               >
