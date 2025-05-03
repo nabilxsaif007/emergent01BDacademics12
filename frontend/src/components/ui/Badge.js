@@ -2,72 +2,132 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * Badge component for status indicators and tags
+ * Airbnb-inspired Badge component for displaying status indicators, counters, and labels
+ * 
+ * @example
+ * // Default badge
+ * <Badge>New</Badge>
+ * 
+ * // Status badge
+ * <Badge variant="success">Verified</Badge>
+ * 
+ * // Count badge
+ * <Badge variant="primary" rounded>3</Badge>
+ * 
+ * // Dot indicator
+ * <Badge dot variant="error" />
  */
-const Badge = ({ 
-  children, 
+const Badge = ({
+  children,
   variant = 'default',
   size = 'md',
-  pill = false,
+  rounded = false,
+  dot = false,
+  outline = false,
+  icon = null,
   className = '',
-  onClick = null,
-  ...props 
+  ...props
 }) => {
-  // Base classes
-  const baseClasses = 'inline-flex items-center justify-center font-medium';
+  // Base classes with proper focus handling
+  const baseClasses = 'inline-flex items-center justify-center font-medium transition-colors';
   
-  // Variant classes
+  // Variant classes based on Airbnb color palette
   const variantClasses = {
-    default: 'bg-gray-100 text-gray-800',
-    primary: 'bg-brand-emerald text-white',
-    secondary: 'bg-brand-gold text-gray-900',
-    emerald: 'bg-green-100 text-green-800',
-    gold: 'bg-yellow-100 text-yellow-800',
-    blue: 'bg-blue-100 text-blue-800',
-    red: 'bg-red-100 text-red-800',
-    purple: 'bg-purple-100 text-purple-800',
-    success: 'bg-green-100 text-green-800',
-    warning: 'bg-yellow-100 text-yellow-800',
-    danger: 'bg-red-100 text-red-800',
-    info: 'bg-blue-100 text-blue-800',
+    default: outline 
+      ? 'bg-transparent border border-border-default text-text-secondary' 
+      : 'bg-background-tertiary text-text-secondary',
+      
+    primary: outline 
+      ? 'bg-transparent border border-cta-primary text-cta-primary' 
+      : 'bg-cta-primary text-white',
+      
+    secondary: outline 
+      ? 'bg-transparent border border-cta-secondary text-cta-secondary' 
+      : 'bg-cta-secondary text-white',
+      
+    success: outline 
+      ? 'bg-transparent border border-status-success text-status-success' 
+      : 'bg-status-success text-white',
+      
+    error: outline 
+      ? 'bg-transparent border border-status-error text-status-error' 
+      : 'bg-status-error text-white',
+      
+    warning: outline 
+      ? 'bg-transparent border border-status-warning text-status-warning' 
+      : 'bg-status-warning text-white',
+      
+    info: outline 
+      ? 'bg-transparent border border-status-info text-status-info' 
+      : 'bg-status-info text-white',
   };
   
-  // Size classes
+  // Size classes with good touch targets and proper spacing
   const sizeClasses = {
-    sm: 'text-xs px-2 py-0.5',
-    md: 'text-sm px-2.5 py-0.5',
-    lg: 'text-base px-3 py-1',
+    xs: dot 
+      ? 'h-1.5 w-1.5' 
+      : rounded 
+        ? 'h-4 w-4 text-[10px]' 
+        : 'h-4 px-1 text-[10px]',
+        
+    sm: dot 
+      ? 'h-2 w-2' 
+      : rounded 
+        ? 'h-5 w-5 text-xs' 
+        : 'h-5 px-1.5 text-xs',
+        
+    md: dot 
+      ? 'h-2.5 w-2.5' 
+      : rounded 
+        ? 'h-6 w-6 text-sm' 
+        : 'h-6 px-2 text-sm',
+        
+    lg: dot 
+      ? 'h-3 w-3' 
+      : rounded 
+        ? 'h-7 w-7 text-base' 
+        : 'h-7 px-2.5 text-base',
   };
   
-  // Shape classes
-  const shapeClasses = pill ? 'rounded-full' : 'rounded';
-  
-  // Interactive classes
-  const interactiveClasses = onClick ? 'cursor-pointer hover:opacity-80 transition-opacity' : '';
+  // Border radius based on shape
+  const radiusClasses = rounded ? 'rounded-full' : 'rounded';
   
   return (
-    <span
-      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${shapeClasses} ${interactiveClasses} ${className}`}
-      onClick={onClick}
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
+    <span 
+      className={`
+        ${baseClasses} 
+        ${variantClasses[variant]} 
+        ${sizeClasses[size]} 
+        ${radiusClasses} 
+        ${className}
+      `}
+      role={dot ? 'status' : (variant === 'error' || variant === 'warning') ? 'status' : undefined}
+      aria-label={dot ? props['aria-label'] || `${variant} indicator` : undefined}
       {...props}
     >
-      {children}
+      {icon && <span className="mr-1">{icon}</span>}
+      {!dot && children}
     </span>
   );
 };
 
 Badge.propTypes = {
-  children: PropTypes.node.isRequired,
-  variant: PropTypes.oneOf([
-    'default', 'primary', 'secondary', 'emerald', 'gold', 
-    'blue', 'red', 'purple', 'success', 'warning', 'danger', 'info'
-  ]),
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
-  pill: PropTypes.bool,
+  /** Badge content */
+  children: PropTypes.node,
+  /** Badge visual style */
+  variant: PropTypes.oneOf(['default', 'primary', 'secondary', 'success', 'error', 'warning', 'info']),
+  /** Badge size */
+  size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg']),
+  /** Whether badge should be fully rounded (circular) */
+  rounded: PropTypes.bool,
+  /** Whether badge should be a dot indicator (no content) */
+  dot: PropTypes.bool,
+  /** Whether badge should have outline style */
+  outline: PropTypes.bool,
+  /** Optional icon element */
+  icon: PropTypes.node,
+  /** Additional CSS classes */
   className: PropTypes.string,
-  onClick: PropTypes.func,
 };
 
 export default Badge;
