@@ -74,15 +74,16 @@ body, html {
 }
 
 .globe-container {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: -1;
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  min-height: 600px;
   background-color: #fff;
-  width: 100vw;
-  height: 100vh;
+  overflow: hidden;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Surprise Me Confetti Animation */
