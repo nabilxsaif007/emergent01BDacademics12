@@ -14,7 +14,7 @@ const ArtisticGlobe = () => {
     const scene = new THREE.Scene();
     sceneRef.current = scene;
     
-    // Background color (white to match Airbnb style)
+    // Background color (white)
     scene.background = new THREE.Color('#FFFFFF');
     
     // Camera
@@ -49,9 +49,9 @@ const ArtisticGlobe = () => {
     const material = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0 },
-        color1: { value: new THREE.Color("#FF5A5F") },  // Airbnb coral
-        color2: { value: new THREE.Color("#00A699") },  // Airbnb teal
-        color3: { value: new THREE.Color("#FC642D") },  // Airbnb arches
+        color1: { value: new THREE.Color("#16a34a") },  // Primary green
+        color2: { value: new THREE.Color("#22c55e") },  // Secondary green
+        color3: { value: new THREE.Color("#86efac") },  // Light green
         resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
       },
       vertexShader: `
