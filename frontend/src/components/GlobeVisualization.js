@@ -28,9 +28,9 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         .filter(child => child instanceof THREE.Light)
         .forEach(light => scene.remove(light));
       
-      // Add new lighting for bright daytime appearance
-      // Main sunlight
-      const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+      // Enhanced lighting for bright, crisp daytime appearance
+      // Main sunlight - brighter and more directional
+      const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.2);
       directionalLight.position.set(0.5, 1, 0.5);
       scene.add(directionalLight);
       
