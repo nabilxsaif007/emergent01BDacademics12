@@ -382,7 +382,7 @@ const Navbar = () => {
                 variant="outline"
                 size="md"
                 fullWidth
-                className="rounded-xl hover:border-coral-300 hover:text-coral-500 transition-all duration-300"
+                className="rounded-xl hover:border-green-300 hover:text-green-600 transition-all duration-300"
               >
                 Log in
               </Button>
