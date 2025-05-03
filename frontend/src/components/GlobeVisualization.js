@@ -324,10 +324,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       )}
       
       {isLoading ? (
-                    onPointClick(randomResearcher);
-                  }
-                }, 1600);
-              }
             }
           }}
           className="bg-cta-primary p-3 rounded-full text-white hover:bg-cta-hover shadow-md transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-50"
