@@ -324,10 +324,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       )}
       
       {isLoading ? (
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (dataPoints && dataPoints.length > 0) {
               // Select a random researcher
               const randomIndex = Math.floor(Math.random() * dataPoints.length);
               const randomResearcher = dataPoints[randomIndex];
