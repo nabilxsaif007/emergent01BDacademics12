@@ -48,42 +48,41 @@ const Button = forwardRef(({
   // Button variants following Airbnb style
   const variantClasses = {
     primary: `
-      bg-cta-primary hover:bg-cta-hover active:bg-cta-active
-      text-text-inverse
+      bg-gradient-to-r from-coral-500 to-coral-400 hover:from-coral-600 hover:to-coral-500
+      text-white
       shadow-sm hover:shadow
-      focus-visible:ring-cta-primary focus-visible:ring-opacity-50
+      focus-visible:ring-coral-500 focus-visible:ring-opacity-50
     `,
     secondary: `
-      bg-cta-secondary hover:opacity-90 active:opacity-100
-      text-text-inverse
+      bg-teal-500 hover:bg-teal-600
+      text-white
       shadow-sm hover:shadow
-      focus-visible:ring-cta-secondary focus-visible:ring-opacity-50
+      focus-visible:ring-teal-500 focus-visible:ring-opacity-50
     `,
     outline: `
-      bg-transparent
-      border border-cta-primary hover:border-cta-hover
-      text-cta-primary hover:text-cta-hover active:text-cta-active
-      hover:bg-cta-primary hover:bg-opacity-5
-      focus-visible:ring-cta-primary focus-visible:ring-opacity-40
+      bg-white hover:bg-gray-50
+      text-gray-700 hover:text-coral-500
+      border border-gray-300 hover:border-coral-300
+      focus-visible:ring-coral-500 focus-visible:ring-opacity-40
     `,
     subtle: `
-      bg-background-tertiary hover:bg-border-light
-      text-text-secondary hover:text-text-primary
+      bg-gray-50 hover:bg-gray-100
+      text-gray-700 hover:text-gray-900
       border border-transparent
-      focus-visible:ring-border-default
+      focus-visible:ring-gray-400
     `,
     danger: `
-      bg-status-error hover:opacity-90 active:opacity-100
-      text-text-inverse
+      bg-status-error hover:bg-red-600
+      text-white
       shadow-sm hover:shadow
-      focus-visible:ring-status-error focus-visible:ring-opacity-50
+      focus-visible:ring-red-500 focus-visible:ring-opacity-50
     `,
     link: `
       bg-transparent
-      text-cta-primary hover:text-cta-hover active:text-cta-active
+      text-coral-500 hover:text-coral-600 active:text-coral-700
       underline hover:no-underline
       p-0 shadow-none
-      focus-visible:ring-cta-primary focus-visible:ring-opacity-30
+      focus-visible:ring-coral-500 focus-visible:ring-opacity-30
     `,
   };
   
