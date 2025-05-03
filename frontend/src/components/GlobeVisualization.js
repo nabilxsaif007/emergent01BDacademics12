@@ -266,16 +266,13 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       {/* Surprise Me Button */}
       <div className="absolute top-6 right-6 z-10">
         <button
-          onClick={(e) => {
-            e.preventDefault(); 
-            e.stopPropagation();
-            if (globeEl.current && globeEl.current.controls) {
-              try {
-                globeEl.current.controls().reset();
-              } catch (err) {
-                console.error("Error resetting controls:", err);
-              }
-            }
+          onClick={handleSurpriseMe}
+          className="flex items-center justify-center bg-white text-gray-800 hover:bg-gray-50 px-4 py-2 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coral-500"
+          style={{
+            fontFamily: "'Circular', 'Inter', -apple-system, sans-serif",
+            fontSize: '14px',
+            fontWeight: 600,
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
           }}
           className="bg-white p-3 rounded-full border border-border-light text-cta-primary hover:shadow-md transition-all shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cta-primary focus-visible:ring-opacity-50"
           title="Reset view"
