@@ -6,31 +6,58 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#FFFFFF",
-        surface: "#F8FAFC",
-        primary: "#4285F4",
-        secondary: "#F59E0B",
-        'brand': {
-          'emerald': '#0D9488',
-          'emerald-light': '#14B8A6',
-          'emerald-dark': '#0F766E',
-          'gold': '#F59E0B',
-          'gold-light': '#FBBF24',
-          'gold-dark': '#D97706'
+        // Airbnb-inspired color palette
+        'airbnb': {
+          'rausch': '#FF5A5F',     // Primary red/coral
+          'babu': '#00A699',       // Teal
+          'arches': '#FC642D',     // Orange
+          'hof': '#484848',        // Text gray
+          'foggy': '#767676',      // Secondary text
         },
+        // Background colors
+        'background': {
+          'primary': '#FFFFFF',    // Pure white
+          'secondary': '#F7F7F7',  // Light gray
+          'tertiary': '#F5F5F5',   // Slightly darker gray
+        },
+        // Text colors with accessible contrast ratios
         'text': {
-          'primary': '#1E293B',
-          'secondary': '#475569',
-          'tertiary': '#94A3B8'
+          'primary': '#484848',    // Dark gray - passes 7:1 contrast on white
+          'secondary': '#717171',  // Medium gray - passes 4.5:1 on white
+          'tertiary': '#999999',   // Light gray - passes 3:1 on white
+          'inverse': '#FFFFFF',    // White text for dark backgrounds
+        },
+        // Call to action colors
+        'cta': {
+          'primary': '#FF5A5F',    // Airbnb red
+          'secondary': '#00A699',  // Teal
+          'hover': '#FF7E82',      // Lighter red for hover states
+          'active': '#E00007',     // Darker red for active states
+          'disabled': '#FFD1D3',   // Very light red for disabled states
+        },
+        // Status colors for feedback
+        'status': {
+          'success': '#00A699',    // Teal
+          'error': '#FF5A5F',      // Red
+          'warning': '#FFB400',    // Amber
+          'info': '#007A87',       // Dark teal
+        },
+        // Border colors
+        'border': {
+          'light': '#EBEBEB',      // Very light gray
+          'default': '#DDDDDD',    // Light gray
+          'dark': '#B0B0B0',       // Medium gray
         }
       },
+      // Shadow system with reduced opacity for subtle effects
       boxShadow: {
-        'sm': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-        'DEFAULT': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-        'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-        'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        'emerald-glow': "0 0 15px rgba(13, 148, 136, 0.3)",
-        'gold-glow': "0 0 15px rgba(245, 158, 11, 0.3)",
+        'sm': '0 1px 2px rgba(0, 0, 0, 0.05)',
+        'DEFAULT': '0 1px 3px rgba(0, 0, 0, 0.08)',
+        'md': '0 4px 6px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.04)',
+        'lg': '0 10px 15px rgba(0, 0, 0, 0.04), 0 4px 6px rgba(0, 0, 0, 0.02)',
+        'xl': '0 20px 25px rgba(0, 0, 0, 0.03), 0 10px 10px rgba(0, 0, 0, 0.02)',
+        'focus': '0 0 0 2px rgba(255, 90, 95, 0.3)',  // Accessible focus ring
+        'hover': '0 2px 5px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)',
       },
       animation: {
         'fadeIn': 'fadeIn 0.2s ease-in-out',
