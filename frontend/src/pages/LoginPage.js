@@ -109,8 +109,8 @@ const LoginPage = () => {
         
         {/* Demo Account Notice */}
         <div className="mb-6">
-          <div className="bg-blue-900 bg-opacity-50 border border-blue-700 text-blue-200 px-4 py-3 rounded-lg flex items-start">
-            <svg className="h-5 w-5 text-blue-400 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg flex items-start">
+            <svg className="h-5 w-5 text-green-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <div>
@@ -119,7 +119,7 @@ const LoginPage = () => {
               </p>
               <button 
                 onClick={useDemoAccount}
-                className="mt-2 bg-blue-600 text-xs text-white px-3 py-1 rounded hover:bg-blue-700 transition-colors"
+                className="mt-2 bg-green-600 text-xs text-white px-3 py-1 rounded hover:bg-green-700 transition-colors"
               >
                 Use Demo Account
               </button>
