@@ -265,12 +265,14 @@ function AppContent() {
               {/* Debug info and testing button removed as requested */}
               
               <FilterPanel onFilter={handleFilter} />
-              <div className="globe-container mt-8">
-                <Globe 
-                  dataPoints={filteredDataPoints} 
-                  isLoading={isLoading}
-                  onPointClick={handleGlobePointClick} 
-                />
+              <div className="mx-auto max-w-6xl px-4 py-8">
+                <div className="globe-container">
+                  <Globe 
+                    dataPoints={filteredDataPoints} 
+                    isLoading={isLoading}
+                    onPointClick={handleGlobePointClick} 
+                  />
+                </div>
               </div>
               
               <InfoPanel 
