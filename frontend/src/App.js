@@ -359,8 +359,7 @@ function AppContent() {
             <div className="globe-container">
               <ArtisticGlobe />
             </div>
-          </>
-            </div>
+            
             <InfoPanel 
               isVisible={showInfoPanel} 
               academic={selectedAcademic} 
