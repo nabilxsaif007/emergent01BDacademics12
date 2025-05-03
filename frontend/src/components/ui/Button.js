@@ -61,10 +61,10 @@ const Button = forwardRef(({
       focus-visible:ring-green-500 focus-visible:ring-opacity-50
     `,
     outline: `
-      bg-white hover:bg-gray-50
-      text-gray-700 hover:text-coral-500
-      border border-gray-300 hover:border-coral-300
-      focus-visible:ring-coral-500 focus-visible:ring-opacity-40
+      bg-white hover:bg-green-50
+      text-gray-700 hover:text-green-600
+      border border-gray-300 hover:border-green-300
+      focus-visible:ring-green-500 focus-visible:ring-opacity-40
     `,
     subtle: `
       bg-gray-50 hover:bg-gray-100
