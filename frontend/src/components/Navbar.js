@@ -106,10 +106,10 @@ const Navbar = () => {
             to="/" 
             className="flex items-center font-bold text-2xl mr-6 focus:outline-none rounded-md"
             aria-label="Bangladesh Academic Network - Home"
-            style={{ color: '#FF5A5F' }}
+            style={{ color: '#16a34a' }}
           >
-            <span style={{ color: '#FF5A5F' }}>B</span>
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-coral-500 to-teal-500 hidden sm:inline" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>
+            <span style={{ color: '#16a34a' }}>B</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-400 hidden sm:inline" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>
               Academic Network
             </span>
           </Link>
