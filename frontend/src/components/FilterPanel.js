@@ -53,72 +53,90 @@ const FilterPanel = ({ onFilter }) => {
             </button>
           </div>
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label className="block text-gray-300 text-sm mb-1">Research Field</label>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-medium mb-1.5">Research Field</label>
               <select 
                 name="field"
                 value={filters.field}
                 onChange={handleChange}
-                className="w-full bg-gray-900 text-white border border-gray-700 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full bg-white border border-gray-200 text-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-coral-500 focus:border-transparent"
+                style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
               >
-                <option value="">Any Field</option>
+                <option value="">All Fields</option>
                 <option value="Computer Science">Computer Science</option>
                 <option value="Medicine">Medicine</option>
+                <option value="Engineering">Engineering</option>
                 <option value="Physics">Physics</option>
-                <option value="Bioengineering">Bioengineering</option>
-                <option value="Environmental Science">Environmental Science</option>
-              </select>
-            </div>
-            
-            <div className="mb-3">
-              <label className="block text-gray-300 text-sm mb-1">Country</label>
-              <select 
-                name="country"
-                value={filters.country}
-                onChange={handleChange}
-                className="w-full bg-gray-900 text-white border border-gray-700 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">Any Country</option>
-                <option value="USA">USA</option>
-                <option value="UK">UK</option>
-                <option value="Canada">Canada</option>
-                <option value="Singapore">Singapore</option>
-                <option value="Bangladesh">Bangladesh</option>
+                <option value="Economics">Economics</option>
               </select>
             </div>
             
             <div className="mb-4">
-              <label className="block text-gray-300 text-sm mb-1">University</label>
-              <input 
-                type="text"
+              <label className="block text-gray-700 text-sm font-medium mb-1.5">Country</label>
+              <select 
+                name="country"
+                value={filters.country}
+                onChange={handleChange}
+                className="w-full bg-white border border-gray-200 text-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-coral-500 focus:border-transparent"
+                style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
+              >
+                <option value="">All Countries</option>
+                <option value="Bangladesh">Bangladesh</option>
+                <option value="USA">USA</option>
+                <option value="UK">UK</option>
+                <option value="Canada">Canada</option>
+                <option value="Australia">Australia</option>
+                <option value="Germany">Germany</option>
+                <option value="Japan">Japan</option>
+                <option value="Singapore">Singapore</option>
+                <option value="India">India</option>
+              </select>
+            </div>
+            
+            <div className="mb-5">
+              <label className="block text-gray-700 text-sm font-medium mb-1.5">University</label>
+              <select 
                 name="university"
                 value={filters.university}
                 onChange={handleChange}
-                placeholder="Type to filter..."
-                className="w-full bg-gray-900 text-white border border-gray-700 rounded py-2 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
+                className="w-full bg-white border border-gray-200 text-gray-700 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-coral-500 focus:border-transparent"
+                style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
+              >
+                <option value="">All Universities</option>
+                <option value="BUET">BUET</option>
+                <option value="MIT">MIT</option>
+                <option value="Harvard">Harvard</option>
+                <option value="Oxford">Oxford</option>
+                <option value="Cambridge">Cambridge</option>
+                <option value="Stanford">Stanford</option>
+                <option value="NUS">NUS</option>
+                <option value="IIT">IIT</option>
+              </select>
             </div>
             
-            <div className="flex justify-between">
+            <div className="flex space-x-3">
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-coral-500 to-coral-400 hover:from-coral-600 hover:to-coral-500 text-white px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:shadow-md"
+                style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
+              >
+                Apply Filters
+              </button>
               <button
                 type="button"
                 onClick={() => {
-                  setFilters({
+                  const resetFilters = {
                     field: '',
                     country: '',
                     university: ''
-                  });
-                  onFilter({});
+                  };
+                  setFilters(resetFilters);
+                  onFilter(resetFilters);
                 }}
-                className="bg-gray-800 hover:bg-gray-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="px-3 py-2.5 border border-gray-200 hover:border-coral-300 text-gray-700 hover:text-coral-500 rounded-lg text-sm font-medium transition-all hover:bg-gray-50"
+                style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
               >
                 Reset
-              </button>
-              <button
-                type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md text-sm font-medium transition-colors shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                Apply Filters
               </button>
             </div>
           </form>
