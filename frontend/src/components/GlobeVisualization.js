@@ -324,10 +324,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       )}
       
       {isLoading ? (
-              // Animate to this researcher's location
-              if (globeEl.current && randomResearcher) {
-                globeEl.current.pointOfView({ 
-                  lat: randomResearcher.lat, 
                   lng: randomResearcher.lng, 
                   altitude: 1.5
                 }, 1500);
