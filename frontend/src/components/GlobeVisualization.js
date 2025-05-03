@@ -75,6 +75,15 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         controls.autoRotate = false;
       });
       
+      // Resume auto rotation after inactivity (4 seconds)
+      let inactivityTimer;
+      controls.addEventListener('end', () => {
+        clearTimeout(inactivityTimer);
+        inactivityTimer = setTimeout(() => {
+          controls.autoRotate = true;
+        }, 4000);
+      });
+      
       // Enhanced touch support for mobile
       controls.enableDamping = true;
       controls.dampingFactor = 0.12;
