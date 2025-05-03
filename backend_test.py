@@ -284,6 +284,9 @@ def test_demo_login():
     # Test getting stats
     stats_success, stats = tester.test_get_stats()
     
+    # Test globe data
+    globe_data_success = tester.test_globe_data()
+    
     # Print results
     print(f"\n📊 Tests passed: {tester.tests_passed}/{tester.tests_run}")
     return 0 if tester.tests_passed == tester.tests_run else 1
