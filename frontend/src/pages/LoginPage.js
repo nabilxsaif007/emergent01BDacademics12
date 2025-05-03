@@ -222,9 +222,9 @@ const LoginPage = () => {
           </Link>
         </div>
         
-        <div className="mt-8 pt-6 border-t border-gray-800">
+        <div className="mt-8 pt-6 border-t border-gray-200">
           <button
-            className="w-full flex items-center justify-center py-2 px-4 border border-gray-700 rounded-lg shadow-sm bg-transparent text-white hover:bg-gray-800 transition-colors mb-3"
+            className="w-full flex items-center justify-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-700 hover:bg-gray-50 transition-colors mb-3"
             onClick={() => {
               setEmail('google@example.com');
               setPassword('google123');
