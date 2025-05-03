@@ -249,23 +249,66 @@ const Input = forwardRef(({
 Input.displayName = 'Input';
 
 Input.propTypes = {
-  id: PropTypes.string.isRequired,
+  /** Input field ID */
+  id: PropTypes.string,
+  /** Input field name */
   name: PropTypes.string.isRequired,
-  type: PropTypes.string,
+  /** Input field type */
+  type: PropTypes.oneOf([
+    'text', 'email', 'password', 'number', 'tel', 'url', 
+    'date', 'datetime-local', 'month', 'week', 'time', 
+    'search', 'color'
+  ]),
+  /** Placeholder text */
   placeholder: PropTypes.string,
+  /** Input value */
   value: PropTypes.any,
+  /** Change handler function */
   onChange: PropTypes.func,
+  /** Blur handler function */
   onBlur: PropTypes.func,
+  /** Focus handler function */
+  onFocus: PropTypes.func,
+  /** Whether the input is disabled */
   disabled: PropTypes.bool,
+  /** Whether the input is read-only */
   readOnly: PropTypes.bool,
+  /** Error message */
   error: PropTypes.string,
+  /** Input label */
   label: PropTypes.node,
+  /** Helper text */
   helpText: PropTypes.node,
+  /** Icon to display on the left side of the input */
   leftIcon: PropTypes.node,
+  /** Icon to display on the right side of the input */
   rightIcon: PropTypes.node,
+  /** Interactive icon with click handler */
+  actionIcon: PropTypes.node,
+  /** Handler for actionIcon click */
+  onActionClick: PropTypes.func,
+  /** Whether the input should take full width of container */
   fullWidth: PropTypes.bool,
+  /** Additional CSS classes */
   className: PropTypes.string,
+  /** Whether the input is required */
   required: PropTypes.bool,
+  /** Maximum length of input value */
+  maxLength: PropTypes.number,
+  /** Whether to show character count */
+  showCount: PropTypes.bool,
+  /** HTML autocomplete attribute */
+  autoComplete: PropTypes.string,
+  /** Input size */
+  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  /** Label size */
+  labelSize: PropTypes.oneOf(['sm', 'md', 'lg']),
+  /** Whether to show success indicator when value is present and no error */
+  hasSuccessIndicator: PropTypes.bool,
+  /** Whether to display label inline with input */
+  inlineLabel: PropTypes.bool,
+  /** Whether to visually hide the label (still accessible to screen readers) */
+  hideLabel: PropTypes.bool,
 };
 
 export default Input;
