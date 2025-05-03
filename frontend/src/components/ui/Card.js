@@ -1,41 +1,111 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 /**
- * Card component for displaying content in containers
+ * Airbnb-inspired Card component for displaying content in containers
+ * 
+ * @example
+ * // Basic card
+ * <Card>
+ *   <Card.Body>Content goes here</Card.Body>
+ * </Card>
+ * 
+ * // Card with header and footer
+ * <Card>
+ *   <Card.Header>
+ *     <h3>Card Title</h3>
+ *   </Card.Header>
+ *   <Card.Body>Main content</Card.Body>
+ *   <Card.Footer>Footer actions</Card.Footer>
+ * </Card>
  */
-const Card = ({ 
+const Card = forwardRef(({ 
   children, 
   variant = 'default',
+  padding = true,
   hover = false,
+  interactive = false,
+  highlighted = false,
+  as = 'div',
+  onClick,
   className = '',
   ...props 
-}) => {
-  // Base classes
-  const baseClasses = 'rounded-lg overflow-hidden transition-all duration-200';
+}, ref) => {
+  // Base classes with smooth transitions and rounded corners
+  const baseClasses = `
+    rounded-lg overflow-hidden
+    transition-all duration-200
+  `;
   
-  // Variant classes
+  // Card variant styles following Airbnb design principles
   const variantClasses = {
-    default: 'bg-white border border-gray-100 shadow-sm',
-    outlined: 'bg-white border-2 border-gray-200',
-    elevated: 'bg-white shadow-md',
-    emerald: 'bg-white border-l-4 border-brand-emerald shadow-sm',
-    gold: 'bg-white border-l-4 border-brand-gold shadow-sm',
-    dark: 'bg-gray-100 text-text-primary shadow-sm',
+    default: `
+      bg-background-primary
+      border border-border-light
+      shadow-sm
+    `,
+    outlined: `
+      bg-background-primary
+      border-2 border-border-default
+    `,
+    elevated: `
+      bg-background-primary
+      shadow-md
+    `,
+    feature: `
+      bg-background-primary
+      border border-border-light
+      shadow-md
+    `,
+    accent: `
+      bg-background-primary
+      border-l-4 border-cta-primary
+      shadow-sm
+    `,
+    secondary: `
+      bg-background-primary
+      border-l-4 border-cta-secondary
+      shadow-sm
+    `,
+    subtle: `
+      bg-background-secondary
+      border border-transparent
+    `,
   };
   
-  // Hover effect
-  const hoverClasses = hover ? 'transform hover:-translate-y-1 hover:shadow-lg transition-shadow' : '';
+  // Conditional classes
+  const paddingClass = padding ? '' : 'p-0';
+  const hoverClasses = hover ? 'transform hover:-translate-y-1 hover:shadow-lg' : '';
+  const interactiveClasses = interactive ? 'cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-cta-primary focus-visible:ring-opacity-50' : '';
+  const highlightedClasses = highlighted ? 'ring-2 ring-cta-primary ring-opacity-50' : '';
+  
+  // Props for interactive card
+  const interactiveProps = interactive ? {
+    tabIndex: 0,
+    role: 'button',
+    onClick,
+    onKeyDown: (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onClick && onClick(e);
+      }
+    }
+  } : {};
+  
+  // Create the component using the specified HTML element
+  const Component = as;
   
   return (
-    <div
-      className={`${baseClasses} ${variantClasses[variant]} ${hoverClasses} ${className}`}
+    <Component
+      ref={ref}
+      className={`${baseClasses} ${variantClasses[variant]} ${paddingClass} ${hoverClasses} ${interactiveClasses} ${highlightedClasses} ${className}`}
+      {...interactiveProps}
       {...props}
     >
       {children}
-    </div>
+    </Component>
   );
-};
+});
 
 // Card Header component
 const CardHeader = ({ children, className = '', ...props }) => {
