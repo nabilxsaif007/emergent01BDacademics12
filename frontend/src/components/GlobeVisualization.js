@@ -369,25 +369,54 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         height={window.innerHeight}
         lineHoverPrecision={0}
         
-        // Country polygons with lighter colors and labels
+        // Enable user interaction
+        enablePointerInteraction={true}
+        
+        // Country polygons with improved colors and labels
         hexPolygonsData={countries}
         hexPolygonResolution={3}
         hexPolygonMargin={0.3}
-        hexPolygonColor={() => `rgba(13, 148, 136, ${isGlobeReady ? 0.15 : 0})`} // Subtle emerald color
+        hexPolygonColor={() => `rgba(255, 90, 95, ${isGlobeReady ? 0.08 : 0})`} // Very subtle Airbnb coral
         hexPolygonLabel={d => `
           <div style="
             background-color: white; 
             color: #484848; 
-            padding: 5px 10px; 
-            border-radius: 5px; 
-            font-size: 12px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 8px 12px; 
+            border-radius: 12px; 
+            font-size: 14px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+            font-family: 'Circular', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             border: 1px solid #EBEBEB;
+            transform: scale(1);
+            transition: transform 0.2s ease-out;
           ">
-            <b>${d.properties.name}</b>
+            <div style="font-weight: 600; color: #484848;">${d.properties.name}</div>
           </div>
         `}
+        
+        // Country labels for better geographic context
+        labelsData={countries.filter(d => d.properties.name && d.properties.name.length < 20)}
+        labelLat={d => {
+          // Extract center point of the country for label placement
+          if (d.geometry.type === 'Polygon') {
+            const coords = d.geometry.coordinates[0];
+            return coords.reduce((sum, p) => sum + p[1], 0) / coords.length;
+          }
+          return 0; // Fallback
+        }}
+        labelLng={d => {
+          if (d.geometry.type === 'Polygon') {
+            const coords = d.geometry.coordinates[0];
+            return coords.reduce((sum, p) => sum + p[0], 0) / coords.length;
+          }
+          return 0; // Fallback
+        }}
+        labelText={d => d.properties.name}
+        labelSize={d => 0.5 + Math.min(d.properties.name.length * 0.08, 1.2)}
+        labelColor={() => '#555555'}
+        labelDotRadius={0.4}
+        labelAltitude={0.01}
+        labelResolution={1}
         
         // Render points with Airbnb color scheme
         pointsData={dataPoints}
