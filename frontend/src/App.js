@@ -262,10 +262,59 @@ function AppContent() {
                 <SearchBar onSearch={handleSearch} academics={dataPoints} />
               </div>
               
-              {/* Debug info and testing button removed as requested */}
+              {/* Enhanced filter bar */}
+              <div className="mx-auto max-w-4xl px-4 py-4">
+                <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                  <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Field of Study</label>
+                      <select 
+                        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        onChange={(e) => handleFilter({ field: e.target.value })}
+                      >
+                        <option value="">All Fields</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Medical Science">Medical Science</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Economics">Economics</option>
+                      </select>
+                    </div>
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                      <select 
+                        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        onChange={(e) => handleFilter({ country: e.target.value })}
+                      >
+                        <option value="">All Countries</option>
+                        <option value="USA">United States</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="Canada">Canada</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Germany">Germany</option>
+                        <option value="Bangladesh">Bangladesh</option>
+                      </select>
+                    </div>
+                    <div className="flex-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-1">University</label>
+                      <select 
+                        className="w-full px-3 py-2 bg-white border border-gray-300 rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        onChange={(e) => handleFilter({ university: e.target.value })}
+                      >
+                        <option value="">All Universities</option>
+                        <option value="MIT">MIT</option>
+                        <option value="Stanford">Stanford University</option>
+                        <option value="Harvard">Harvard University</option>
+                        <option value="Oxford">Oxford University</option>
+                        <option value="Cambridge">Cambridge University</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
               
-              <FilterPanel onFilter={handleFilter} />
-              <div className="mx-auto max-w-6xl px-4 py-8">
+              {/* Globe */}
+              <div className="mx-auto max-w-6xl px-4 py-4">
                 <div className="globe-container">
                   <Globe 
                     dataPoints={filteredDataPoints} 
