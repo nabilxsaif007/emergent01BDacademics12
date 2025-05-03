@@ -324,9 +324,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       )}
       
       {isLoading ? (
-                  lng: randomResearcher.lng, 
-                  altitude: 1.5
-                }, 1500);
                 
                 // Trigger the click handler after animation completes
                 setTimeout(() => {
