@@ -225,7 +225,7 @@ function AppContent() {
                 <div className="max-w-4xl mx-auto bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
                   <div className="text-center mb-8">
                     <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>
-                      Explore Bangladesh's <span className="bg-clip-text text-transparent bg-gradient-to-r from-coral-500 to-teal-500">Global Academic Network</span>
+                      Explore Bangladesh's <span className="bg-clip-text text-transparent bg-gradient-to-r from-green-600 to-green-400">Global Academic Network</span>
                     </h1>
                     <p className="text-gray-600 mt-3 max-w-2xl mx-auto" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>
                       Connect with researchers and academics worldwide
