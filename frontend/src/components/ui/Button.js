@@ -187,7 +187,7 @@ Button.propTypes = {
   /** HTML button type */
   type: PropTypes.oneOf(['button', 'submit', 'reset']),
   /** Button visual style */
-  variant: PropTypes.oneOf(['primary', 'secondary', 'outline', 'subtle', 'danger', 'link']),
+  variant: PropTypes.oneOf(['primary', 'secondary', 'outline', 'subtle', 'danger', 'link', 'black', 'white']),
   /** Button size */
   size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
   /** Whether the button is disabled */
