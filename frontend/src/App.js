@@ -306,10 +306,10 @@ function AppContent() {
               {/* Debug info and testing button removed as requested */}
               
               <FilterPanel onFilter={handleFilter} />
-              <div className="globe-container">
+              <div className="globe-container mt-8">
                 <Globe 
                   dataPoints={filteredDataPoints} 
-                  isLoading={isLoading} 
+                  isLoading={isLoading}
                   onPointClick={handleGlobePointClick} 
                 />
               </div>
