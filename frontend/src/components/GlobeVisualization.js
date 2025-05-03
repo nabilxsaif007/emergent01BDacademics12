@@ -426,9 +426,9 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         labelAltitude={0.01}
         labelResolution={1}
         
-        // Render points with Airbnb color scheme
+        // Render points with green color scheme
         pointsData={dataPoints}
-        pointColor={(d) => d === hoveredPoint ? '#FF5A5F' : '#00A699'} // Airbnb coral for hover, teal for default
+        pointColor={(d) => d === hoveredPoint ? '#16a34a' : '#22c55e'} // Darker green for hover, green for default
         pointAltitude={0.12}
         pointRadius={(d) => d === hoveredPoint ? 0.7 : 0.5}
         pointResolution={24} // Higher resolution for smoother points
@@ -442,12 +442,12 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
             font-size: 14px; 
             box-shadow: 0 6px 20px rgba(0,0,0,0.1); 
             font-family: 'Circular', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            border: 1px solid #EBEBEB;
+            border: 1px solid #dcfce7;
             max-width: 280px;
             transform: translateY(-4px);
             transition: all 0.2s ease-out;
           ">
-            <div style="font-weight: 700; color: #FF5A5F; margin-bottom: 6px; font-size: 16px;">${d.name}</div>
+            <div style="font-weight: 700; color: #16a34a; margin-bottom: 6px; font-size: 16px;">${d.name}</div>
             <div style="margin-bottom: 4px; font-weight: 500;">${d.university}</div>
             <div style="font-size: 13px; color: #717171; display: flex; align-items: center;">
               <svg viewBox="0 0 24 24" width="14" height="14" stroke="#717171" stroke-width="2" fill="none" style="margin-right: 5px;">
@@ -456,7 +456,7 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
               </svg>
               ${d.city}, ${d.country}
             </div>
-            <div style="margin-top: 8px; font-size: 13px; color: #008489; font-weight: 500;">Click for details</div>
+            <div style="margin-top: 8px; font-size: 13px; color: #22c55e; font-weight: 500;">Click for details</div>
           </div>
         `}
         onPointClick={(point, event) => {
