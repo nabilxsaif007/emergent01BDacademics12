@@ -292,8 +292,6 @@ function AppContent() {
                     </div>
                   </div>
                   </div>
-                    <span>Click for details</span>
-                  </div>
                 </div>
                 
                 {/* Enhanced search bar with autocomplete */}
