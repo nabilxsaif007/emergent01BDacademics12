@@ -88,11 +88,11 @@ const Button = forwardRef(({
   
   // Size classes with better touch targets for mobile
   const sizeClasses = {
-    xs: 'py-1 px-2.5 text-xs rounded',
-    sm: 'py-1.5 px-3.5 text-sm rounded',
-    md: 'py-2 px-4 text-base rounded-md',
-    lg: 'py-3 px-5 text-lg rounded-md',
-    xl: 'py-3.5 px-6 text-xl rounded-lg',
+    xs: 'px-2.5 py-1 text-xs rounded-lg',
+    sm: 'px-3.5 py-1.5 text-sm rounded-lg',
+    md: 'px-4 py-2 text-sm rounded-lg',
+    lg: 'px-5 py-2.5 text-base rounded-lg',
+    xl: 'px-6 py-3 text-lg rounded-lg',
   };
   
   // State classes
