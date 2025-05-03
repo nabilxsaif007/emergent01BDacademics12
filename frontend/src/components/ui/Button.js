@@ -39,10 +39,11 @@ const Button = forwardRef(({
   // Base classes with focus styles
   const baseClasses = `
     inline-flex items-center justify-center font-medium
-    transition-all duration-200 
+    transition-all duration-300
     border border-transparent
-    focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+    focus:outline-none focus:ring-2 focus:ring-offset-2
     select-none
+    hover:transform hover:-translate-y-0.5 hover:shadow-md
   `;
   
   // Button variants following Airbnb style
