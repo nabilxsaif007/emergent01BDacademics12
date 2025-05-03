@@ -213,17 +213,20 @@ function AppContent() {
       {/* Add padding for fixed navbar */}
       <div className="pt-20">
       <Routes>
-        <Route path="/" element={
-          <>
-            <WelcomeOverlay />
-            <div className="relative z-10 px-4 sm:px-6 md:px-10 mb-8 mt-2">
-              <div className="max-w-4xl mx-auto bg-black bg-opacity-70 backdrop-blur-xl rounded-xl p-4 sm:p-6 border border-blue-900 shadow-lg">
-                <h1 className="text-3xl md:text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-                  Bangladesh Academic Mentor Network
-                </h1>
-                <p className="text-gray-300 text-lg mb-4">
-                  Explore Bangladeshi academics and researchers worldwide using our interactive 3D globe
-                </p>
+          {/* For the homepage (globe view) */}
+          <Route path="/" element={
+            <>
+              <div className="fixed inset-0 bg-white pointer-events-none" />
+              <div className="relative z-10">
+                <div className="max-w-4xl mx-auto bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
+                  <div className="text-center mb-8">
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>
+                      Explore Bangladesh's <span className="bg-clip-text text-transparent bg-gradient-to-r from-coral-500 to-teal-500">Global Academic Network</span>
+                    </h1>
+                    <p className="text-gray-600 mt-3 max-w-2xl mx-auto" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>
+                      Connect with researchers and academics worldwide
+                    </p>
+                  </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 md:gap-3">
                   <div className="bg-blue-900 bg-opacity-40 rounded-lg px-3 py-2 text-sm text-blue-200 flex items-center">
                     <svg className="w-4 h-4 mr-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
