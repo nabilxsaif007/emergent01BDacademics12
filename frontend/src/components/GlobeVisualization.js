@@ -420,26 +420,35 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
         
         // Render points with Airbnb color scheme
         pointsData={dataPoints}
-        pointColor={(d) => d === hoveredPoint ? '#FF5A5F' : '#0D9488'} // Airbnb coral for hover, emerald for default
-        pointAltitude={0.1}
-        pointRadius={(d) => d === hoveredPoint ? 0.6 : 0.4}
-        pointResolution={12}
+        pointColor={(d) => d === hoveredPoint ? '#FF5A5F' : '#00A699'} // Airbnb coral for hover, teal for default
+        pointAltitude={0.12}
+        pointRadius={(d) => d === hoveredPoint ? 0.7 : 0.5}
+        pointResolution={24} // Higher resolution for smoother points
         pointsMerge={false}
         pointLabel={(d) => `
           <div style="
             background-color: white; 
             color: #484848; 
-            padding: 8px 12px; 
-            border-radius: 8px; 
-            font-size: 13px; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1); 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            padding: 12px 16px; 
+            border-radius: 12px; 
+            font-size: 14px; 
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1); 
+            font-family: 'Circular', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             border: 1px solid #EBEBEB;
-            max-width: 250px;
+            max-width: 280px;
+            transform: translateY(-4px);
+            transition: all 0.2s ease-out;
           ">
-            <div style="font-weight: 600; color: #FF5A5F; margin-bottom: 4px;">${d.name}</div>
-            <div style="margin-bottom: 2px;">${d.university}</div>
-            <div style="font-size: 12px; color: #717171;">${d.city}, ${d.country}</div>
+            <div style="font-weight: 700; color: #FF5A5F; margin-bottom: 6px; font-size: 16px;">${d.name}</div>
+            <div style="margin-bottom: 4px; font-weight: 500;">${d.university}</div>
+            <div style="font-size: 13px; color: #717171; display: flex; align-items: center;">
+              <svg viewBox="0 0 24 24" width="14" height="14" stroke="#717171" stroke-width="2" fill="none" style="margin-right: 5px;">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              ${d.city}, ${d.country}
+            </div>
+            <div style="margin-top: 8px; font-size: 13px; color: #008489; font-weight: 500;">Click for details</div>
           </div>
         `}
         onPointClick={(point, event) => {
