@@ -180,17 +180,41 @@ const Button = forwardRef(({
 });
 
 Button.propTypes = {
+  /** Button content */
   children: PropTypes.node,
+  /** Click handler function */
   onClick: PropTypes.func,
+  /** HTML button type */
   type: PropTypes.oneOf(['button', 'submit', 'reset']),
-  variant: PropTypes.oneOf(['primary', 'secondary', 'outline', 'ghost', 'danger', 'link']),
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  /** Button visual style */
+  variant: PropTypes.oneOf(['primary', 'secondary', 'outline', 'subtle', 'danger', 'link']),
+  /** Button size */
+  size: PropTypes.oneOf(['xs', 'sm', 'md', 'lg', 'xl']),
+  /** Whether the button is disabled */
   disabled: PropTypes.bool,
+  /** Whether the button should take full width of container */
   fullWidth: PropTypes.bool,
+  /** Whether to show a loading spinner */
+  isLoading: PropTypes.bool,
+  /** Optional icon element */
   icon: PropTypes.node,
+  /** Icon position relative to text */
   iconPosition: PropTypes.oneOf(['left', 'right']),
+  /** Additional CSS classes */
   className: PropTypes.string,
+  /** Accessible label for screen readers */
   ariaLabel: PropTypes.string,
+  /** ID of element that describes this button */
+  ariaDescribedby: PropTypes.string,
+  /** Whether button controls an expanded element */
+  ariaExpanded: PropTypes.bool,
+  /** ID of element controlled by this button */
+  ariaControls: PropTypes.string,
+  /** Whether button is in a pressed state */
+  ariaPressed: PropTypes.bool,
 };
+
+// Display name for dev tools
+Button.displayName = 'Button';
 
 export default Button;
