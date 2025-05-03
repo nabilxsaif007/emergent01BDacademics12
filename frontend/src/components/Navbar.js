@@ -492,8 +492,8 @@ const NavDropdown = ({ label, isActive = false }) => {
       <button
         className={`flex items-center text-sm font-medium px-3 py-2 rounded-full transition-all duration-300 ${
           isActive || isOpen
-            ? 'text-gray-900 after:block after:h-0.5 after:bg-coral-500 after:mt-0.5'
-            : 'text-gray-700 hover:text-coral-500 hover:bg-gray-50'
+            ? 'text-gray-900 after:block after:h-0.5 after:bg-green-600 after:mt-0.5'
+            : 'text-gray-700 hover:text-green-600 hover:bg-green-50'
         }`}
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
