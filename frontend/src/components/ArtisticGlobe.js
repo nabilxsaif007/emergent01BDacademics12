@@ -146,42 +146,127 @@ const ArtisticGlobe = () => {
   };
   
   return (
-    <div className="relative">
-      <div 
-        ref={containerRef} 
-        style={{ 
-          width: '100%', 
-          height: '100vh', 
-          background: 'transparent' 
-        }} 
-      />
-      
-      {/* Information tooltip for selected location */}
-      {selectedCountry && (
-        <div className="absolute top-6 right-6 z-10 bg-white p-4 rounded-lg shadow-md animate-fade-in">
-          <div className="flex justify-between items-center mb-2">
-            <h3 className="text-green-600 font-bold text-lg">{selectedCountry.name}</h3>
-            <button 
-              onClick={() => setSelectedCountry(null)}
-              className="text-gray-400 hover:text-gray-600"
+    <div className="flex flex-col h-screen bg-white">
+      <div
+        className="flex-grow relative bg-white"
+        ref={containerRef}
+      >
+        <div
+          className="absolute inset-0 flex items-center justify-center overflow-hidden"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+        >
+          {/* Map Background */}
+          <div
+            className="relative w-full h-full max-w-full max-h-full overflow-hidden"
+            style={{
+              backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0) 40%, rgba(240,240,240,1) 100%)',
+            }}
+          >
+            {/* World Map */}
+            <div
+              className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full overflow-hidden"
+              style={{
+                width: '70vmin',
+                height: '70vmin',
+                backgroundImage: 'url("https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Mercator_projection_Square.JPG/1280px-Mercator_projection_Square.JPG")',
+                backgroundSize: '200% 100%',
+                backgroundPosition: `${mapRotation / 360 * -100}% center`,
+                boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+              }}
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+              {/* Render researcher markers */}
+              {researchers.map(researcher => {
+                // Get marker position
+                const coords = latLngToCoordinates(
+                  researcher.location.lat,
+                  researcher.location.lng,
+                  100, // percentage-based width
+                  100  // percentage-based height
+                );
+                
+                // Skip if not visible
+                if (!coords.isVisible) return null;
+                
+                return (
+                  <button
+                    key={researcher.id}
+                    className="absolute rounded-full border-2 border-white shadow-md hover:bg-green-600 focus:outline-none transition-all duration-200"
+                    style={{
+                      left: `${coords.x}%`,
+                      top: `${coords.y}%`,
+                      width: coords.size,
+                      height: coords.size,
+                      backgroundColor: researcher.country === 'Bangladesh' ? '#16a34a' : '#3B82F6',
+                      opacity: coords.opacity,
+                      transform: 'translate(-50%, -50%)',
+                      zIndex: Math.round(50 + coords.opacity * 50)
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedResearcher(researcher);
+                    }}
+                  />
+                );
+              })}
+            </div>
           </div>
-          <div className="text-gray-700">
-            <p>Lat: {selectedCountry.lat.toFixed(4)}</p>
-            <p>Lng: {selectedCountry.lng.toFixed(4)}</p>
-            <p className="mt-2 text-green-600 font-medium">10 researchers in this area</p>
-          </div>
+          
+          {/* Researcher Info Popup */}
+          {selectedResearcher && (
+            <div
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white rounded-lg shadow-xl p-4 w-64 max-w-xs"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-start">
+                <div className="flex-1">
+                  <h3 className="font-bold text-lg">{selectedResearcher.name}</h3>
+                  <p className="text-gray-700 text-sm">{selectedResearcher.position}</p>
+                </div>
+                <button
+                  className="text-gray-400 hover:text-gray-600 text-xl font-bold"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedResearcher(null);
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="mt-2">
+                {selectedResearcher.fields.map((field, index) => (
+                  <span
+                    key={index}
+                    className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded mr-1 mb-1"
+                  >
+                    {field}
+                  </span>
+                ))}
+              </div>
+              
+              <button className="mt-3 bg-green-600 hover:bg-green-700 text-white py-1 px-3 rounded flex items-center justify-center w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                </svg>
+                Contact
+              </button>
+            </div>
+          )}
         </div>
-      )}
+      </div>
       
       {/* Instructions */}
       <div className="absolute bottom-6 right-6 z-10 bg-white bg-opacity-90 p-3 rounded-lg shadow-md text-xs text-gray-600">
-        <p>🔍 Click on blue markers to explore locations</p>
-        <p>🖱️ Drag to rotate | Scroll to zoom</p>
+        <p>🔍 Click on markers to explore researchers</p>
+        <p>🖱️ Drag to rotate the globe</p>
       </div>
     </div>
   );
