@@ -141,7 +141,7 @@ const Navbar = () => {
                 onKeyDown={handleKeyDown}
                 style={{ transition: 'all 0.2s ease' }}
               >
-                <div className="h-8 w-8 rounded-full bg-gradient-to-r from-coral-500 to-coral-400 flex items-center justify-center text-white shadow-sm">
+                <div className="h-8 w-8 rounded-full bg-gradient-to-r from-green-600 to-green-500 flex items-center justify-center text-white shadow-sm">
                   {user.email ? user.email.charAt(0).toUpperCase() : 'U'}
                 </div>
                 <span className="hidden md:block text-sm font-medium" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>
