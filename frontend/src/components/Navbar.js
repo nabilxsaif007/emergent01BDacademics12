@@ -364,7 +364,7 @@ const Navbar = () => {
               <div className="border-t border-gray-100 mt-3 pt-3">
                 <button
                   onClick={handleLogout}
-                  className="flex items-center w-full text-left px-3 py-2.5 text-coral-500 hover:bg-gray-50 rounded-lg font-medium"
+                  className="flex items-center w-full text-left px-3 py-2.5 text-green-600 hover:bg-gray-50 rounded-lg font-medium"
                   style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
                 >
                   <svg className="w-5 h-5 mr-3 text-coral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
