@@ -264,6 +264,40 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
 
   return (
     <div className="globe-container" style={{width: '100%', height: '100%', position: 'relative'}}>
+      {/* Instructions */}
+      <div className="absolute top-6 left-6 z-10">
+        <div 
+          className="bg-white text-gray-700 p-3 rounded-xl shadow-md" 
+          style={{
+            fontFamily: "'Circular', 'Inter', -apple-system, sans-serif",
+            fontSize: '13px',
+            fontWeight: 500,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+          }}
+        >
+          <div className="flex items-center mb-2">
+            <svg className="w-4 h-4 mr-2 text-coral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122">
+              </path>
+            </svg>
+            <span className="font-medium">Drag to rotate</span>
+          </div>
+          <div className="flex items-center mb-2">
+            <svg className="w-4 h-4 mr-2 text-coral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
+            </svg>
+            <span className="font-medium">Scroll to zoom</span>
+          </div>
+          <div className="flex items-center">
+            <svg className="w-4 h-4 mr-2 text-coral-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+            </svg>
+            <span className="font-medium">Click for details</span>
+          </div>
+        </div>
+      </div>
+      
       {/* Surprise Me Button */}
       <div className="absolute top-6 right-6 z-10">
         <button
