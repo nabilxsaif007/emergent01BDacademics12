@@ -324,10 +324,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       )}
       
       {isLoading ? (
-        </button>
-        
-        {/* Surprise Me button */}
-        <button 
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
