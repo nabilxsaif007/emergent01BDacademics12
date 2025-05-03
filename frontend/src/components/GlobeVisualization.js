@@ -274,10 +274,6 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
             fontWeight: 600,
             boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
           }}
-          className="bg-white p-3 rounded-full border border-border-light text-cta-primary hover:shadow-md transition-all shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-cta-primary focus-visible:ring-opacity-50"
-          title="Reset view"
-          type="button"
-          aria-label="Reset globe view"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
