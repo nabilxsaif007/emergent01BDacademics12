@@ -164,7 +164,7 @@ const InfoPanel = ({ isVisible, academic, onClose }) => {
         
         {/* Connect Button */}
         <button 
-          className="mt-3 w-full bg-white text-coral-500 border border-coral-200 hover:border-coral-400 py-3 rounded-xl transition-all duration-300 font-medium flex items-center justify-center hover:bg-gray-50"
+          className="mt-3 w-full bg-white text-green-600 border border-green-200 hover:border-green-400 py-3 rounded-xl transition-all duration-300 font-medium flex items-center justify-center hover:bg-green-50"
           style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
         >
           <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
