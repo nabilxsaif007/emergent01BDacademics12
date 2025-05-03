@@ -87,14 +87,15 @@ const Navbar = () => {
   
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-shadow duration-200 ${
-        scrolled ? 'shadow-md' : 'shadow-sm'
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? 'shadow-md bg-white' : 'shadow-sm bg-white'
       }`}
+      style={{ borderBottom: '1px solid #f7f7f7' }}
     >
       <SkipToContentLink />
       
       <nav
-        className={`flex justify-between items-center py-4 px-6 sm:px-8 bg-background-primary transition-all duration-200 ${
+        className={`flex justify-between items-center py-4 px-6 lg:px-8 transition-all duration-300 ${
           scrolled ? 'py-3' : 'py-4'
         }`}
         aria-label="Main navigation"
@@ -103,11 +104,12 @@ const Navbar = () => {
         <div className="flex items-center">
           <Link 
             to="/" 
-            className="flex items-center text-cta-primary font-bold text-2xl mr-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cta-primary focus-visible:ring-opacity-50 rounded-md"
+            className="flex items-center font-bold text-2xl mr-6 focus:outline-none rounded-md"
             aria-label="Bangladesh Academic Network - Home"
+            style={{ color: '#FF5A5F' }}
           >
-            <span className="text-cta-primary">B</span>
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-cta-primary to-cta-secondary hidden sm:inline">
+            <span style={{ color: '#FF5A5F' }}>B</span>
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-coral-500 to-teal-500 hidden sm:inline" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>
               Academic Network
             </span>
           </Link>
@@ -115,11 +117,11 @@ const Navbar = () => {
           {/* Desktop navigation */}
           <div className="hidden md:flex items-center space-x-1">
             {navigationItems.map((item) => (
-              item.hasDropdown ? (
+              item.isNewCombinedItem ? (
                 <NavDropdown 
                   key={item.path} 
                   label={item.label} 
-                  isActive={isActive('/academics') || isActive('/researchers') || isActive('/countries')}
+                  isActive={isActive('/academics') || isActive('/researchers') || isActive('/countries') || isActive('/explore')}
                 />
               ) : (
                 <NavLink 
@@ -139,71 +141,108 @@ const Navbar = () => {
           {user ? (
             <div className="relative" ref={dropdownRef}>
               <button
-                className="flex items-center space-x-2 text-text-primary hover:text-cta-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-cta-primary focus-visible:ring-opacity-50 rounded-full p-1"
+                className="flex items-center space-x-2 text-gray-700 hover:text-coral-500 focus:outline-none focus:ring-2 focus:ring-coral-500 focus:ring-opacity-30 rounded-full p-1.5"
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
                 aria-expanded={userMenuOpen}
                 aria-haspopup="true"
                 aria-label="User menu"
                 onKeyDown={handleKeyDown}
+                style={{ transition: 'all 0.2s ease' }}
               >
-                <div className="h-8 w-8 rounded-full bg-cta-primary flex items-center justify-center text-white">
+                <div className="h-8 w-8 rounded-full bg-gradient-to-r from-coral-500 to-coral-400 flex items-center justify-center text-white shadow-sm">
                   {user.email ? user.email.charAt(0).toUpperCase() : 'U'}
                 </div>
-                <span className="hidden md:block text-sm">{user.email}</span>
+                <span className="hidden md:block text-sm font-medium" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>
+                  {user.email}
+                </span>
                 <svg 
-                  className={`h-5 w-5 transition-transform duration-200 ${userMenuOpen ? 'rotate-180' : ''}`} 
+                  className={`h-5 w-5 text-gray-500 transition-transform duration-300 ${userMenuOpen ? 'rotate-180' : ''}`} 
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
+                  style={{ strokeWidth: 2.5 }}
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                 </svg>
               </button>
               
               {/* User dropdown menu */}
               {userMenuOpen && (
                 <div 
-                  className="absolute right-0 mt-2 w-48 bg-background-primary rounded-md shadow-lg border border-border-light overflow-hidden origin-top-right animate-fade-in"
+                  className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden origin-top-right"
                   role="menu"
                   aria-orientation="vertical"
                   aria-labelledby="user-menu"
+                  style={{ 
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                    animation: 'dropdown-fade-in 0.2s ease-out'
+                  }}
                 >
-                  <div className="py-1">
-                    <Link 
-                      to="/dashboard" 
-                      className="block px-4 py-2 text-sm text-text-primary hover:bg-background-secondary focus:bg-background-secondary focus:outline-none transition-colors duration-200"
-                      role="menuitem"
-                    >
-                      Dashboard
-                    </Link>
-                    <Link 
-                      to="/profile" 
-                      className="block px-4 py-2 text-sm text-text-primary hover:bg-background-secondary focus:bg-background-secondary focus:outline-none transition-colors duration-200"
-                      role="menuitem"
-                    >
-                      Profile
-                    </Link>
-                    <Link 
-                      to="/settings" 
-                      className="block px-4 py-2 text-sm text-text-primary hover:bg-background-secondary focus:bg-background-secondary focus:outline-none transition-colors duration-200"
-                      role="menuitem"
-                    >
-                      Settings
-                    </Link>
-                    <Link 
-                      to="/admin" 
-                      className="block px-4 py-2 text-sm text-text-primary hover:bg-background-secondary focus:bg-background-secondary focus:outline-none transition-colors duration-200"
-                      role="menuitem"
-                    >
-                      Admin Panel
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="block w-full text-left px-4 py-2 text-sm text-status-error hover:bg-background-secondary focus:bg-background-secondary focus:outline-none transition-colors duration-200"
-                      role="menuitem"
-                    >
-                      Log out
-                    </button>
+                  <div className="py-2">
+                    <div className="px-4 pt-2 pb-3 border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-700">{user.email}</p>
+                      <p className="text-xs text-gray-500 mt-1">Academic Researcher</p>
+                    </div>
+                    
+                    <div className="pt-2">
+                      <Link 
+                        to="/dashboard" 
+                        className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-coral-500 transition-colors duration-150"
+                        role="menuitem"
+                      >
+                        <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        Dashboard
+                      </Link>
+                      <Link 
+                        to="/profile" 
+                        className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-coral-500 transition-colors duration-150"
+                        role="menuitem"
+                      >
+                        <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                        Profile
+                      </Link>
+                      <Link 
+                        to="/settings" 
+                        className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-coral-500 transition-colors duration-150"
+                        role="menuitem"
+                      >
+                        <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        Settings
+                      </Link>
+                      
+                      <div className="border-t border-gray-100 my-2"></div>
+                      
+                      <Link 
+                        to="/admin" 
+                        className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-coral-500 transition-colors duration-150 font-medium"
+                        role="menuitem"
+                      >
+                        <svg className="w-5 h-5 mr-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Admin Panel
+                      </Link>
+                      
+                      <div className="border-t border-gray-100 my-2"></div>
+                      
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center w-full text-left px-4 py-2.5 text-sm text-coral-500 hover:bg-gray-50 transition-colors duration-150 font-medium"
+                        role="menuitem"
+                      >
+                        <svg className="w-5 h-5 mr-3 text-coral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        </svg>
+                        Log out
+                      </button>
+                    </div>
                   </div>
                 </div>
               )}
@@ -212,8 +251,9 @@ const Navbar = () => {
             <div className="flex items-center space-x-2 sm:space-x-4">
               <Link 
                 to="/login" 
-                className="text-text-primary hover:text-cta-primary text-sm font-medium py-2 px-3 rounded-md transition-colors duration-200"
+                className="text-gray-700 hover:text-coral-500 text-sm font-medium py-2 px-3 rounded-full transition-colors duration-200"
                 aria-label="Log in to your account"
+                style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}
               >
                 Log in
               </Link>
@@ -222,6 +262,7 @@ const Navbar = () => {
                 to="/signup"
                 variant="primary"
                 size="sm"
+                className="rounded-full bg-gradient-to-r from-coral-500 to-coral-400 hover:shadow-md transition-all duration-300"
               >
                 Sign up
               </Button>
