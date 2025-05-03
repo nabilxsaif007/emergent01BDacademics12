@@ -378,9 +378,13 @@ const GlobeVisualization = ({ dataPoints = [], isLoading, onPointClick }) => {
       </div>
       
       {isLoading ? (
-        <div className="flex flex-col justify-center items-center h-full">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cta-primary"></div>
-          <p className="mt-4 text-text-secondary font-medium">Loading globe data...</p>
+        <div className="globe-loading flex items-center justify-center h-screen bg-white">
+          <div className="text-center">
+            <div className="spinner inline-block w-10 h-10 border-4 border-coral-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+            <p className="text-gray-700 font-medium" style={{ fontFamily: "'Circular', 'Inter', -apple-system, sans-serif" }}>
+              Loading Global Network...
+            </p>
+          </div>
         </div>
       ) : (
       <Globe
