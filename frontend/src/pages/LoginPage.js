@@ -216,8 +216,8 @@ const LoginPage = () => {
         </form>
         
         <div className="mt-6 text-center">
-          <span className="text-gray-400">Don't have an account? </span>
-          <Link to="/signup" className="text-blue-400 hover:text-blue-300 font-medium">
+          <span className="text-gray-600">Don't have an account? </span>
+          <Link to="/signup" className="text-green-600 hover:text-green-700 font-medium">
             Create one
           </Link>
         </div>
