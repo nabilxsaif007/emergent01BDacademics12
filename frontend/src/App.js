@@ -21,7 +21,7 @@ import ResearcherSearchPage from './pages/ResearcherSearchPage';
 import ResearcherProfilePage from './pages/ResearcherProfilePage';
 import ConnectionsPage from './pages/ConnectionsPage';
 import NotFoundPage from './pages/NotFoundPage';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import './App.css';
 
 // Define API URL from environment variables
